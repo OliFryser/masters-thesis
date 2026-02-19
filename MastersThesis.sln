@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokémon", "Pokémon\Pokém
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{99505EE9-7CAF-4F1A-98FA-134378FC0ECB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFC.Tests", "WFC.Tests\WFC.Tests.csproj", "{C282ACD2-7D41-4032-AE8C-C0BE02413361}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{99505EE9-7CAF-4F1A-98FA-134378FC0ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99505EE9-7CAF-4F1A-98FA-134378FC0ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99505EE9-7CAF-4F1A-98FA-134378FC0ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
