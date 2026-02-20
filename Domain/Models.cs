@@ -35,7 +35,7 @@ namespace Domain
         }
     }
 
-    public struct Vector : IEquatable<Vector>
+    public readonly struct Vector : IEquatable<Vector>
     {
         public Vector(float x, float y)
         {
