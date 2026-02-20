@@ -26,5 +26,22 @@ namespace WFC.Extensions
         {
             throw new NotImplementedException();
         }
+
+        public static T MinBy<T>(this IEnumerable<T> collection, Func<T, float> comparer)
+        {
+            T min = default;
+            float minValue = float.MaxValue;
+            foreach (T element in collection)
+            {
+                float value = comparer(element);
+                if (value <= minValue)
+                {
+                    min = element;
+                    minValue = value;
+                }
+            }
+
+            return min ?? throw new InvalidOperationException("Collection is empty and could not find minimum.");
+        }
     }
 }

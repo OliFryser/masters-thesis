@@ -10,7 +10,7 @@ namespace WFC
     public static class WaveFunctionCollapse
     {
         public static Level Generate(
-            IReadOnlyCollection<Vector> coordinates, 
+            IReadOnlyCollection<Vector> coordinates,
             HashSet<TileOption> tiles,
             ReadOnlyDictionary<TileType, TileRules> rules)
         {
@@ -28,9 +28,11 @@ namespace WFC
             return level;
         }
 
-        public static Cell PickCell(Level level)
+        private static Cell PickCell(Level level)
         {
-            throw new NotImplementedException();
+            return level.Cells
+                .Where(cell => !cell.IsCollapsed())
+                .MinBy(cell => cell.Entropy);
         }
 
         private static Level ReplaceCell(Level level, Cell collapsedCell)

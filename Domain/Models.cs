@@ -54,7 +54,7 @@ namespace Domain
 
     public class AdjacencyRule
     {
-        public string Type { get; set; } = "Default";
+        public TileType Type { get; set; } = new TileType();
         public float Weight { get; set; } = 1;
     }
 
