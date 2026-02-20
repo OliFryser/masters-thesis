@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFC.Tests", "WFC.Tests\WFC.Tests.csproj", "{C282ACD2-7D41-4032-AE8C-C0BE02413361}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C282ACD2-7D41-4032-AE8C-C0BE02413361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
