@@ -22,13 +22,17 @@ namespace Domain
         {
             Position = position;
             Options = options;
-            Entropy = -options.Aggregate<TileOption, float>(0,
-                (acc, tileOption) => acc + tileOption.Weight * MathF.Log(tileOption.Weight));
         }
 
         public Vector Position { get; }
         public HashSet<TileOption> Options { get; }
         public float Entropy { get; set; }
+
+        public void CalculateEntropy()
+        {
+            Entropy = -Options.Aggregate<TileOption, float>(0,
+                (acc, tileOption) => acc + tileOption.Weight * MathF.Log(tileOption.Weight));
+        }
     }
 
     public struct Vector : IEquatable<Vector>

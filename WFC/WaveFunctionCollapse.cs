@@ -9,6 +9,13 @@ namespace WFC
 {
     public static class WaveFunctionCollapse
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="coordinates"></param>
+        /// <param name="tiles"></param>
+        /// <param name="rules"></param>
+        /// <returns>The returned level may not be complete. </returns>
         public static Level Generate(
             IReadOnlyCollection<Vector> coordinates,
             HashSet<TileOption> tiles,
@@ -17,12 +24,12 @@ namespace WFC
             List<Cell> collection = coordinates.Select(coordinate => new Cell(coordinate, tiles)).ToList();
             Level level = new Level(collection);
 
-            while (!level.IsComplete())
+            while (!level.IsComplete() && !level.IsInfeasible())
             {
                 Cell cellToCollapse = PickCell(level);
                 Cell collapsedCell = cellToCollapse.CollapseCell();
-                level = ReplaceCell(level, collapsedCell);
-                level = Propagate(level, cellToCollapse);
+                level.SetCell(collapsedCell);
+                level.Propagate(collapsedCell);
             }
 
             return level;
@@ -33,16 +40,6 @@ namespace WFC
             return level.Cells
                 .Where(cell => !cell.IsCollapsed())
                 .MinBy(cell => cell.Entropy);
-        }
-
-        private static Level ReplaceCell(Level level, Cell collapsedCell)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static Level Propagate(Level level, Cell collapsedCell)
-        {
-            throw new NotImplementedException();
         }
     }
 }
