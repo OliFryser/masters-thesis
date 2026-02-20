@@ -6,12 +6,14 @@ namespace Domain
 {
     public class Level
     {
-        public Level(IReadOnlyCollection<Cell> cells)
+        public Level(ICollection<Cell> cells)
         {
-            Cells = cells;
+            Dictionary<Vector, Cell> dictionary = cells.ToDictionary(cell => cell.Position);
+            CellLookup = dictionary;
         }
 
-        public IReadOnlyCollection<Cell> Cells { get; }
+        public IDictionary<Vector, Cell> CellLookup { get; }
+        public ICollection<Cell> Cells => CellLookup.Values;
     }
 
     public class Cell
@@ -29,10 +31,20 @@ namespace Domain
         public float Entropy { get; set; }
     }
 
-    public struct Vector
+    public struct Vector : IEquatable<Vector>
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public Vector(float x, float y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public float X { get; }
+        public float Y { get; }
+
+        public bool Equals(Vector other) => X.Equals(other.X) && Y.Equals(other.Y);
+        public override bool Equals(object? obj) => obj is Vector other && Equals(other);
+        public override int GetHashCode() => HashCode.Combine(X, Y);
     }
 
     public class TileType
