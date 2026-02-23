@@ -12,6 +12,13 @@ namespace ImageAnalysis
 {
     public static class ImageAnalysis
     {
+        public static void Run()
+        {
+            string[,] map = CreateIdMap();
+            WriteTileIdsToCsv(map);
+            WriteAdjacencyJson(map);
+        }
+
         public static string[,] CreateIdMap()
         {
             const string path =
@@ -96,7 +103,7 @@ namespace ImageAnalysis
         public static void WriteTileIdsToCsv(string[,] tiles)
         {
             string csvPath = "/Users/dkWiSkHe/RiderProjects/masters-thesis/DotNet/ImageAnalysis/CSV/PalletTown.csv";
-            
+
             int rows = tiles.GetLength(0);
             int cols = tiles.GetLength(1);
 

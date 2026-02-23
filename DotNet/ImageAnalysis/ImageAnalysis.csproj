@@ -6,13 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CSV\" />
-      <Folder Include="Json\" />
-      <Folder Include="Tiles\" />
+        <Folder Include="CSV\"/>
+        <Folder Include="Json\"/>
+        <Folder Include="Tiles\"/>
     </ItemGroup>
 
 </Project>
