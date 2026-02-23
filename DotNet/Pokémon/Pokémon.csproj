@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
-        <UnityPluginsDir>../UnityMastersThesis/Assets/Plugins</UnityPluginsDir>
+        <UnityPluginsDir>../../UnityMastersThesis/Assets/Plugins</UnityPluginsDir>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,11 +12,15 @@
     </ItemGroup>
 
     <Target Name="CopyToUnityPlugins" AfterTargets="AfterBuild" Condition="'$(TargetFramework)' == 'netstandard2.1'">
-        <Message Text=">>> Copying Simulation.dll for Unity..." Importance="high"/>
+        <ItemGroup>
+            <BuiltAssemblies Include="$(OutputPath)*.dll" />
+        </ItemGroup>
+
+        <Message Text=">>> Copying all DLLs to Unity Plugins..." Importance="high"/>
         <Message Text="UnityPluginsDir=$(UnityPluginsDir)" Importance="high"/>
         <Message Text="OutputPath=$(OutputPath)" Importance="high"/>
         <Copy
-                SourceFiles="$(OutputPath)$(AssemblyName).dll"
+                SourceFiles="@(BuiltAssemblies)"
                 DestinationFolder="$(UnityPluginsDir)"
                 SkipUnchangedFiles="false"
         />
