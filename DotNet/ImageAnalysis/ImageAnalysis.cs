@@ -12,7 +12,7 @@ namespace ImageAnalysis
 {
     public static class ImageAnalysis
     {
-        private static readonly string BaseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../../ImageAnalysis/";
+        private static readonly string BaseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../../ImageAnalysis/Resources/";
         
         public static void Run()
         {
