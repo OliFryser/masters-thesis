@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -41,10 +41,12 @@ public class Visualizer : MonoBehaviour
     
     public void ReadAdjacencyData()
     {
-        Dictionary<string, Adjacency> adjacencyData = JsonConvert.DeserializeObject<Dictionary<string, Adjacency>>(_adjacencyFile.text);
+        Dictionary<string, Adjacency> adjacencyData =
+            JsonUtility.FromJson<Dictionary<string, Adjacency>>(_adjacencyFile.text);
         Debug.Log(adjacencyData.Count);
     }
     
+    [Serializable]
     public class Adjacency
     {
         public Dictionary<string, int> UpNeighbors { get; set; } = new();
