@@ -9,7 +9,7 @@ public class AdjacencyRulesTests
     {
         // Arrange
         var adjacencyRules = new AdjacencyRules();
-        var dummyTileType = new TileType("Dummy");
+        var dummyTileType = new TileType(0);
         
         // act
         var northRules = adjacencyRules.GetAdjacencyRules(Direction.North, dummyTileType);
@@ -30,8 +30,8 @@ public class AdjacencyRulesTests
     {
         // Arrange
         var adjacencyRules = new AdjacencyRules();
-        var waterTile =  new TileType("Water");
-        var sandTile =  new TileType("Sand");
+        var waterTile =  new TileType(0);
+        var sandTile =  new TileType(1);
         var adjacencyRule = new AdjacencyRule(1.0f, sandTile);
         adjacencyRules.AddRule(Direction.North, waterTile, adjacencyRule);
         
