@@ -61,8 +61,8 @@ namespace ImageAnalysis
 
         public static void WriteAdjacencyJson(string[,] tileIds)
         {
-            int tilesY = tileIds.GetLength(0);
-            int tilesX = tileIds.GetLength(1);
+            int tilesY = tileIds.GetLength(1);
+            int tilesX = tileIds.GetLength(0);
 
             Dictionary<string, Adjacency> adjacencies = new();
 
