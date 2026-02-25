@@ -1,12 +1,8 @@
 ﻿using System;
+using ImageAnalysis;
 
-namespace CLI
-{
-    public static class Program
-    {
-        public static void Main()
-        {
-            ImageAnalysis.ImageAnalysis.Run();
-        }
-    }
-}
+var resourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources/";
+var tilemap = resourceDirectory + "Tilemaps/PalletTown.png";
+    
+ImageAnalyzer analyzer = new ImageAnalyzer(tilemap, resourceDirectory);
+analyzer.Run();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -10,30 +9,34 @@ using Rectangle = SixLabors.ImageSharp.Rectangle;
 
 namespace ImageAnalysis
 {
-    public static class ImageAnalysis
+    public class ImageAnalyzer
     {
-        private static readonly string BaseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../../ImageAnalysis/Resources/";
+        private string InputTilemapPath { get; }
+        private string OutputDirectory { get; }
+
+        public ImageAnalyzer(string inputTilemapPath, string outputDirectory)
+        {
+            InputTilemapPath = inputTilemapPath;
+            OutputDirectory = outputDirectory;
+        }
         
-        public static void Run()
+        public void Run()
         {
             string[,] map = CreateIdMap();
             WriteTileIdsToCsv(map);
             WriteAdjacencyJson(map);
         }
 
-        public static string[,] CreateIdMap()
+        private string[,] CreateIdMap()
         {
-            string palletTownPath =
-                $"{BaseDirectory}/Tilemaps/PalletTown.png";
-            string outputFolder = $"{BaseDirectory}/Tiles/";
-            using Image<Rgba32> image = Image.Load<Rgba32>(palletTownPath);
-
+            string outputFolder = $"{OutputDirectory}/Tiles/";
+            using Image<Rgba32> image = Image.Load<Rgba32>(InputTilemapPath);
             const int tileSize = 16;
 
             int tilesX = image.Width / tileSize;
             int tilesY = image.Height / tileSize;
 
-            HashSet<string> unique = new();
+            HashSet<string> unique = new HashSet<string>();
 
             string[,] tileIds = new string[tilesX, tilesY];
 
@@ -41,7 +44,7 @@ namespace ImageAnalysis
             {
                 for (int x = 0; x < tilesX; x++)
                 {
-                    Rectangle rect = new(x * tileSize, y * tileSize, tileSize, tileSize);
+                    Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
 
                     using Image<Rgba32> tile = image.Clone(ctx => ctx.Crop(rect));
 
@@ -59,12 +62,12 @@ namespace ImageAnalysis
             return tileIds;
         }
 
-        public static void WriteAdjacencyJson(string[,] tileIds)
+        private void WriteAdjacencyJson(string[,] tileIds)
         {
             int tilesY = tileIds.GetLength(1);
             int tilesX = tileIds.GetLength(0);
 
-            Dictionary<string, Adjacency> adjacencies = new();
+            Dictionary<string, Adjacency> adjacencies = new Dictionary<string, Adjacency>();
 
             for (int y = 0; y < tilesY; y++)
             {
@@ -92,19 +95,19 @@ namespace ImageAnalysis
                 }
             }
 
-            JsonSerializerOptions options = new()
+            JsonSerializerOptions options = new JsonSerializerOptions()
             {
                 WriteIndented = true
             };
 
             File.WriteAllText(
-                $"{BaseDirectory}/Json/PalletTownAdjacencies.json",
+                $"{OutputDirectory}/Json/PalletTownAdjacencies.json",
                 JsonSerializer.Serialize(adjacencies, options));
         }
 
-        public static void WriteTileIdsToCsv(string[,] tiles)
+        private void WriteTileIdsToCsv(string[,] tiles)
         {
-            string csvPath = $"{BaseDirectory}/CSV/PalletTown.csv";
+            string csvPath = $"{OutputDirectory}/CSV/PalletTown.csv";
 
             int rows = tiles.GetLength(0);
             int cols = tiles.GetLength(1);
@@ -131,7 +134,7 @@ namespace ImageAnalysis
 
         private static string Hash(Image<Rgba32> imageToHash)
         {
-            StringBuilder stringBuilder = new();
+            StringBuilder stringBuilder = new StringBuilder();
 
             for (int y = 0; y < imageToHash.Height; y++)
             {
