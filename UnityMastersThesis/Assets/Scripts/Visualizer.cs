@@ -13,7 +13,8 @@ public class Visualizer : MonoBehaviour
     
     public void DisplayMap()
     {
-        string[] rows = _layoutFile.text.Split('\n');
+        string[] rows = _layoutFile.text.Split('\n', '\r').Where(r => !string.IsNullOrEmpty(r)).ToArray();
+        Debug.Log(_tiles.Length);
         
         _tilemap.ClearAllTiles();
         
@@ -31,10 +32,17 @@ public class Visualizer : MonoBehaviour
                     Debug.LogWarning($"Empty sprite ID at {x},{y}");
                     continue;
                 }
+
+                try
+                {
+                    TileBase tileBase = _tiles.First(tileBase => tileBase.name == tileId);
+                    _tilemap.SetTile(new Vector3Int(y, -x, 0), tileBase);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
                 
-                TileBase tileBase = _tiles.First(tileBase => tileBase.name == $"{tileId}_0");
-                
-                _tilemap.SetTile(new Vector3Int(y, -x, 0), tileBase);
             }
         }
     }
