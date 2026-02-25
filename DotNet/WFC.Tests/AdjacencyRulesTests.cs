@@ -31,6 +31,15 @@ public class AdjacencyRulesTests
         // Arrange
         var adjacencyRules = new AdjacencyRules();
         var waterTile =  new TileType("Water");
-        var tileType =  new TileType("Sand");
+        var sandTile =  new TileType("Sand");
+        var adjacencyRule = new AdjacencyRule(1.0f, sandTile);
+        adjacencyRules.AddRule(Direction.North, waterTile, adjacencyRule);
+        
+        // Act
+        var rules = adjacencyRules.GetAdjacencyRules(Direction.North, waterTile);
+        
+        // Assert
+        Assert.That(rules, Has.Count.EqualTo(1));
+        Assert.That(rules.First(), Is.EqualTo(adjacencyRule));
     }
 }
