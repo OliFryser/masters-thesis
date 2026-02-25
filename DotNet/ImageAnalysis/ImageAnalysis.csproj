@@ -1,18 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="CSV\"/>
-        <Folder Include="Json\"/>
-        <Folder Include="Tiles\"/>
     </ItemGroup>
 
 </Project>

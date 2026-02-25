@@ -12,6 +12,8 @@ namespace ImageAnalysis
 {
     public static class ImageAnalysis
     {
+        private static readonly string BaseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../../ImageAnalysis/";
+        
         public static void Run()
         {
             string[,] map = CreateIdMap();
@@ -21,10 +23,10 @@ namespace ImageAnalysis
 
         public static string[,] CreateIdMap()
         {
-            const string path =
-                "/Users/dkWiSkHe/RiderProjects/masters-thesis/DotNet/ImageAnalysis/Tilemaps/PalletTown.png";
-            const string outputFolder = "/Users/dkWiSkHe/RiderProjects/masters-thesis/DotNet/ImageAnalysis/Tiles";
-            using Image<Rgba32> image = Image.Load<Rgba32>(path);
+            string palletTownPath =
+                $"{BaseDirectory}/Tilemaps/PalletTown.png";
+            string outputFolder = $"{BaseDirectory}/Tiles/";
+            using Image<Rgba32> image = Image.Load<Rgba32>(palletTownPath);
 
             const int tileSize = 16;
 
@@ -96,13 +98,13 @@ namespace ImageAnalysis
             };
 
             File.WriteAllText(
-                "/Users/dkWiSkHe/RiderProjects/masters-thesis/DotNet/ImageAnalysis/Json/PalletTownAdjacencies.json",
+                $"{BaseDirectory}/Json/PalletTownAdjacencies.json",
                 JsonSerializer.Serialize(adjacencies, options));
         }
 
         public static void WriteTileIdsToCsv(string[,] tiles)
         {
-            string csvPath = "/Users/dkWiSkHe/RiderProjects/masters-thesis/DotNet/ImageAnalysis/CSV/PalletTown.csv";
+            string csvPath = $"{BaseDirectory}/CSV/PalletTown.csv";
 
             int rows = tiles.GetLength(0);
             int cols = tiles.GetLength(1);

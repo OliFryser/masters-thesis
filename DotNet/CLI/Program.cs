@@ -6,7 +6,7 @@ namespace CLI
     {
         public static void Main()
         {
-            Console.WriteLine("Hello World!");
+            ImageAnalysis.ImageAnalysis.Run();
         }
     }
 }
