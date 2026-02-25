@@ -1,5 +1,7 @@
 ﻿using Domain;
+using WFC.Args;
 using WFC.Extensions;
+using WFC.Models;
 
 namespace WFC.Tests;
 
@@ -31,10 +33,10 @@ public class Tests
         
         TileOption option = new()
         {
-            TileType = new TileType
-            {
-                Type = "Grass"
-            }
+            // TileType = new TileType
+            // {
+            //     Type = "Grass"
+            // }
         };
         
         HashSet<TileOption> options = [option];
@@ -50,18 +52,18 @@ public class Tests
         
         TileOption option = new()
         {
-            TileType = new TileType
-            {
-                Type = "Grass"
-            }
+            // TileType = new TileType
+            // {
+            //     Type = "Grass"
+            // }
         };
         
         TileOption option2 = new()
         {
-            TileType = new TileType
-            {
-                Type = "Water"
-            }
+            // TileType = new TileType
+            // {
+            //     Type = "Water"
+            // }
         };
 
         HashSet<TileOption> options = [option, option2];

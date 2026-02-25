@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
-using Domain;
+using WFC.Models;
+using WFC.Output;
 
 namespace WFC.Extensions
 {
@@ -10,7 +12,12 @@ namespace WFC.Extensions
         public static void SetCell(this Level level, Cell cell) => level.CellLookup[cell.Position] = cell;
         public static void Propagate(this Level level, Cell collapsedCell)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public static Map? ToMap(this Level level)
+        {
+            throw new NotImplementedException();
         }
     }
 }

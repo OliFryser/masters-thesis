@@ -1,4 +1,4 @@
-namespace WFC.Public.Output
+namespace WFC.Output
 {
     public class Status
     {

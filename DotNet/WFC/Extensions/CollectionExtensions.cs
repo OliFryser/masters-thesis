@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain;
 
 namespace WFC.Extensions
 {
@@ -17,12 +16,12 @@ namespace WFC.Extensions
         public static T GetRandomElement<T>(this ICollection<T> collection) =>
             collection.GetRandomElement(new Random());
 
-        public static TileOption GetRandomWeightedElement(this ICollection<TileOption> collection, Random random)
+        public static T GetRandomWeightedElement<T>(this ICollection<T> collection, Random random)
         {
             throw new NotImplementedException();
         }
 
-        public static TileOption GetRandomWeightedElement(this ICollection<TileOption> collection)
+        public static T GetRandomWeightedElement<T>(this ICollection<T> collection)
         {
             throw new NotImplementedException();
         }

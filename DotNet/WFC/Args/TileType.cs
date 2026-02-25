@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WFC.Models
+namespace WFC.Args
 {
     public struct TileType : IEquatable<TileType>
     {
@@ -9,7 +9,7 @@ namespace WFC.Models
             Id = id;
         }
 
-        public uint Id { get; set; }
+        public uint Id { get; }
 
         public bool Equals(TileType other) => Id == other.Id;
         public override bool Equals(object? obj) => obj is TileType other && Equals(other);

@@ -1,4 +1,6 @@
-﻿namespace WFC.Models
+﻿using WFC.Models;
+
+namespace WFC.Args
 {
     public struct AdjacencyRule
     {

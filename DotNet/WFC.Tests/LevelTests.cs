@@ -1,4 +1,6 @@
-﻿namespace Domain.Tests;
+﻿using WFC.Models;
+
+namespace Domain.Tests;
 
 public class Tests
 {
