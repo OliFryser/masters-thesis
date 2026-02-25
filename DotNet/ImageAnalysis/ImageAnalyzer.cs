@@ -13,13 +13,30 @@ namespace ImageAnalysis
     {
         private string InputTilemapPath { get; }
         private string OutputDirectory { get; }
-
+        private string TileSpritesDirectory { get; }
+        private string JsonDirectory { get; }
+        private string CsvDirectory { get; }
+        
         public ImageAnalyzer(string inputTilemapPath, string outputDirectory)
         {
             InputTilemapPath = inputTilemapPath;
             OutputDirectory = outputDirectory;
+            TileSpritesDirectory = $"{OutputDirectory}/TileSprites";
+            CreateDirectory(TileSpritesDirectory);
+            JsonDirectory = $"{OutputDirectory}/Json";
+            CreateDirectory(JsonDirectory);
+            CsvDirectory = $"{OutputDirectory}/Csv";
+            CreateDirectory(CsvDirectory);
         }
-        
+
+        private void CreateDirectory(string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+        }
+
         public void Run()
         {
             string[,] map = CreateIdMap();
@@ -29,7 +46,6 @@ namespace ImageAnalysis
 
         private string[,] CreateIdMap()
         {
-            string outputFolder = $"{OutputDirectory}/Tiles/";
             using Image<Rgba32> image = Image.Load<Rgba32>(InputTilemapPath);
             const int tileSize = 16;
 
@@ -51,7 +67,7 @@ namespace ImageAnalysis
                     string hash = Hash(tile);
                     if (unique.Add(hash))
                     {
-                        string tilePath = Path.Combine(outputFolder, $"{hash}.png");
+                        string tilePath = Path.Combine(TileSpritesDirectory, $"{hash}.png");
                         tile.Save(tilePath);
                     }
 
@@ -101,18 +117,18 @@ namespace ImageAnalysis
             };
 
             File.WriteAllText(
-                $"{OutputDirectory}/Json/PalletTownAdjacencies.json",
+                $"{JsonDirectory}/PalletTownAdjacencies.json",
                 JsonSerializer.Serialize(adjacencies, options));
         }
 
         private void WriteTileIdsToCsv(string[,] tiles)
         {
-            string csvPath = $"{OutputDirectory}/CSV/PalletTown.csv";
+            string csvPath = $"{CsvDirectory}/PalletTown.csv";
 
             int rows = tiles.GetLength(0);
             int cols = tiles.GetLength(1);
-
-            using StreamWriter writer = new StreamWriter(csvPath);
+            
+            using StreamWriter writer = new StreamWriter(csvPath, append: false);
             for (int y = 0; y < rows; y++)
             {
                 string[] row = new string[cols];

@@ -31,7 +31,7 @@ public class Visualizer : MonoBehaviour
                     Debug.LogWarning($"Empty sprite ID at {x},{y}");
                     continue;
                 }
-
+                
                 TileBase tileBase = _tiles.First(tileBase => tileBase.name == $"{tileId}_0");
                 
                 _tilemap.SetTile(new Vector3Int(y, -x, 0), tileBase);
