@@ -32,7 +32,7 @@ public class AdjacencyRulesTests
         var adjacencyRules = new AdjacencyRules();
         var waterTile =  new TileType(0);
         var sandTile =  new TileType(1);
-        var adjacencyRule = new AdjacencyRule(1.0f, sandTile);
+        var adjacencyRule = new AdjacencyRule(waterTile, sandTile, Direction.North, 1);
         adjacencyRules.AddRule(Direction.North, waterTile, adjacencyRule);
         
         // Act
