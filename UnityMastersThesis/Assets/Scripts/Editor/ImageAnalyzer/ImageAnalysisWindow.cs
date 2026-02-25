@@ -10,6 +10,7 @@ namespace Editor.ImageAnalyzer
     {
         [SerializeField]
         private VisualTreeAsset _visualTreeAsset = default;
+        private Sprite InputSprite { get; set; }
 
         [MenuItem("Window/Services/Image Analysis")]
         public static void ShowWindow()
@@ -24,12 +25,16 @@ namespace Editor.ImageAnalyzer
             VisualElement root = rootVisualElement;
             
             
-            ObjectField spriteField = new ObjectField("Tilemap Sprite")
+            ObjectField spriteField = new ObjectField("Input Sprite")
             {
                 objectType = typeof(Sprite),
                 allowSceneObjects = false
             };
             
+            spriteField.RegisterValueChangedCallback(evt =>
+            {
+                InputSprite = evt.newValue as Sprite;
+            });
             
             // Button
             Button analyzeTilemapButton = new Button(OnAnalyzeTilemapClick)
@@ -44,7 +49,8 @@ namespace Editor.ImageAnalyzer
 
         private void OnAnalyzeTilemapClick()
         {
-            ImageAnalysis.ImageAnalysis.Run();
+            ImageAnalysis.ImageAnalyzer imageAnalyzer = new ImageAnalysis.ImageAnalyzer(AssetDatabase.GetAssetPath(InputSprite), "Assets/Resources/Tiles/Pokemon/");
+            imageAnalyzer.Run();
         }
     }
 }
