@@ -9,5 +9,9 @@
     <ItemGroup>
       <ProjectReference Include="..\ImageAnalysis\ImageAnalysis.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\PalletTown\" />
+    </ItemGroup>
     
 </Project>

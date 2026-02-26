@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Domain.Models;
 using WFC.Args;
-using WFC.Models;
+using Models;
 
 namespace WFC.Output
 {

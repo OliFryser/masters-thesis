@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WFC.Args;
 
-namespace WFC.Models
+namespace Models
 {
     public class AdjacencyRules
     {

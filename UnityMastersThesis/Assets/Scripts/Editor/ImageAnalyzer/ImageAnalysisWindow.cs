@@ -1,7 +1,6 @@
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -65,7 +64,7 @@ namespace Editor.ImageAnalyzer
         {
             ImageAnalysis.ImageAnalyzer imageAnalyzer = 
                 new ImageAnalysis.ImageAnalyzer(AssetDatabase.GetAssetPath(InputSprite), ParentDirectory);
-            imageAnalyzer.Run();
+            imageAnalyzer.Analyze();
             AssetDatabase.Refresh();
             ConvertTilesButton.SetEnabled(HasTilemap());
         }

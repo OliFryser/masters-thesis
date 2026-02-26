@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 public class Visualizer : MonoBehaviour
 {
@@ -13,36 +15,21 @@ public class Visualizer : MonoBehaviour
     
     public void DisplayMap()
     {
-        string[] rows = _layoutFile.text.Split('\n', '\r').Where(r => !string.IsNullOrEmpty(r)).ToArray();
-        Debug.Log(_tiles.Length);
+        List<ImageAnalysis.Models.Tile> tileLayout =
+            JsonConvert.DeserializeObject<List<ImageAnalysis.Models.Tile>>(_layoutFile.text);
         
         _tilemap.ClearAllTiles();
         
-        for (int y = 0; y < rows.Length; y++)
-        {
-            string row = rows[y];
-            string[] columns = row.Split(',');
-
-            for (int x = 0; x < columns.Length; x++)
+        foreach (ImageAnalysis.Models.Tile tile in tileLayout)
+        {    
+            try
             {
-                string tileId = columns[x];
-
-                if (tileId == string.Empty)
-                {
-                    Debug.LogWarning($"Empty sprite ID at {x},{y}");
-                    continue;
-                }
-
-                try
-                {
-                    TileBase tileBase = _tiles.First(tileBase => tileBase.name == tileId);
-                    _tilemap.SetTile(new Vector3Int(y, -x, 0), tileBase);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
-                
+                TileBase tileBase = _tiles.First(tileBase => tileBase.name == tile.Name);
+                _tilemap.SetTile(new Vector3Int(tile.Position.X, -tile.Position.Y, 0), tileBase);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
     }

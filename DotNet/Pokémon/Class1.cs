@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using WFC.Args;
-using WFC.Models;
+using Models;
 
 namespace Pokémon
 {

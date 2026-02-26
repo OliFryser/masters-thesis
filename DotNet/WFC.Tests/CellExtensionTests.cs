@@ -1,7 +1,7 @@
-﻿using Domain;
-using WFC.Args;
+﻿
+using Domain.Models;
 using WFC.Extensions;
-using WFC.Models;
+using Models;
 
 namespace WFC.Tests;
 

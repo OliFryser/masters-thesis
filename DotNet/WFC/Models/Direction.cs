@@ -1,4 +1,4 @@
-﻿namespace WFC.Models
+﻿namespace Models
 {
     public enum Direction
     {

@@ -1,7 +1,7 @@
 using System.Linq;
 using WFC.Args;
 using WFC.Extensions;
-using WFC.Models;
+using Models;
 using WFC.Output;
 
 namespace WFC

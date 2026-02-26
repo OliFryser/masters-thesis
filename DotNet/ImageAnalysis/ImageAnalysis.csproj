@@ -8,8 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
       <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13"/>
       <PackageReference Include="System.Text.Json" Version="10.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
     <Target Name="CopyToUnityPlugins" AfterTargets="AfterBuild" Condition="'$(TargetFramework)' == 'netstandard2.1'">

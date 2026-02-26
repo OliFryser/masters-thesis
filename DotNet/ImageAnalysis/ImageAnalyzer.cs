@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.Json;
+using ImageAnalysis.Extensions;
+using ImageAnalysis.Models;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using Rectangle = SixLabors.ImageSharp.Rectangle;
 
 namespace ImageAnalysis
@@ -15,7 +19,6 @@ namespace ImageAnalysis
         private string OutputDirectory { get; }
         private string TileSpritesDirectory => OutputDirectory + "/TileSprites";
         private string JsonDirectory => OutputDirectory + "/Json";
-        private string CsvDirectory => OutputDirectory + "/Csv";
         
         public ImageAnalyzer(string inputTilemapPath, string outputDirectory)
         {
@@ -24,13 +27,12 @@ namespace ImageAnalysis
 
             CreateDirectory(TileSpritesDirectory);
             CreateDirectory(JsonDirectory);
-            CreateDirectory(CsvDirectory);
         }
         
         public void Analyze()
         {
             string[,] map = CreateIdMap();
-            WriteTileIdsToCsv(map);
+            WriteTilePositionsToJson(map);
             WriteAdjacencyJson(map);
         }
 
@@ -51,7 +53,7 @@ namespace ImageAnalysis
             int tilesY = image.Height / tileSize;
 
             HashSet<string> unique = new HashSet<string>();
-
+            
             string[,] tileIds = new string[tilesX, tilesY];
 
             for (int y = 0; y < tilesY; y++)
@@ -61,8 +63,8 @@ namespace ImageAnalysis
                     Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
 
                     using Image<Rgba32> tile = image.Clone(ctx => ctx.Crop(rect));
-                    int hashCode = tile.GetHashCode();
-                    string hash = Hash(tile);
+                    string hash = tile.Hash();
+                    
                     if (unique.Add(hash))
                     {
                         string tilePath = Path.Combine(TileSpritesDirectory, $"{hash}.png");
@@ -72,14 +74,14 @@ namespace ImageAnalysis
                     tileIds[x, y] = hash;
                 }
             }
-
+            
             return tileIds;
         }
 
         private void WriteAdjacencyJson(string[,] tileIds)
         {
-            int tilesY = tileIds.GetLength(1);
             int tilesX = tileIds.GetLength(0);
+            int tilesY = tileIds.GetLength(1);
 
             Dictionary<string, Adjacency> adjacencies = new Dictionary<string, Adjacency>();
 
@@ -115,51 +117,33 @@ namespace ImageAnalysis
             };
 
             File.WriteAllText(
-                $"{JsonDirectory}/PalletTownAdjacencies.json",
+                $"{JsonDirectory}/Adjencencies.json",
                 JsonSerializer.Serialize(adjacencies, options));
         }
 
-        private void WriteTileIdsToCsv(string[,] tiles)
+        private void WriteTilePositionsToJson(string[,] tiles)
         {
-            string csvPath = $"{CsvDirectory}/PalletTown.csv";
-
-            int rows = tiles.GetLength(0);
-            int cols = tiles.GetLength(1);
+            List<Tile> tilesWithPositions = new List<Tile>();
             
-            using StreamWriter writer = new StreamWriter(csvPath, append: false);
-            for (int y = 0; y < rows; y++)
+            int tilesX = tiles.GetLength(0);
+            int tilesY = tiles.GetLength(1);
+            
+            for (int y = 0; y < tilesY; y++)
             {
-                string[] row = new string[cols];
-                for (int x = 0; x < cols; x++)
+                for (int x = 0; x < tilesX; x++)
                 {
-                    // Escape quotes and wrap in quotes if necessary
-                    string value = tiles[y, x] ?? "";
-                    if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
-                    {
-                        value = "\"" + value.Replace("\"", "\"\"") + "\"";
-                    }
-
-                    row[x] = value;
-                }
-
-                writer.WriteLine(string.Join(",", row));
-            }
-        }
-
-        private static string Hash(Image<Rgba32> imageToHash)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int y = 0; y < imageToHash.Height; y++)
-            {
-                for (int x = 0; x < imageToHash.Width; x++)
-                {
-                    Rgba32 color = imageToHash[x, y];
-                    stringBuilder.Append(color.ToHex());
+                    tilesWithPositions.Add(new Tile(x, y, tiles[x, y]));
+                    
                 }
             }
+            
+            string json = JsonConvert.SerializeObject(
+                tilesWithPositions,
+                Formatting.Indented);
 
-            return stringBuilder.ToString().GetHashCode().ToString();
+            File.WriteAllText(
+                $"{JsonDirectory}/TilesWithPositions.json",
+                json);
         }
 
         private static void AddNeighbor(Dictionary<string, int> neighbors, string neighborId)

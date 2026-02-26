@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WFC.Models;
+using Models;
 
 namespace WFC.Extensions
 {

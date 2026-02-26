@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Models;
 
-namespace WFC.Models
+namespace Models
 {
     public class Level
     {

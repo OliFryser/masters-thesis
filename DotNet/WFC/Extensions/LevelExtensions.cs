@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using WFC.Models;
+using Models;
 using WFC.Output;
 
 namespace WFC.Extensions

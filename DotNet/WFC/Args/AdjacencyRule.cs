@@ -1,4 +1,4 @@
-﻿using WFC.Models;
+﻿using Models;
 
 namespace WFC.Args
 {

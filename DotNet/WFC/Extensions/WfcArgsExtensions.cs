@@ -1,6 +1,6 @@
 using System;
 using WFC.Args;
-using WFC.Models;
+using Models;
 
 namespace WFC.Extensions
 {
