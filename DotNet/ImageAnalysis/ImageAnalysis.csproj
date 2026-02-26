@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <Nullable>enable</Nullable>
-        <UnityPluginsDir>../../UnityMastersThesis/Assets/Plugins/ImageAnalysis</UnityPluginsDir>
+        <UnityPluginsDir>../../UnityMastersThesis/Assets/Plugins</UnityPluginsDir>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
