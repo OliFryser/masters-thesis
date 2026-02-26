@@ -76,36 +76,39 @@ namespace Editor.ImageAnalyzer
             string tileFolder = ParentDirectory + "/Tiles";
             if (!AssetDatabase.IsValidFolder(tileFolder))
                 AssetDatabase.CreateFolder(ParentDirectory, "Tiles");
-            foreach (var guid in guids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-                if (importer != null)
-                {
-                    importer.textureType = TextureImporterType.Sprite;
-                    importer.spritePixelsPerUnit = 16;
-                    importer.filterMode = FilterMode.Point;
-                    importer.mipmapEnabled = false;
-                    importer.spriteImportMode = SpriteImportMode.Single;
-                    importer.alphaIsTransparency = true;
-
-                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-                }
-                
-                Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-
-                if (sprite != null)
-                {
-                    Tile tile = CreateInstance<Tile>();
-                    tile.sprite = sprite;
-
-                    string tilePath = $"{tileFolder}/{sprite.name}.asset";
-                    AssetDatabase.CreateAsset(tile, tilePath);
-                }
-            }
+            
+            guids.ToList().ForEach(guid => ConvertTile(guid, tileFolder));
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static void ConvertTile(string guid, string tileFolder)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (importer != null)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spritePixelsPerUnit = 16;
+                importer.filterMode = FilterMode.Point;
+                importer.mipmapEnabled = false;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.alphaIsTransparency = true;
+
+                AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+            }
+                
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+
+            if (sprite != null)
+            {
+                Tile tile = CreateInstance<Tile>();
+                tile.sprite = sprite;
+
+                string tilePath = $"{tileFolder}/{sprite.name}.asset";
+                AssetDatabase.CreateAsset(tile, tilePath);
+            }
         }
 
         private string[] GetTiles()

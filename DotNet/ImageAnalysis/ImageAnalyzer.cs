@@ -13,20 +13,25 @@ namespace ImageAnalysis
     {
         private string InputTilemapPath { get; }
         private string OutputDirectory { get; }
-        private string TileSpritesDirectory { get; }
-        private string JsonDirectory { get; }
-        private string CsvDirectory { get; }
+        private string TileSpritesDirectory => OutputDirectory + "/TileSprites";
+        private string JsonDirectory => OutputDirectory + "/Json";
+        private string CsvDirectory => OutputDirectory + "/Csv";
         
         public ImageAnalyzer(string inputTilemapPath, string outputDirectory)
         {
             InputTilemapPath = inputTilemapPath;
             OutputDirectory = outputDirectory;
-            TileSpritesDirectory = $"{OutputDirectory}/TileSprites";
+
             CreateDirectory(TileSpritesDirectory);
-            JsonDirectory = $"{OutputDirectory}/Json";
             CreateDirectory(JsonDirectory);
-            CsvDirectory = $"{OutputDirectory}/Csv";
             CreateDirectory(CsvDirectory);
+        }
+        
+        public void Analyze()
+        {
+            string[,] map = CreateIdMap();
+            WriteTileIdsToCsv(map);
+            WriteAdjacencyJson(map);
         }
 
         private void CreateDirectory(string directory)
@@ -35,13 +40,6 @@ namespace ImageAnalysis
             {
                 Directory.CreateDirectory(directory);
             }
-        }
-
-        public void Run()
-        {
-            string[,] map = CreateIdMap();
-            WriteTileIdsToCsv(map);
-            WriteAdjacencyJson(map);
         }
 
         private string[,] CreateIdMap()
@@ -63,7 +61,7 @@ namespace ImageAnalysis
                     Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
 
                     using Image<Rgba32> tile = image.Clone(ctx => ctx.Crop(rect));
-
+                    int hashCode = tile.GetHashCode();
                     string hash = Hash(tile);
                     if (unique.Add(hash))
                     {
