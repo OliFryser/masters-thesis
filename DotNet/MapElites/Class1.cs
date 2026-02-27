@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MapElites
+﻿namespace MapElites
 {
     public class Class1
     {

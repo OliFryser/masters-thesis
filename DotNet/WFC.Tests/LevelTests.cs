@@ -1,7 +1,4 @@
-﻿using Domain.Models;
-using Models;
-
-namespace Domain.Tests;
+﻿namespace Domain.Tests;
 
 public class Tests
 {

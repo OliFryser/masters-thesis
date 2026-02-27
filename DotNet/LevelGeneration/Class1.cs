@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LevelGeneration
+﻿namespace LevelGeneration
 {
     public class Class1
     {

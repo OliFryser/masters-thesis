@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Grammar
+﻿namespace Grammar
 {
     public class Class1
     {

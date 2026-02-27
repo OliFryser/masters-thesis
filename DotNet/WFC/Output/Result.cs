@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace WFC.Output
 {
     public class Result
