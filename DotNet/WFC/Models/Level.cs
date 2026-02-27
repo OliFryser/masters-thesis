@@ -23,24 +23,4 @@ namespace Models
         public float[] Entropy { get; }
         public Neighbors[] NeighborIndices { get; }
     }
-
-    public struct Neighbors
-    {
-        public Neighbors(Dictionary<Direction, int> indices)
-        {
-            Indices = indices;
-        }
-
-        public Dictionary<Direction, int> Indices { get; }
-    }
-
-    public struct TileRules
-    {
-        public TileRules(Dictionary<Direction, int[]> validTileIds)
-        {
-            ValidTileIds = validTileIds;
-        }
-
-        public Dictionary<Direction, int[]> ValidTileIds { get; }
-    }
 }

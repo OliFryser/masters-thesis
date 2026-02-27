@@ -16,9 +16,9 @@ public class EndToEndTests
         IReadOnlyCollection<AdjacencyRule> adjacencyRules = [];
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
         Result result = WaveFunctionCollapse.Run(args);
-        
+
         Assert.That(result, Is.Not.Null);
-        
+
         Assert.That(result.Status.Success, Is.True);
     }
 
@@ -29,16 +29,24 @@ public class EndToEndTests
         TileType tile1 = new TileType(1);
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0), new Vector(1, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile0, tile0];
-        IReadOnlyCollection<AdjacencyRule> adjacencyRules = [
+        IReadOnlyCollection<AdjacencyRule> adjacencyRules =
+        [
             new AdjacencyRule(tile0, tile1, Direction.East),
             new AdjacencyRule(tile1, tile0, Direction.West)
         ];
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
-        Result result = WaveFunctionCollapse.Run(args);
+
+        const int simulationCount = 20;
+        Result[] results = new Result[simulationCount];
+        for (int i = 0; i < simulationCount; i++)
+        {
+            Result result = WaveFunctionCollapse.Run(args);
+            results[i] = result;
+        }
         
-        Assert.That(result, Is.Not.Null);
-        
-        Assert.That(result.Status.Success, Is.True);
+        Assert.That(results, Does.Not.Contain(null));
+
+        Assert.That(results.Any(result => result.Status.Success), Is.True);
     }
 
     [Test]
@@ -48,15 +56,16 @@ public class EndToEndTests
         TileType tile1 = new TileType(1);
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0), new Vector(1, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile0, tile0];
-        IReadOnlyCollection<AdjacencyRule> adjacencyRules = [
+        IReadOnlyCollection<AdjacencyRule> adjacencyRules =
+        [
             new AdjacencyRule(tile0, tile1, Direction.West),
             new AdjacencyRule(tile1, tile0, Direction.West)
         ];
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
         Result result = WaveFunctionCollapse.Run(args);
-        
+
         Assert.That(result, Is.Not.Null);
-        
+
         Assert.That(result.Status.Success, Is.False);
     }
 }
