@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using WFC.Args;
 using WFC.Extensions;
 using Models;
@@ -10,6 +11,8 @@ namespace WFC
     {
         public static Result Run(in WfcArgs args)
         {
+            Dictionary<int, TileType> indexToType = CreateIndexToTypeMapping(args.TileTypes);
+
             Level level = args.ToLevel();
 
             while (!level.IsComplete() && !level.IsInfeasible())
@@ -20,7 +23,7 @@ namespace WFC
             }
 
             Status status = new Status(level.IsComplete());
-            return new Result(level.ToMap(), status);
+            return new Result(level.ToMap(indexToType), status);
         }
 
         private static int PickCell(Level level)
@@ -67,6 +70,18 @@ namespace WFC
                     level.Options[cellIndex].IntersectWith(validTiles);
                 }
             }
+        }
+        
+        private static Dictionary<int, TileType> CreateIndexToTypeMapping(IReadOnlyCollection<TileType> a)
+        {
+            Dictionary<int, TileType> indexToType = new Dictionary<int, TileType>();
+            var tiles = a.ToList();
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                indexToType.Add(i, tiles[i]);
+            }
+
+            return indexToType;
         }
     }
 }

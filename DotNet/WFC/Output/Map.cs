@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using Domain.Models;
+using WFC.Args;
 
 namespace WFC.Output
 {
     public class Map
     {
-        public Map(IReadOnlyDictionary<Vector, int> coordinateToTile)
+        public Map(IReadOnlyDictionary<Vector, TileType> coordinateToTile)
         {
             CoordinateToTile = coordinateToTile;
         }
 
-        public IReadOnlyDictionary<Vector, int> CoordinateToTile { get; }
+        public IReadOnlyDictionary<Vector, TileType> CoordinateToTile { get; }
     }
 }
