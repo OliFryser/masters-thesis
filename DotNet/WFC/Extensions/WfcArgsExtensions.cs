@@ -21,9 +21,9 @@ namespace WFC.Extensions
             Vector[] positions = args.Coordinates.ToArray();
 
             HashSet<int>[] options = new HashSet<int>[numberOfCells];
-            foreach (HashSet<int> hashSet in options)
+            for (int i = 0; i < options.Length; i++)
             {
-                hashSet.UnionWith(Enumerable.Range(0, numberOfTiles));
+                options[i] = new HashSet<int>(Enumerable.Range(0, numberOfTiles));
             }
 
             float[] entropy = Enumerable.Repeat<float>(numberOfTiles, numberOfCells).ToArray();
