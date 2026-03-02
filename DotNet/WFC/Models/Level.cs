@@ -5,7 +5,6 @@ namespace Models
 { 
     public class Level
     {
-        // Index by tile
         public Level(TileRules[] rules, Vector[] position, HashSet<int>[] options, float[] entropy, Neighbors[] neighborIndices)
         {
             Rules = rules;
@@ -15,6 +14,7 @@ namespace Models
             NeighborIndices = neighborIndices;
         }
 
+        // Index by tile
         public TileRules[] Rules { get; }
            
         // Index by cell 

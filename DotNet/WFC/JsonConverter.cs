@@ -1,5 +1,6 @@
 using System;
 using WFC.Args;
+using WFC.Output;
 
 namespace WFC
 {
@@ -11,6 +12,11 @@ namespace WFC
         }
 
         public static void WriteArgs(WfcArgs args, string jsonFilePath)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static void WriteResult(Result result, string jsonFilePath)
         {
             throw new NotImplementedException();
         }
