@@ -13,7 +13,7 @@ namespace WFC.Extensions
     {
         public static bool IsComplete(this Level level)
         {
-            foreach (var option in level.Options)
+            foreach (HashSet<int> option in level.Options)
             {
                 if (option.Count != 1)
                     return false;
@@ -23,7 +23,7 @@ namespace WFC.Extensions
         
         public static bool IsInfeasible(this Level level)
         {
-            foreach (var option in level.Options)
+            foreach (HashSet<int> option in level.Options)
             {
                 if (option.Count == 0)
                     return true;
@@ -38,8 +38,8 @@ namespace WFC.Extensions
             Dictionary<Vector, TileType> coordinateToTile = new Dictionary<Vector, TileType>();
             for (int i = 0; i < level.Position.Length; i++)
             {
-                var tileIndex = level.Options[i].Single();
-                var tileType = tileIndexToTileType[tileIndex];
+                int tileIndex = level.Options[i].Single();
+                TileType tileType = tileIndexToTileType[tileIndex];
                 coordinateToTile.Add(level.Position[i], tileType);
             }
             

@@ -32,21 +32,17 @@ public class EndToEndTests
         IReadOnlyCollection<AdjacencyRule> adjacencyRules =
         [
             new AdjacencyRule(tile0, tile1, Direction.East),
+            new AdjacencyRule(tile0, tile1, Direction.West),
+            new AdjacencyRule(tile1, tile0, Direction.East),
             new AdjacencyRule(tile1, tile0, Direction.West)
         ];
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
 
-        const int simulationCount = 20;
-        Result[] results = new Result[simulationCount];
-        for (int i = 0; i < simulationCount; i++)
-        {
-            Result result = WaveFunctionCollapse.Run(args);
-            results[i] = result;
-        }
-        
-        Assert.That(results, Does.Not.Contain(null));
+        Result result = WaveFunctionCollapse.Run(args);
 
-        Assert.That(results.Any(result => result.Status.Success), Is.True);
+        Assert.That(result, Is.Not.Null);
+
+        Assert.That(result.Status.Success, Is.True);
     }
 
     [Test]
