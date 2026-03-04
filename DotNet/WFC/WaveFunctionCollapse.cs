@@ -70,6 +70,8 @@ namespace WFC
                     level.Options[cellIndex].IntersectWith(validTiles);
                 }
             }
+
+            level.Entropy[cellIndex] = level.Options[cellIndex].Count;
         }
         
         private static Dictionary<int, TileType> CreateIndexToTypeMapping(IReadOnlyCollection<TileType> a)
