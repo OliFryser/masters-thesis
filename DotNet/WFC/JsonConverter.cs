@@ -4,6 +4,8 @@ using WFC.Output;
 
 namespace WFC
 {
+    // Use NewtonSoft for serialization. 
+    // Everything must have setters. 
     public static class JsonConverter
     {
         public static WfcArgs ReadArgs(string jsonFilePath)
