@@ -63,10 +63,23 @@ public class Visualizer : MonoBehaviour
         if (_state == null)
         {
             _state = _wfcArgs.ToArgs().ToState();
+            Debug.Log("Creating initial state.");
         }
 
         _state = WaveFunctionCollapse.Step(_state);
         Debug.Log(_state.IsComplete);
+        DisplayTiles(_state.GetMap().Tiles);
+    }
+
+    [Button("Complete")]
+    public void Complete()
+    {
+        if (_state == null)
+        {
+            _state = _wfcArgs.ToArgs().ToState();
+        }
+        
+        _state = WaveFunctionCollapse.Complete(_state);
         DisplayTiles(_state.GetMap().Tiles);
     }
 

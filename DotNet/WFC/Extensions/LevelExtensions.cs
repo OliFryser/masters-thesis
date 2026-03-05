@@ -35,7 +35,7 @@ namespace WFC.Extensions
             List<Tile> tiles = new List<Tile>();
             for (int i = 0; i < level.Position.Length; i++)
             {
-                if (level.Options[i].Count > 1)
+                if (!level.Collapsed[i])
                     continue;
                 int tileIndex = level.Options[i].Single();
                 TileType tileType = level.TileTypes[tileIndex];

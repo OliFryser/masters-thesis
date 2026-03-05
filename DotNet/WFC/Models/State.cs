@@ -14,7 +14,5 @@ namespace WFC.Models
         {
             Level = level;
         }
-
-
     }
 }

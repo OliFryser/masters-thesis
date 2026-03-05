@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WFC.Args;
@@ -10,6 +11,8 @@ namespace WFC
 {
     public static class WaveFunctionCollapse
     {
+        private static readonly Random Rng = new Random();
+        
         public static State Step(State state)
         {
             if (state.Level.IsComplete() || state.Level.IsInfeasible())
@@ -18,16 +21,17 @@ namespace WFC
             Step(state.Level);
             return state;
         }
+
+        public static State Complete(State state)
+        {
+            Complete(state.Level);
+            return state;
+        }
         
         public static Result Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
-
-            while (!level.IsComplete() && !level.IsInfeasible())
-            {
-                Step(level);
-            }
-
+            Complete(level);
             Status status = new Status(level.IsComplete());
             return new Result(level.ToMap(), status);
         }
@@ -39,12 +43,25 @@ namespace WFC
             Propagate(level, cellToCollapseIndex);
         }
 
+        private static void Complete(Level level)
+        {
+            while (!level.IsComplete() && !level.IsInfeasible())
+            {
+                Step(level);
+            }
+        }
+
         private static int PickCell(Level level)
         {
-            int lowestEntropyIndex = 0;
+            int lowestEntropyIndex = -1;
             float lowestEntropy = float.PositiveInfinity;
             for (int i = 0; i < level.Entropy.Length; i++)
             {
+                if (level.Collapsed[i])
+                {
+                    continue;
+                }
+                
                 float entropy = level.Entropy[i];
                 if (entropy < lowestEntropy)
                 {
@@ -59,6 +76,7 @@ namespace WFC
         {
             int chosenTileType = level.Options[cellToCollapseIndex].GetRandomElement();
             level.Options[cellToCollapseIndex] = new HashSet<int> { chosenTileType };
+            level.Collapsed[cellToCollapseIndex] = true;
         }
 
         private static void Propagate(Level level, int collapsedCellIndex)
@@ -71,20 +89,27 @@ namespace WFC
 
         private static void ReduceEntropy(Level level, int cellIndex)
         {
+            if (level.Collapsed[cellIndex])
+            {
+                return;
+            }
+            
             Neighbors neighbors = level.NeighborIndices[cellIndex];
             
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
-                HashSet<int> options = level.Options[neighborIndex];
-                foreach (int tileId in options)
+                HashSet<int> neighborOptions = level.Options[neighborIndex];
+                HashSet<int> validOptions = new HashSet<int>();
+                foreach (int tileId in neighborOptions)
                 {
                     TileRules rules = level.Rules[tileId];
                     int[] validTiles = rules.ValidTileIds[direction.Reverse()];
-                    level.Options[cellIndex].IntersectWith(validTiles);
+                    validOptions.UnionWith(validTiles);
                 }
+                level.Options[cellIndex].IntersectWith(validOptions);
             }
 
-            level.Entropy[cellIndex] = level.Options[cellIndex].Count;
+            level.Entropy[cellIndex] = level.Options[cellIndex].Count;// + (float)Rng.NextDouble();
         }
     }
 }
