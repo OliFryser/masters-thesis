@@ -3,6 +3,7 @@ using System.Linq;
 using Domain.Models;
 using WFC.Args;
 using Models;
+using WFC.Models;
 
 namespace WFC.Extensions
 {
@@ -33,12 +34,20 @@ namespace WFC.Extensions
             }
 
             float[] entropy = Enumerable.Repeat<float>(numberOfTiles, numberOfCells).ToArray();
-
+            
             Neighbors[] neighborIndices = CreateNeighborsArray(positions);
-
-            Level level = new Level(rules, tileTypes, positions, options, entropy, neighborIndices);
+            
+            bool[] collapsed = new bool[numberOfCells];
+            
+            Level level = new Level(rules, tileTypes, positions, options, entropy, neighborIndices, collapsed);
 
             return level;
+        }
+
+        public static State ToState(this WfcArgs args)
+        {
+            Level level = args.ToLevel();
+            return new State(level);
         }
 
         private static Neighbors[] CreateNeighborsArray(Vector[] positions)

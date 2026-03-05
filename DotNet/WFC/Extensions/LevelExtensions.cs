@@ -12,9 +12,9 @@ namespace WFC.Extensions
     {
         public static bool IsComplete(this Level level)
         {
-            foreach (HashSet<int> option in level.Options)
+            for (var i = 0; i < level.Collapsed.Length; i++)
             {
-                if (option.Count != 1)
+                if (!level.Collapsed[i])
                     return false;
             }
             return true;
@@ -30,13 +30,13 @@ namespace WFC.Extensions
             return false;
         }
 
-        public static Map? ToMap(this Level level)
+        public static Map ToMap(this Level level)
         {
-            if (!level.IsComplete()) return null;
-            
             List<Tile> tiles = new List<Tile>();
             for (int i = 0; i < level.Position.Length; i++)
             {
+                if (level.Options[i].Count > 1)
+                    continue;
                 int tileIndex = level.Options[i].Single();
                 TileType tileType = level.TileTypes[tileIndex];
                 tiles.Add(new Tile(level.Position[i].X, level.Position[i].Y, tileType.Id));

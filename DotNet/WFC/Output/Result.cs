@@ -2,13 +2,13 @@ namespace WFC.Output
 {
     public class Result
     {
-        public Result(Map? map, Status status)
+        public Result(Map map, Status status)
         {
             Map = map;
             Status = status;
         }
 
-        public Map? Map { get; }
+        public Map Map { get; }
         public Status Status { get; }
     }
 }

@@ -3,25 +3,40 @@ using System.Linq;
 using WFC.Args;
 using WFC.Extensions;
 using Models;
+using WFC.Models;
 using WFC.Output;
 
 namespace WFC
 {
     public static class WaveFunctionCollapse
     {
+        public static State Step(State state)
+        {
+            if (state.Level.IsComplete() || state.Level.IsInfeasible())
+                return state;
+
+            Step(state.Level);
+            return state;
+        }
+        
         public static Result Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
 
             while (!level.IsComplete() && !level.IsInfeasible())
             {
-                int cellToCollapseIndex = PickCell(level);
-                CollapseCell(level, cellToCollapseIndex);
-                Propagate(level, cellToCollapseIndex);
+                Step(level);
             }
 
             Status status = new Status(level.IsComplete());
             return new Result(level.ToMap(), status);
+        }
+
+        private static void Step(Level level)
+        {
+            int cellToCollapseIndex = PickCell(level);
+            CollapseCell(level, cellToCollapseIndex);
+            Propagate(level, cellToCollapseIndex);
         }
 
         private static int PickCell(Level level)

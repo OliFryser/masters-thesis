@@ -6,7 +6,7 @@ namespace Models
 { 
     public class Level
     {
-        public Level(TileRules[] rules, TileType[] tileTypes, Vector[] position, HashSet<int>[] options, float[] entropy, Neighbors[] neighborIndices)
+        public Level(TileRules[] rules, TileType[] tileTypes, Vector[] position, HashSet<int>[] options, float[] entropy, Neighbors[] neighborIndices, bool[] collapsed)
         {
             TileTypes = tileTypes;
             Rules = rules;
@@ -14,6 +14,7 @@ namespace Models
             Options = options;
             Entropy = entropy;
             NeighborIndices = neighborIndices;
+            Collapsed = collapsed;
         }
 
         // Index by tile
@@ -25,5 +26,6 @@ namespace Models
         public HashSet<int>[] Options { get; }
         public float[] Entropy { get; }
         public Neighbors[] NeighborIndices { get; }
+        public bool[] Collapsed { get; }
     }
 }

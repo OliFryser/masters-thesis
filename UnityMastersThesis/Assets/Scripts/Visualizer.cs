@@ -5,6 +5,9 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
+using WFC;
+using WFC.Extensions;
+using WFC.Models;
 using Tile = Domain.Models.Tile;
 
 public class Visualizer : MonoBehaviour
@@ -15,6 +18,8 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private Tilemap _tilemap;
 
     [SerializeField] private WfcArgs _wfcArgs;
+
+    private State _state;
     
     [Button("Display Map from layout file")]
     public void DisplayMapFromJson()
@@ -22,13 +27,13 @@ public class Visualizer : MonoBehaviour
         List<Domain.Models.Tile> tileLayout =
             JsonConvert.DeserializeObject<List<Domain.Models.Tile>>(_layoutFile.text);
         
-        _tilemap.ClearAllTiles();
-        
         DisplayTiles(tileLayout);
     }
 
     private void DisplayTiles(List<Tile> tileLayout)
     {
+        _tilemap.ClearAllTiles();
+        
         foreach (Domain.Models.Tile tile in tileLayout)
         {    
             try
@@ -46,9 +51,30 @@ public class Visualizer : MonoBehaviour
     [Button("Generate and display WFC map")]
     public void GenerateAndDisplayWfcMap()
     {
+        WFC.Args.WfcArgs wfcArgs = _wfcArgs.ToArgs();
+        var result = WaveFunctionCollapse.Run(wfcArgs);
+        var map = result.Map;
+        DisplayTiles(map.Tiles);
+    }
+
+    [Button("Step")]
+    public void Step()
+    {
+        if (_state == null)
+        {
+            _state = _wfcArgs.ToArgs().ToState();
+        }
+
+        _state = WaveFunctionCollapse.Step(_state);
+        Debug.Log(_state.IsComplete);
+        DisplayTiles(_state.GetMap().Tiles);
+    }
+
+    [Button("Reset")]
+    public void Reset()
+    {
+        _state = null;
         _tilemap.ClearAllTiles();
-        var tiles = _wfcArgs.RunWfc();
-        DisplayTiles(tiles);
     }
     
     public void ReadAdjacencyData()
