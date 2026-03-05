@@ -51,10 +51,13 @@ namespace WFC
             }
         }
 
+        // Pick the lowest entropy
+        // Unless multiple ones have the same entropy,
+        // then pick a random element among the non-collapsed ones
         private static int PickCell(Level level)
         {
-            int lowestEntropyIndex = -1;
             float lowestEntropy = float.PositiveInfinity;
+            List<int> lowestEntropyIndices = new List<int>();
             for (int i = 0; i < level.Entropy.Length; i++)
             {
                 if (level.Collapsed[i])
@@ -63,13 +66,19 @@ namespace WFC
                 }
                 
                 float entropy = level.Entropy[i];
-                if (entropy < lowestEntropy)
+                if (Math.Abs(entropy - lowestEntropy) < 0.1f)
                 {
                     lowestEntropy = entropy;
-                    lowestEntropyIndex = i;
+                    lowestEntropyIndices.Clear();
+                    lowestEntropyIndices.Add(i);
+                } 
+                else if (entropy < lowestEntropy)
+                {
+                    lowestEntropyIndices.Add(i);
                 }
             }
-            return lowestEntropyIndex;
+
+            return lowestEntropyIndices.GetRandomElement();
         }
 
         private static void CollapseCell(Level level, int cellToCollapseIndex)
