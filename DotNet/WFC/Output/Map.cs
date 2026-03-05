@@ -6,11 +6,11 @@ namespace WFC.Output
 {
     public class Map
     {
-        public Map(IReadOnlyDictionary<Vector, TileType> coordinateToTile)
+        public Map(List<Tile> coordinateToTile)
         {
-            CoordinateToTile = coordinateToTile;
+            Tiles = coordinateToTile;
         }
-
-        public IReadOnlyDictionary<Vector, TileType> CoordinateToTile { get; }
+        
+        public List<Tile> Tiles { get; }
     }
 }

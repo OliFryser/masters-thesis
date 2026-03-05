@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Text.Json;
 using Newtonsoft.Json;
+using Tile = Domain.Models.Tile;
 
 public class Visualizer : MonoBehaviour
 {
@@ -12,15 +13,23 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private TextAsset _adjacencyFile;
     [SerializeField] private TileBase[] _tiles;
     [SerializeField] private Tilemap _tilemap;
+
+    [SerializeField] private WfcArgs _wfcArgs;
     
-    public void DisplayMap()
+    [Button("Display Map from layout file")]
+    public void DisplayMapFromJson()
     {
-        List<ImageAnalysis.Models.Tile> tileLayout =
-            JsonConvert.DeserializeObject<List<ImageAnalysis.Models.Tile>>(_layoutFile.text);
+        List<Domain.Models.Tile> tileLayout =
+            JsonConvert.DeserializeObject<List<Domain.Models.Tile>>(_layoutFile.text);
         
         _tilemap.ClearAllTiles();
         
-        foreach (ImageAnalysis.Models.Tile tile in tileLayout)
+        DisplayTiles(tileLayout);
+    }
+
+    private void DisplayTiles(List<Tile> tileLayout)
+    {
+        foreach (Domain.Models.Tile tile in tileLayout)
         {    
             try
             {
@@ -32,6 +41,14 @@ public class Visualizer : MonoBehaviour
                 Debug.LogError(e);
             }
         }
+    }
+
+    [Button("Generate and display WFC map")]
+    public void GenerateAndDisplayWfcMap()
+    {
+        _tilemap.ClearAllTiles();
+        var tiles = _wfcArgs.RunWfc();
+        DisplayTiles(tiles);
     }
     
     public void ReadAdjacencyData()

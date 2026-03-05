@@ -8,19 +8,23 @@ using UnityEngine.Tilemaps;
 using WFC.Args;
 using WFC.Extensions;
 using WFC.Output;
+using Tile = Domain.Models.Tile;
 
 [CreateAssetMenu(fileName = "WfcArgs", menuName = "Scriptable Objects/Wave Function Collapse Args")]
 public class WfcArgs : ScriptableObject
 {
+    // TODO: Put this somewhere else
+    private const string BaseDirectory = "Assets/Resources/Tiles/Pokemon/";
+    
     public AdjacencyRule[] Rules;
     public int Width = 100;
     public int Height = 200;
 
     [Button("Run Wave Function Collapse")]
-    public void RunWfc()
+    public List<Tile> RunWfc()
     {
         Result result = WFC.WaveFunctionCollapse.Run(ToArgs());
-        
+        return result.Map?.Tiles ?? new List<Tile>();
     }
 
     private WFC.Args.WfcArgs ToArgs()

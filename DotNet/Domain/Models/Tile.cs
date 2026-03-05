@@ -1,6 +1,4 @@
-﻿using Domain.Models;
-
-namespace ImageAnalysis.Models
+﻿namespace Domain.Models
 {
     public struct Tile
     {

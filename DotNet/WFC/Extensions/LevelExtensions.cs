@@ -34,17 +34,15 @@ namespace WFC.Extensions
         {
             if (!level.IsComplete()) return null;
             
-            Dictionary<Vector, TileType> coordinateToTile = new Dictionary<Vector, TileType>();
+            List<Tile> tiles = new List<Tile>();
             for (int i = 0; i < level.Position.Length; i++)
             {
                 int tileIndex = level.Options[i].Single();
                 TileType tileType = level.TileTypes[tileIndex];
-                coordinateToTile.Add(level.Position[i], tileType);
+                tiles.Add(new Tile(level.Position[i].X, level.Position[i].Y, tileType.Id));
             }
             
-            ReadOnlyDictionary<Vector, TileType> readOnlyDictionary = new ReadOnlyDictionary<Vector, TileType>(coordinateToTile);
-            
-            return new Map(readOnlyDictionary);
+            return new Map(tiles);
         }
     }
 }
