@@ -4,12 +4,12 @@ namespace WFC.Args
 {
     public struct TileType : IEquatable<TileType>
     {
-        public TileType(int id)
+        public TileType(string id)
         {
             Id = id;
         }
 
-        public int Id { get; }
+        public string Id { get; }
 
         public bool Equals(TileType other) => Id == other.Id;
         public override bool Equals(object? obj) => obj is TileType other && Equals(other);

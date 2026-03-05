@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using Domain.Models;
+using WFC.Args;
 
 namespace Models
 { 
     public class Level
     {
-        public Level(TileRules[] rules, Vector[] position, HashSet<int>[] options, float[] entropy, Neighbors[] neighborIndices)
+        public Level(TileRules[] rules, TileType[] tileTypes, Vector[] position, HashSet<int>[] options, float[] entropy, Neighbors[] neighborIndices)
         {
+            TileTypes = tileTypes;
             Rules = rules;
             Position = position;
             Options = options;
@@ -16,6 +18,7 @@ namespace Models
 
         // Index by tile
         public TileRules[] Rules { get; }
+        public TileType[] TileTypes { get; }
            
         // Index by cell 
         public Vector[] Position { get; }

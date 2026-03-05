@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace WFC.Extensions
             return false;
         }
 
-        public static Map? ToMap(this Level level, Dictionary<int, TileType> tileIndexToTileType)
+        public static Map? ToMap(this Level level)
         {
             if (!level.IsComplete()) return null;
             
@@ -39,7 +38,7 @@ namespace WFC.Extensions
             for (int i = 0; i < level.Position.Length; i++)
             {
                 int tileIndex = level.Options[i].Single();
-                TileType tileType = tileIndexToTileType[tileIndex];
+                TileType tileType = level.TileTypes[tileIndex];
                 coordinateToTile.Add(level.Position[i], tileType);
             }
             

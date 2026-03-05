@@ -14,9 +14,15 @@ namespace WFC.Extensions
             int numberOfTiles = args.TileTypes.Count;
 
             // convert tile ids to tile indices
+            TileType[] tileTypes = args.TileTypes.ToArray();
+            Dictionary<TileType, int> tileTypeToIndex = new Dictionary<TileType, int>();
+            for (int i = 0; i < tileTypes.Length; i++)
+            {
+                tileTypeToIndex.Add(tileTypes[i], i);
+            }
 
             TileRules[] rules = new TileRules[numberOfTiles];
-            PopulateRules(rules, args.AdjacencyRules);
+            PopulateRules(rules, tileTypeToIndex, args.AdjacencyRules);
 
             Vector[] positions = args.Coordinates.ToArray();
 
@@ -30,7 +36,7 @@ namespace WFC.Extensions
 
             Neighbors[] neighborIndices = CreateNeighborsArray(positions);
 
-            Level level = new Level(rules, positions, options, entropy, neighborIndices);
+            Level level = new Level(rules, tileTypes, positions, options, entropy, neighborIndices);
 
             return level;
         }
@@ -75,7 +81,7 @@ namespace WFC.Extensions
             return neighbors;
         }
 
-        private static void PopulateRules(TileRules[] rules, IReadOnlyCollection<AdjacencyRule> argsAdjacencyRules)
+        private static void PopulateRules(TileRules[] rules, Dictionary<TileType, int> typeToIndex,  IReadOnlyCollection<AdjacencyRule> argsAdjacencyRules)
         {
             Dictionary<Direction, HashSet<int>>[]
                 adjacencyRules = new Dictionary<Direction, HashSet<int>>[rules.Length];
@@ -93,7 +99,9 @@ namespace WFC.Extensions
 
             foreach (AdjacencyRule adjacencyRule in argsAdjacencyRules)
             {
-                adjacencyRules[adjacencyRule.From.Id][adjacencyRule.Direction].Add(adjacencyRule.To.Id);
+                int fromIndex = typeToIndex[adjacencyRule.From];
+                int toIndex = typeToIndex[adjacencyRule.To];
+                adjacencyRules[fromIndex][adjacencyRule.Direction].Add(toIndex);
             }
 
             for (int i = 0; i < rules.Length; i++)

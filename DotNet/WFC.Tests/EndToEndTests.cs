@@ -10,7 +10,7 @@ public class EndToEndTests
     [Test]
     public void Wfc_Completes_WithOnlyOneCell()
     {
-        TileType tile = new TileType(0);
+        TileType tile = new TileType("0");
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile];
         IReadOnlyCollection<AdjacencyRule> adjacencyRules = [];
@@ -25,8 +25,8 @@ public class EndToEndTests
     [Test]
     public void Wfc_Completes_WithTwoCells()
     {
-        TileType tile0 = new TileType(0);
-        TileType tile1 = new TileType(1);
+        TileType tile0 = new TileType("0");
+        TileType tile1 = new TileType("1");
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0), new Vector(1, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile0, tile0];
         IReadOnlyCollection<AdjacencyRule> adjacencyRules =
@@ -48,8 +48,8 @@ public class EndToEndTests
     [Test]
     public void Wfc_DoesNotComplete_WithInfeasibleRules()
     {
-        TileType tile0 = new TileType(0);
-        TileType tile1 = new TileType(1);
+        TileType tile0 = new TileType("0");
+        TileType tile1 = new TileType("1");
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0), new Vector(1, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile0, tile0];
         IReadOnlyCollection<AdjacencyRule> adjacencyRules =
