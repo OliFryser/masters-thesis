@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Models;
+using Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using WFC;
+using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
 using Tile = Domain.Models.Tile;
@@ -23,25 +27,25 @@ public class Visualizer : MonoBehaviour
 
     [SerializeField] private WfcArgs _wfcArgs;
 
-    [SerializeField, Range(0f, 1f)] private float _animationSpeed = .5f;
-    
+    [SerializeField, UnityEngine.Range(0f, 1f)] private float _animationSpeed = .5f;
+
     private State _state;
-    
+
     [Button("Display Map from layout file")]
     public void DisplayMapFromJson()
     {
-        List<Domain.Models.Tile> tileLayout =
-            JsonConvert.DeserializeObject<List<Domain.Models.Tile>>(_layoutFile.text);
-        
+        List<Tile> tileLayout =
+            JsonConvert.DeserializeObject<List<Tile>>(_layoutFile.text);
+
         DisplayTiles(tileLayout);
     }
 
     private void DisplayTiles(List<Tile> tileLayout)
     {
         _tilemap.ClearAllTiles();
-        
-        foreach (Domain.Models.Tile tile in tileLayout)
-        {    
+
+        foreach (Tile tile in tileLayout)
+        {
             try
             {
                 TileBase tileBase = _tiles.First(tileBase => tileBase.name == tile.Name);
@@ -85,7 +89,7 @@ public class Visualizer : MonoBehaviour
     public void Complete()
     {
         InitializeState();
-        
+
         _state = WaveFunctionCollapse.Complete(_state);
         DisplayTiles(_state.GetMap().Tiles);
     }
@@ -96,15 +100,72 @@ public class Visualizer : MonoBehaviour
         _state = null;
         _tilemap.ClearAllTiles();
     }
-    
+
+    [Button]
     public void ReadAdjacencyData()
     {
-        Dictionary<string, Adjacency> adjacencyData =
-            JsonUtility.FromJson<Dictionary<string, Adjacency>>(_adjacencyFile.text);
-        Debug.Log(adjacencyData.Count);
+        Dictionary<string, Adjacency> adjacencies =
+            JsonConvert.DeserializeObject<Dictionary<string, Adjacency>>(_adjacencyFile.text);
+        Debug.Log(adjacencies.Count);
+
+        List<Tile> tileLayout =
+            JsonConvert.DeserializeObject<List<Tile>>(_layoutFile.text);
+        
+
+        List<Vector> coordinates = tileLayout.Select(tile => tile.Position).ToList();
+        HashSet<TileType> tileTypes = tileLayout.Select(tile => new TileType(tile.Name)).ToHashSet();
+
+        List<WFC.Args.AdjacencyRule> adjacencyRules = new List<WFC.Args.AdjacencyRule>();
+        
+        foreach ((string idFrom, Adjacency adjacency) in adjacencies)
+        {
+            foreach ((string idTo, int count) in adjacency.UpNeighbors)
+            {
+                TileType from = new TileType(idFrom);
+                TileType to = new TileType(idTo);
+                Direction direction = Direction.North;
+                adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
+            }
+            
+            foreach ((string idTo, int count) in adjacency.RightNeighbors)
+            {
+                TileType from = new TileType(idFrom);
+                TileType to = new TileType(idTo);
+                Direction direction = Direction.East;
+                adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
+            }
+            
+            foreach ((string idTo, int count) in adjacency.DownNeighbors)
+            {
+                TileType from = new TileType(idFrom);
+                TileType to = new TileType(idTo);
+                Direction direction = Direction.South;
+                adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
+            }
+            
+            foreach ((string idTo, int count) in adjacency.LeftNeighbors)
+            {
+                TileType from = new TileType(idFrom);
+                TileType to = new TileType(idTo);
+                Direction direction = Direction.West;
+                adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
+            }
+        }
+        
+        WFC.Args.WfcArgs wfcArgs = new WFC.Args.WfcArgs(coordinates, tileTypes, adjacencyRules);
+        
+        if (_state == null)
+        {
+            _state = wfcArgs.ToState();
+            Debug.Log("Creating initial state.");
+        }
+        
+        _state = WaveFunctionCollapse.Complete(_state);
+        Debug.Log("Map completed.");
+        DisplayTiles(_state.GetMap().Tiles);
     }
-    
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     private float _lastStepTime;
 
     [Button("Start Animation")]
@@ -136,13 +197,13 @@ public class Visualizer : MonoBehaviour
         {
             Step();
             _lastStepTime = currentTime;
-        
+
             // This ensures the Scene View repaints so you see the tiles change
             EditorUtility.SetDirty(_tilemap);
         }
     }
-    #endif
-    
+#endif
+
     [Serializable]
     public class Adjacency
     {
