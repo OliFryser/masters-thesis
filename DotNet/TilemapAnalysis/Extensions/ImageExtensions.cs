@@ -2,7 +2,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace ImageAnalysis.Extensions
+namespace TilemapAnalysis.Extensions
 {
     public static class ImageExtensions
     {

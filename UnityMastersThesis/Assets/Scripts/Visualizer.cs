@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
 using WFC;
+using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
 using Tile = Domain.Models.Tile;
@@ -17,11 +18,9 @@ using UnityEditor;
 public class Visualizer : MonoBehaviour
 {
     [SerializeField] private TextAsset _layoutFile;
-    [SerializeField] private TextAsset _adjacencyFile;
-    [SerializeField] private TileBase[] _tiles;
     [SerializeField] private Tilemap _tilemap;
 
-    [SerializeField] private WfcArgs _wfcArgs;
+    [SerializeField] private WfcConfig _wfcConfig;
 
     [SerializeField, Range(0f, 1f)] private float _animationSpeed = .5f;
     
@@ -30,8 +29,8 @@ public class Visualizer : MonoBehaviour
     [Button("Display Map from layout file")]
     public void DisplayMapFromJson()
     {
-        List<Domain.Models.Tile> tileLayout =
-            JsonConvert.DeserializeObject<List<Domain.Models.Tile>>(_layoutFile.text);
+        List<Tile> tileLayout =
+            JsonConvert.DeserializeObject<List<Tile>>(_layoutFile.text);
         
         DisplayTiles(tileLayout);
     }
@@ -40,11 +39,11 @@ public class Visualizer : MonoBehaviour
     {
         _tilemap.ClearAllTiles();
         
-        foreach (Domain.Models.Tile tile in tileLayout)
+        foreach (Tile tile in tileLayout)
         {    
             try
             {
-                TileBase tileBase = _tiles.First(tileBase => tileBase.name == tile.Name);
+                TileBase tileBase = _wfcConfig.Tiles.First(tileBase => tileBase.name == tile.Type.Id);
                 _tilemap.SetTile(new Vector3Int(tile.Position.X, -tile.Position.Y, 0), tileBase);
             }
             catch (Exception e)
@@ -57,7 +56,8 @@ public class Visualizer : MonoBehaviour
     [Button("Generate and display WFC map")]
     public void GenerateAndDisplayWfcMap()
     {
-        WFC.Args.WfcArgs wfcArgs = _wfcArgs.ToArgs();
+        
+        WfcArgs wfcArgs = _wfcConfig.ToArgs();
         var result = WaveFunctionCollapse.Run(wfcArgs);
         var map = result.Map;
         DisplayTiles(map.Tiles);
@@ -76,7 +76,7 @@ public class Visualizer : MonoBehaviour
     {
         if (_state == null)
         {
-            _state = _wfcArgs.ToArgs().ToState();
+            _state = _wfcConfig.ToArgs().ToState();
             Debug.Log("Creating initial state.");
         }
     }
@@ -95,13 +95,6 @@ public class Visualizer : MonoBehaviour
     {
         _state = null;
         _tilemap.ClearAllTiles();
-    }
-    
-    public void ReadAdjacencyData()
-    {
-        Dictionary<string, Adjacency> adjacencyData =
-            JsonUtility.FromJson<Dictionary<string, Adjacency>>(_adjacencyFile.text);
-        Debug.Log(adjacencyData.Count);
     }
     
     #if UNITY_EDITOR
@@ -142,13 +135,4 @@ public class Visualizer : MonoBehaviour
         }
     }
     #endif
-    
-    [Serializable]
-    public class Adjacency
-    {
-        public Dictionary<string, int> UpNeighbors { get; set; } = new();
-        public Dictionary<string, int> DownNeighbors { get; set; } = new();
-        public Dictionary<string, int> LeftNeighbors { get; set; } = new();
-        public Dictionary<string, int> RightNeighbors { get; set; } = new();
-    }
 }

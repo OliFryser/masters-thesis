@@ -5,11 +5,11 @@
         public Tile(int x, int y, string name)
         {
             Position = new Vector(x, y);
-            Name = name;
+            Type = new TileType(name);
         }
 
         public Vector Position { get; set; }
-        public string Name { get; set; }
+        public TileType Type { get; set; }
 
     }
 }

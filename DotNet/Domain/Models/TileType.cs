@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace WFC.Args
+namespace Domain.Models
 {
-    public struct TileType : IEquatable<TileType>
+    public readonly struct TileType : IEquatable<TileType>
     {
         public TileType(string id)
         {

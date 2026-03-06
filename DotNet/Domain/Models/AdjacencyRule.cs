@@ -1,6 +1,4 @@
-﻿using Models;
-
-namespace WFC.Args
+﻿namespace Domain.Models
 {
     public struct AdjacencyRule
     {

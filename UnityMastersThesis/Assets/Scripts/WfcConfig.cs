@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Domain.Models;
-using Models;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WFC.Args;
 using WFC.Extensions;
 
 [CreateAssetMenu(fileName = "WfcArgs", menuName = "Scriptable Objects/Wave Function Collapse Args")]
-public class WfcArgs : ScriptableObject
+public class WfcConfig : ScriptableObject
 {
     public AdjacencyRule[] Rules;
+    public TileBase[] Tiles;
     public int Width = 100;
     public int Height = 200;
-
-    public WFC.Args.WfcArgs ToArgs()
+    
+    public WfcArgs ToArgs()
     {
         List<Vector> positions = new();
         for (int y = 0; y < Height; y++)
@@ -25,7 +25,7 @@ public class WfcArgs : ScriptableObject
             }
         }
         HashSet<TileType> tileIds = new HashSet<TileType>();
-        List<WFC.Args.AdjacencyRule> rules = new();
+        List<Domain.Models.AdjacencyRule> rules = new();
         foreach (var rule in Rules)
         {
             TileType fromTile = new TileType(rule.From.name);
@@ -34,17 +34,24 @@ public class WfcArgs : ScriptableObject
             tileIds.Add(fromTile);
             tileIds.Add(toTile);
             
-            rules.Add(new WFC.Args.AdjacencyRule(fromTile, toTile, rule.Direction));
-            rules.Add(new WFC.Args.AdjacencyRule(toTile, fromTile, rule.Direction.Reverse()));
+            rules.Add(new Domain.Models.AdjacencyRule(fromTile, toTile, rule.Direction));
+            rules.Add(new Domain.Models.AdjacencyRule(toTile, fromTile, rule.Direction.Reverse()));
         }
         List<TileType> tiles = new(tileIds);
-        return new WFC.Args.WfcArgs(positions, tiles, rules);
+        return new WfcArgs(positions, tiles, rules);
     }
 }
 
 [Serializable]
 public struct AdjacencyRule
 {
+    public AdjacencyRule(TileBase from, TileBase to, Direction direction)
+    {
+        From = from;
+        To = to;
+        Direction = direction;
+    }
+    
     public TileBase From;
     public TileBase To;
     public Direction Direction;

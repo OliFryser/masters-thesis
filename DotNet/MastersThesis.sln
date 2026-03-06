@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFC.Tests", "WFC.Tests\WFC.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageAnalysis", "ImageAnalysis\ImageAnalysis.csproj", "{06BF7689-36D1-4061-B220-73AF308FBFF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TilemapAnalysis", "TilemapAnalysis\TilemapAnalysis.csproj", "{06BF7689-36D1-4061-B220-73AF308FBFF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{1A534DB3-470B-485B-96BC-78087AB2A9F4}"
 EndProject
