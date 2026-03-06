@@ -7,7 +7,7 @@ namespace WFC.Models
     public class State
     {
         internal Level Level { get; }
-        public bool IsComplete => Level.IsComplete();
+        public bool IsCollapsed => Level.IsCollapsed();
         public Map GetMap() => Level.ToMap();
         
         public State(Level level)

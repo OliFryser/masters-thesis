@@ -1,32 +1,40 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Domain.Models;
 using Models;
-using WFC.Args;
 using WFC.Output;
 
 namespace WFC.Extensions
 {
     public static class LevelExtensions
     {
-        public static bool IsComplete(this Level level)
+        public static bool IsCollapsed(this Level level)
         {
             for (var i = 0; i < level.Collapsed.Length; i++)
             {
                 if (!level.Collapsed[i])
+                {
                     return false;
+                }
             }
             return true;
         }
         
-        public static bool IsInfeasible(this Level level)
+        public static bool IsFeasible(this Level level)
         {
-            foreach (HashSet<int> option in level.Options)
+            for (var i = 0; i < level.Options.Length; i++)
             {
-                if (option.Count == 0)
+                if (level.Collapsed[i])
+                {
+                    continue;
+                }
+                
+                if (level.Options[i].Count > 0)
+                {
                     return true;
+                }
             }
+
             return false;
         }
 

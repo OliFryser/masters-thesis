@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Domain.Models;
 using WFC.Args;
 using WFC.Extensions;
@@ -12,11 +11,9 @@ namespace WFC
 {
     public static class WaveFunctionCollapse
     {
-        private static readonly Random Rng = new Random();
-        
         public static State Step(State state)
         {
-            if (state.Level.IsComplete() || state.Level.IsInfeasible())
+            if (state.Level.IsCollapsed() || !state.Level.IsFeasible())
                 return state;
 
             Step(state.Level);
@@ -33,7 +30,7 @@ namespace WFC
         {
             Level level = args.ToLevel();
             Complete(level);
-            Status status = new Status(level.IsComplete());
+            Status status = new Status(level.IsCollapsed());
             return new Result(level.ToMap(), status);
         }
 
@@ -46,7 +43,7 @@ namespace WFC
 
         private static void Complete(Level level)
         {
-            while (!level.IsComplete() && !level.IsInfeasible())
+            while (!level.IsCollapsed() && level.IsFeasible())
             {
                 Step(level);
             }
@@ -64,7 +61,7 @@ namespace WFC
             List<int> lowestEntropyIndices = new List<int>();
             for (int i = 0; i < level.Entropy.Length; i++)
             {
-                if (level.Collapsed[i])
+                if (level.Collapsed[i] || level.Options[i].Count == 0)
                 {
                     continue;
                 }

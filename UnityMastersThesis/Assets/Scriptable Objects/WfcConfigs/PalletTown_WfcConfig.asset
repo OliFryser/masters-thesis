@@ -5607,5 +5607,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8ee945fa4e9a4914fa443f14c1ed6869, type: 2}
   - {fileID: 11400000, guid: 5063b2299a9b9a54ba7b94329d50bc3f, type: 2}
   - {fileID: 11400000, guid: 3ad7265fec361844ba6ca5988ac512bc, type: 2}
-  Width: 20
-  Height: 20
+  Width: 200
+  Height: 200

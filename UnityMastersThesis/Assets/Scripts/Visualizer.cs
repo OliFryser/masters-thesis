@@ -95,6 +95,7 @@ public class Visualizer : MonoBehaviour
     {
         _state = null;
         _tilemap.ClearAllTiles();
+        StopAnimationInEditor();
     }
     
     #if UNITY_EDITOR
@@ -110,16 +111,16 @@ public class Visualizer : MonoBehaviour
     }
 
     [Button("Stop Animation")]
-    public void StopEditor()
+    public void StopAnimationInEditor()
     {
         EditorApplication.update -= UpdateEditorAnimation;
     }
 
     private void UpdateEditorAnimation()
     {
-        if (_state != null && _state.IsComplete)
+        if (_state != null && _state.IsCollapsed)
         {
-            StopEditor();
+            StopAnimationInEditor();
             Debug.Log("WFC Complete.");
             return;
         }

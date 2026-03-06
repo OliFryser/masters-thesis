@@ -87,6 +87,6 @@ public class EndToEndTests
         State step1 = WaveFunctionCollapse.Step(step0);
         State step2 = WaveFunctionCollapse.Step(step1);
         
-        Assert.That(step2.IsComplete, Is.True);
+        Assert.That(step2.IsCollapsed, Is.True);
     }
 }
