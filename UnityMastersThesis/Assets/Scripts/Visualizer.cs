@@ -123,7 +123,7 @@ public class Visualizer : MonoBehaviour
             {
                 TileType from = new TileType(idFrom);
                 TileType to = new TileType(idTo);
-                Direction direction = Direction.North;
+                Direction direction = Direction.North.Reverse();
                 adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
             }
             
@@ -139,7 +139,7 @@ public class Visualizer : MonoBehaviour
             {
                 TileType from = new TileType(idFrom);
                 TileType to = new TileType(idTo);
-                Direction direction = Direction.South;
+                Direction direction = Direction.South.Reverse();
                 adjacencyRules.Add(new WFC.Args.AdjacencyRule(from, to, direction));
             }
             
