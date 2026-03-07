@@ -38,7 +38,7 @@ namespace WFC
         {
             int cellToCollapseIndex = PickCell(level);
             CollapseCell(level, cellToCollapseIndex);
-            Propagate(level, cellToCollapseIndex);
+            Propagate(level, cellToCollapseIndex, level.MaxDepth);
         }
 
         private static void Complete(Level level)
@@ -91,11 +91,14 @@ namespace WFC
             level.Collapsed[cellToCollapseIndex] = true;
         }
 
-        private static void Propagate(Level level, int collapsedCellIndex)
+        private static void Propagate(Level level, int collapsedCellIndex, int depth)
         {
+            if (depth <= 0)
+                return;
             foreach ((Direction _, int cellId) in level.NeighborIndices[collapsedCellIndex].Indices)
             {
                 ReduceEntropy(level, cellId);
+                Propagate(level, cellId, depth - 1);
             }
         }
 

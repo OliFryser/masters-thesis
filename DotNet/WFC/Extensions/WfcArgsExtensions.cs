@@ -39,7 +39,15 @@ namespace WFC.Extensions
             
             bool[] collapsed = new bool[numberOfCells];
             
-            Level level = new Level(rules, tileTypes, positions, options, entropy, neighborIndices, collapsed);
+            Level level = new Level(
+                rules, 
+                tileTypes, 
+                positions, 
+                options, 
+                entropy, 
+                neighborIndices, 
+                collapsed, 
+                args.MaxPropagationDepth);
 
             return level;
         }

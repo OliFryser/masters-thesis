@@ -11,8 +11,9 @@ public class WfcConfig : ScriptableObject
 {
     public AdjacencyRule[] Rules;
     public TileBase[] Tiles;
-    public int Width = 100;
-    public int Height = 200;
+    public int Width = 50;
+    public int Height = 50;
+    public int MaxPropagationDepth = 5;
     
     public WfcArgs ToArgs()
     {
@@ -38,7 +39,7 @@ public class WfcConfig : ScriptableObject
             rules.Add(new Domain.Models.AdjacencyRule(toTile, fromTile, rule.Direction.Reverse()));
         }
         List<TileType> tiles = new(tileIds);
-        return new WfcArgs(positions, tiles, rules);
+        return new WfcArgs(positions, tiles, rules, MaxPropagationDepth);
     }
 }
 
