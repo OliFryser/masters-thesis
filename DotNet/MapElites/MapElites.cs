@@ -11,14 +11,20 @@ namespace MapElites
             for (int i = 0; i < initializationIterations; i++)
             {
                 Individual individual = GenerateRandomSolution();
-                archive.TrySaveInArchive(individual);
+                Fitness fitness = individual.Evaluate();
+                Behavior behavior = individual.GetBehavior();
+                archive.TrySaveInArchive(individual, fitness, behavior);
             }
             
             for (int i = 0; i < iterations - initializationIterations; i++)
             {
                 Individual sampledIndividual = archive.SampleRandomSolution();
+                
                 Individual variedIndividual = sampledIndividual.GetRandomVariation();
-                archive.TrySaveInArchive(variedIndividual);
+                
+                Fitness fitness = variedIndividual.Evaluate();
+                Behavior behavior = variedIndividual.GetBehavior();
+                archive.TrySaveInArchive(variedIndividual, fitness, behavior);
             }
             
             return archive;
