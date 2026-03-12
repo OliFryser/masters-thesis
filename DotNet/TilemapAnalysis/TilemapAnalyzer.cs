@@ -30,7 +30,7 @@ namespace TilemapAnalysis
 
         public List<AdjacencyRule> GetAdjacencyRules()
         {
-            List<AdjacencyRule> rules = new List<AdjacencyRule>();
+            HashSet<AdjacencyRule> rules = new HashSet<AdjacencyRule>();
             Dictionary<Vector, Tile> positionToTile = Tiles.ToDictionary(t => t.Position, t => t);
 
             foreach (Tile fromTile in Tiles)
@@ -52,7 +52,7 @@ namespace TilemapAnalysis
                     rules.Add(new AdjacencyRule(fromTile.Type, toTile.Type, Direction.South));
             }
 
-            return rules;
+            return rules.ToList();
         }
 
         private void LoadTiles(string inputTilemap)
