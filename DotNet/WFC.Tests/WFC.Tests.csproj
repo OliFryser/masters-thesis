@@ -21,7 +21,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TilemapAnalysis\TilemapAnalysis.csproj" />
       <ProjectReference Include="..\WFC\WFC.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Benchmark\" />
     </ItemGroup>
 
 </Project>

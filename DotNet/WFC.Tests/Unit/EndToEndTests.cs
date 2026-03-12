@@ -1,11 +1,10 @@
 using Domain.Models;
-using Models;
 using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
 using WFC.Output;
 
-namespace WFC.Tests;
+namespace WFC.Tests.Unit;
 
 public class EndToEndTests
 {

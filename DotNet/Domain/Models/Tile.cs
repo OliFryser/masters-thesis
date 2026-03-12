@@ -10,6 +10,5 @@
 
         public Vector Position { get; set; }
         public TileType Type { get; set; }
-
     }
 }
