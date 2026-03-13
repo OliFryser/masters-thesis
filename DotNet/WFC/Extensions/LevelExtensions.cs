@@ -29,7 +29,7 @@ namespace WFC.Extensions
                     continue;
                 }
                 
-                if (level.Options[i].Count > 0)
+                if (level.Options[i].HasAnySet())
                 {
                     return true;
                 }
@@ -42,7 +42,7 @@ namespace WFC.Extensions
         {
             for (int i = 0; i < level.Collapsed.Length; i++)
             {
-                if (!level.Collapsed[i] && level.Options[i].Count > 1)
+                if (!level.Collapsed[i] && level.Options[i].PopCount() > 1)
                 {
                     return true;
                 }
@@ -58,7 +58,7 @@ namespace WFC.Extensions
             {
                 if (!level.Collapsed[i])
                     continue;
-                int tileIndex = level.Options[i].Single();
+                int tileIndex = level.Options[i].GetCollapsedTileIndex();
                 TileType tileType = level.TileTypes[tileIndex];
                 tiles.Add(new Tile(level.Position[i].X, level.Position[i].Y, tileType.Id));
             }
