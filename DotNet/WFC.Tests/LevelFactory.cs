@@ -6,19 +6,11 @@ using WFC.Extensions;
 
 namespace WFC.Tests;
 
-public class LevelFactory
+public static class LevelFactory
 {
-    public enum Size
-    {
-        Small,
-        Medium,
-        Large
-    }
-
-    public Level Create(Size size, string inputTilemapPath, int maxPropagationDepth)
+    public static Level Create(int dimension, string inputTilemapPath, int maxPropagationDepth)
     {
         List<Vector> positions = new();
-        int dimension = Dimension(size);
         for (int y = 0; y < dimension; y++)
         {
             for (int x = 0; x < dimension; x++)
@@ -34,12 +26,4 @@ public class LevelFactory
         WfcArgs args = new WfcArgs(positions, tiles, rules, maxPropagationDepth);
         return args.ToLevel();
     }
-
-    private int Dimension(Size size) => size switch
-    {
-        Size.Small => 10,
-        Size.Medium => 25,
-        Size.Large => 50,
-        _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
-    };
 }
