@@ -38,6 +38,19 @@ namespace WFC.Extensions
             return false;
         }
 
+        public static bool CanStep(this Level level)
+        {
+            for (int i = 0; i < level.Collapsed.Length; i++)
+            {
+                if (!level.Collapsed[i] && level.Options[i].Count > 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static Map ToMap(this Level level)
         {
             List<Tile> tiles = new List<Tile>();

@@ -28,7 +28,7 @@ public class LevelFactory
         }
 
         TilemapAnalyzer analyzer = new TilemapAnalyzer(inputTilemapPath);
-        List<TileType> tiles = analyzer.Tiles.Select(tile => tile.Type).ToList();
+        List<TileType> tiles = analyzer.Tiles.Select(tile => tile.Type).ToHashSet().ToList();
         List<AdjacencyRule> rules = analyzer.GetAdjacencyRules();
         
         WfcArgs args = new WfcArgs(positions, tiles, rules, maxPropagationDepth);
