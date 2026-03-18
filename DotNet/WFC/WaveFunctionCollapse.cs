@@ -130,6 +130,9 @@ namespace WFC
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
                 UpdateValidNeighbors(validNeighbors, level, neighborIndex, direction);
+                // Don't we need to and these or something? Neighbor South allows tile X and Y and Z,
+                // Neighbor West allows X and Z and W, thus only X and Z should be allowed.
+                // This tile already only allows X and Y and Z, so the end result is that X and Z are allowed
             }
 
             BitArray validNeighborsInCurrentOptions = validNeighbors.And(level.Options[cellIndex]);
