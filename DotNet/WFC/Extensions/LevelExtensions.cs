@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
@@ -18,6 +19,24 @@ namespace WFC.Extensions
                 }
             }
             return true;
+        }
+
+        public static bool IsCollapsed(this bool[] collapsed)
+        {
+            for (var i = 0; i < collapsed.Length; i++)
+            {
+                if (!collapsed[i])
+                {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        public static bool IsCollapsed(this BitArray collapsed)
+        {
+            return collapsed.HasAllSet();
         }
         
         public static bool IsFeasible(this Level level)

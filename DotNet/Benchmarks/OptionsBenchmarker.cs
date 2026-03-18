@@ -13,6 +13,8 @@ public class OptionsBenchmarker
 {
     [Params(10, 50, 100)] public int Dimension;
 
+    [Params(5, 10, 20)] public int PropagationDepth;
+    
     private const string TilemapPath =
         "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
 
@@ -21,7 +23,7 @@ public class OptionsBenchmarker
     [IterationSetup]
     public void IterationSetup()
     {
-        Level level = LevelFactory.Create(Dimension, TilemapPath, 5);
+        Level level = LevelFactory.Create(Dimension, TilemapPath, PropagationDepth);
         _startingState = new State(level);
     }
 
@@ -30,5 +32,4 @@ public class OptionsBenchmarker
     {
         return WaveFunctionCollapse.Complete(_startingState);
     }
-    
 }
