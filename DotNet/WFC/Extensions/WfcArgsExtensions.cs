@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace WFC.Extensions
             PopulateRules(rules, tileTypeToIndex, args.AdjacencyRules);
 
             Vector[] positions = args.Coordinates.ToArray();
-            
+
             BitArray[] options = new BitArray[numberOfCells];
             for (int i = 0; i < numberOfCells; i++)
             {
@@ -36,20 +37,40 @@ namespace WFC.Extensions
             }
 
             float[] entropy = Enumerable.Repeat<float>(numberOfTiles, numberOfCells).ToArray();
-            
+
             Neighbors[] neighborIndices = CreateNeighborsArray(positions);
-            
+
             bool[] collapsed = new bool[numberOfCells];
+
+            int[] weights = new int[numberOfTiles];
+            foreach ((TileType tileType, int count) in args.TileTypeToCount)
+            {
+                int tileTypeIndex = tileTypeToIndex[tileType];
+                weights[tileTypeIndex] = count;
+            }
             
+            float sumOfWeights = weights.Sum();
+            float[] sumOfWeightsArray = new float[numberOfCells];
+            Array.Fill(sumOfWeightsArray, sumOfWeights);
+            
+            float somOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
+            float[] sumOfWeightsLogWeightsArray = new float[numberOfCells];
+            Array.Fill(sumOfWeightsLogWeightsArray, somOfWeightsLogWeights);
+
             Level level = new Level(
-                rules, 
-                tileTypes, 
-                positions, 
-                options, 
-                entropy, 
-                neighborIndices, 
-                collapsed, 
-                args.MaxPropagationDepth);
+                rules,
+                tileTypes,
+                positions,
+                options,
+                entropy,
+                neighborIndices,
+                collapsed,
+                args.MaxPropagationDepth,
+                args.TileCount,
+                weights,
+                sumOfWeightsArray,
+                sumOfWeightsLogWeightsArray
+            );
 
             return level;
         }
@@ -95,15 +116,18 @@ namespace WFC.Extensions
                         neighborIndices[Direction.West] = j;
                     }
                 }
+
                 neighbors[i] = new Neighbors(neighborIndices);
             }
+
             return neighbors;
         }
 
-        private static void PopulateRules(TileRules[] rules, Dictionary<TileType, int> typeToIndex,  IReadOnlyCollection<AdjacencyRule> argsAdjacencyRules)
+        private static void PopulateRules(TileRules[] rules, Dictionary<TileType, int> typeToIndex,
+            IReadOnlyCollection<AdjacencyRule> argsAdjacencyRules)
         {
             int numberOfTiles = typeToIndex.Count;
-            
+
             Dictionary<Direction, BitArray>[]
                 adjacencyRules = new Dictionary<Direction, BitArray>[numberOfTiles];
 
