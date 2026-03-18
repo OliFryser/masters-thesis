@@ -27,12 +27,6 @@ namespace WFC.Extensions
             PopulateRules(rules, tileTypeToIndex, args.AdjacencyRules);
 
             Vector[] positions = args.Coordinates.ToArray();
-
-            // HashSet<int>[] options = new HashSet<int>[numberOfCells];
-            // for (int i = 0; i < options.Length; i++)
-            // {
-            //     options[i] = new HashSet<int>(Enumerable.Range(0, numberOfTiles));
-            // }
             
             BitArray[] options = new BitArray[numberOfCells];
             for (int i = 0; i < numberOfCells; i++)
