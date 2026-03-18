@@ -78,7 +78,8 @@ namespace Editor.ImageAnalyzer
             wfcConfig.name = $"{InputSprite.name}_WfcConfig";
             wfcConfig.Tiles = tiles.ToArray();
             wfcConfig.Rules = convertedRules.ToArray();
-            wfcConfig.TileTypeToCount = new SerializedDictionary<TileType, int>(tilemapAnalyzer.TileTypeToCount);
+            wfcConfig.TileTypeToCount = 
+                new SerializedDictionary<string, int>(tilemapAnalyzer.TileTypeToCount.ToDictionary(kvp => kvp.Key.Id, kvp => kvp.Value));
             wfcConfig.TileCount = tilemapAnalyzer.TileCount;
 
             AssetDatabase.CreateAsset(wfcConfig, ConfigDirectory + wfcConfig.name + ".asset");

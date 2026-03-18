@@ -36,7 +36,6 @@ namespace WFC.Extensions
                 options[i].SetAll(true);
             }
 
-            float[] entropy = Enumerable.Repeat<float>(numberOfTiles, numberOfCells).ToArray();
 
             Neighbors[] neighborIndices = CreateNeighborsArray(positions);
 
@@ -53,10 +52,13 @@ namespace WFC.Extensions
             int[] sumOfWeightsArray = new int[numberOfCells];
             Array.Fill(sumOfWeightsArray, sumOfWeights);
             
-            float somOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
+            float sumOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
             float[] sumOfWeightsLogWeightsArray = new float[numberOfCells];
-            Array.Fill(sumOfWeightsLogWeightsArray, somOfWeightsLogWeights);
+            Array.Fill(sumOfWeightsLogWeightsArray, sumOfWeightsLogWeights);
 
+            float[] entropy = 
+                Enumerable.Repeat<float>(MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeights / sumOfWeights, numberOfCells).ToArray();
+            
             Level level = new Level(
                 rules,
                 tileTypes,

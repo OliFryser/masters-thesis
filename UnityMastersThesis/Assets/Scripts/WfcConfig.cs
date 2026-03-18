@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Models;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -11,7 +12,7 @@ public class WfcConfig : ScriptableObject
 {
     public AdjacencyRule[] Rules;
     public TileBase[] Tiles;
-    public SerializedDictionary<TileType, int> TileTypeToCount;
+    public SerializedDictionary<string, int> TileTypeToCount;
     public int TileCount = 0;
     public int Width = 50;
     public int Height = 50;
@@ -41,7 +42,8 @@ public class WfcConfig : ScriptableObject
             rules.Add(new Domain.Models.AdjacencyRule(toTile, fromTile, rule.Direction.Reverse()));
         }
         List<TileType> tiles = new(tileIds);
-        return new WfcArgs(positions, tiles, rules, TileTypeToCount.ToDictionary(), TileCount, MaxPropagationDepth);
+        var tileTypeToCount = TileTypeToCount.ToDictionary().ToDictionary(kvp => new TileType(kvp.Key), kvp => kvp.Value);
+        return new WfcArgs(positions, tiles, rules, tileTypeToCount, TileCount, MaxPropagationDepth);
     }
 }
 
