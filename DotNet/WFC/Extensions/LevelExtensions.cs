@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Domain.Models;
 using Models;
 using WFC.Output;
@@ -19,6 +19,24 @@ namespace WFC.Extensions
             }
             return true;
         }
+
+        public static bool IsCollapsed(this bool[] collapsed)
+        {
+            for (var i = 0; i < collapsed.Length; i++)
+            {
+                if (!collapsed[i])
+                {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        public static bool IsCollapsed(this BitArray collapsed)
+        {
+            return collapsed.HasAllSetBits();
+        }
         
         public static bool IsFeasible(this Level level)
         {
@@ -29,7 +47,7 @@ namespace WFC.Extensions
                     continue;
                 }
                 
-                if (level.Options[i].Count > 0)
+                if (level.Options[i].HasAnySetBits())
                 {
                     return true;
                 }
@@ -42,7 +60,7 @@ namespace WFC.Extensions
         {
             for (int i = 0; i < level.Collapsed.Length; i++)
             {
-                if (!level.Collapsed[i] && level.Options[i].Count > 1)
+                if (!level.Collapsed[i] && level.Options[i].PopCount() > 1)
                 {
                     return true;
                 }
@@ -58,7 +76,7 @@ namespace WFC.Extensions
             {
                 if (!level.Collapsed[i])
                     continue;
-                int tileIndex = level.Options[i].Single();
+                int tileIndex = level.Options[i].GetCollapsedTileIndex();
                 TileType tileType = level.TileTypes[tileIndex];
                 tiles.Add(new Tile(level.Position[i].X, level.Position[i].Y, tileType.Id));
             }

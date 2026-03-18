@@ -7,8 +7,10 @@ namespace Benchmarks;
 public class ExampleClass
 {
     [Benchmark]
-    public void MyMethod()
+    public int MyMethod()
     {
         // Do work here... 
+        // Return something so the method call is not optimized away.
+        return 0;
     }
 }

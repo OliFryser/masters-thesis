@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Domain.Models;
 using WFC.Args;
@@ -61,7 +62,7 @@ namespace WFC
             List<int> lowestEntropyIndices = new List<int>();
             for (int i = 0; i < level.Entropy.Length; i++)
             {
-                if (level.Collapsed[i] || level.Options[i].Count == 0)
+                if (level.Collapsed[i] || !level.Options[i].HasAnySetBits())
                 {
                     continue;
                 }
@@ -86,8 +87,9 @@ namespace WFC
 
         private static void CollapseCell(Level level, int cellToCollapseIndex)
         {
-            int chosenTileType = level.Options[cellToCollapseIndex].GetRandomElement();
-            level.Options[cellToCollapseIndex] = new HashSet<int> { chosenTileType };
+            int chosenTileType = level.Options[cellToCollapseIndex].GetRandomSetIndex();
+            level.Options[cellToCollapseIndex].SetAll(false);
+            level.Options[cellToCollapseIndex][chosenTileType] = true;
             level.Collapsed[cellToCollapseIndex] = true;
         }
 
@@ -119,18 +121,24 @@ namespace WFC
             
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
-                HashSet<int> neighborOptions = level.Options[neighborIndex];
-                HashSet<int> validOptions = new HashSet<int>();
-                foreach (int tileId in neighborOptions)
+                BitArray neighborOptions = level.Options[neighborIndex];
+                
+                BitArray validOptions = new BitArray(level.Options[cellIndex].Count, defaultValue: false);
+
+                for (int i = 0; i < neighborOptions.Count; i++)
                 {
-                    TileRules rules = level.Rules[tileId];
-                    int[] validTiles = rules.ValidTileIds[direction.Reverse()];
-                    validOptions.UnionWith(validTiles);
+                    if (neighborOptions[i])
+                    {
+                        TileRules rules = level.Rules[i];
+                        BitArray validTiles = rules.ValidTileIds[direction.Reverse()];
+                        validOptions.Or(validTiles);
+                    }
                 }
-                level.Options[cellIndex].IntersectWith(validOptions);
+                
+                level.Options[cellIndex].And(validOptions);
             }
 
-            level.Entropy[cellIndex] = level.Options[cellIndex].Count;
+            level.Entropy[cellIndex] = level.Options[cellIndex].PopCount();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
@@ -27,10 +28,17 @@ namespace WFC.Extensions
 
             Vector[] positions = args.Coordinates.ToArray();
 
-            HashSet<int>[] options = new HashSet<int>[numberOfCells];
-            for (int i = 0; i < options.Length; i++)
+            // HashSet<int>[] options = new HashSet<int>[numberOfCells];
+            // for (int i = 0; i < options.Length; i++)
+            // {
+            //     options[i] = new HashSet<int>(Enumerable.Range(0, numberOfTiles));
+            // }
+            
+            BitArray[] options = new BitArray[numberOfCells];
+            for (int i = 0; i < numberOfCells; i++)
             {
-                options[i] = new HashSet<int>(Enumerable.Range(0, numberOfTiles));
+                options[i] = new BitArray(numberOfTiles);
+                options[i].SetAll(true);
             }
 
             float[] entropy = Enumerable.Repeat<float>(numberOfTiles, numberOfCells).ToArray();
@@ -100,17 +108,19 @@ namespace WFC.Extensions
 
         private static void PopulateRules(TileRules[] rules, Dictionary<TileType, int> typeToIndex,  IReadOnlyCollection<AdjacencyRule> argsAdjacencyRules)
         {
-            Dictionary<Direction, HashSet<int>>[]
-                adjacencyRules = new Dictionary<Direction, HashSet<int>>[rules.Length];
+            int numberOfTiles = typeToIndex.Count;
+            
+            Dictionary<Direction, BitArray>[]
+                adjacencyRules = new Dictionary<Direction, BitArray>[numberOfTiles];
 
             for (int i = 0; i < rules.Length; i++)
             {
-                adjacencyRules[i] = new Dictionary<Direction, HashSet<int>>
+                adjacencyRules[i] = new Dictionary<Direction, BitArray>
                 {
-                    { Direction.North, new HashSet<int>() },
-                    { Direction.East, new HashSet<int>() },
-                    { Direction.South, new HashSet<int>() },
-                    { Direction.West, new HashSet<int>() },
+                    { Direction.North, new BitArray(numberOfTiles) },
+                    { Direction.East, new BitArray(numberOfTiles) },
+                    { Direction.South, new BitArray(numberOfTiles) },
+                    { Direction.West, new BitArray(numberOfTiles) },
                 };
             }
 
@@ -118,18 +128,12 @@ namespace WFC.Extensions
             {
                 int fromIndex = typeToIndex[adjacencyRule.From];
                 int toIndex = typeToIndex[adjacencyRule.To];
-                adjacencyRules[fromIndex][adjacencyRule.Direction].Add(toIndex);
+                adjacencyRules[fromIndex][adjacencyRule.Direction][toIndex] = true;
             }
 
             for (int i = 0; i < rules.Length; i++)
             {
-                var validTileIds = new Dictionary<Direction, int[]>();
-                foreach ((Direction direction, HashSet<int> ids) in adjacencyRules[i])
-                {
-                    validTileIds.Add(direction, ids.ToArray());
-                }
-
-                rules[i] = new TileRules(validTileIds);
+                rules[i] = new TileRules(adjacencyRules[i]);
             }
         }
     }

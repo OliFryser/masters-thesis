@@ -89,10 +89,9 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteSmall_FromInputTilemap()
     {
-        LevelFactory levelFactory = new();
         const string tilemapPath =
             "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = levelFactory.Create(LevelFactory.Size.Small, tilemapPath, 5);
+        Level level = LevelFactory.Create(10, tilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
@@ -105,10 +104,9 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteMedium_FromInputTilemap()
     {
-        LevelFactory levelFactory = new();
         const string tilemapPath =
             "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = levelFactory.Create(LevelFactory.Size.Large, tilemapPath, 5);
+        Level level = LevelFactory.Create(50, tilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
@@ -121,10 +119,9 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteLarge_FromInputTilemap()
     {
-        LevelFactory levelFactory = new();
         const string tilemapPath =
             "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = levelFactory.Create(LevelFactory.Size.Large, tilemapPath, 5);
+        Level level = LevelFactory.Create(100, tilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
