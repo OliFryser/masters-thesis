@@ -32,31 +32,12 @@ namespace WFC.Extensions
 
         public static int GetCollapsedTileIndex(this BitArray bitArray)
         {
-            // 1. Copy BitArray to an int array
-            int[] ints = new int[(bitArray.Count + 31) / 32];
-            bitArray.CopyTo(ints, 0);
-
-            int totalTrailingZeros = 0;
-
-            for (int i = 0; i < ints.Length; i++)
+            for (int i = 0; i < bitArray.Count; i++)
             {
-                int val = ints[i];
-
-                if (val == 0)
-                {
-                    // This entire block of 32 bits is zero
-                    totalTrailingZeros += 32;
-                }
-                else
-                {
-                    // Use the hardware-accelerated method
-                    totalTrailingZeros += BitOperations.TrailingZeroCount(val);
-                    break;
-                }
+                if (bitArray[i]) return i;
             }
 
-            // Ensure we don't return more than the actual BitArray length
-            return Math.Min(totalTrailingZeros, bitArray.Count);
+            throw new ArgumentException("No valid tile was set as an option!");
         }
 
         public static int GetRandomSetIndex(this BitArray bitArray)
