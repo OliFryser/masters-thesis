@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <UnityPluginsDir>../../UnityMastersThesis/Assets/Plugins</UnityPluginsDir>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <RootNamespace>ImageAnalysis</RootNamespace>
+        <RootNamespace>TilemapAnalysis</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

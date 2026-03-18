@@ -16,7 +16,12 @@ public class EndToEndTests
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile];
         IReadOnlyCollection<AdjacencyRule> adjacencyRules = [];
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
+        IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
+        {
+            { tile, 1 },
+        };
+        int tileCount = 1;
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
         Result result = WaveFunctionCollapse.Run(args);
 
         Assert.That(result, Is.Not.Null);
@@ -38,7 +43,13 @@ public class EndToEndTests
             new AdjacencyRule(tile1, tile0, Direction.East),
             new AdjacencyRule(tile1, tile0, Direction.West)
         ];
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
+        IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
+        {
+            { tile0, 1 },
+            { tile1, 1 },
+        };
+        int tileCount = 2;
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
 
         Result result = WaveFunctionCollapse.Run(args);
 
@@ -55,7 +66,13 @@ public class EndToEndTests
         IReadOnlyCollection<Vector> coordinates = [new Vector(0, 0), new Vector(1, 0)];
         IReadOnlyCollection<TileType> tileTypes = [tile0, tile1];
         IReadOnlyCollection<AdjacencyRule> adjacencyRules = [];
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
+        IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
+        {
+            { tile0, 1 },
+            { tile1, 1 },
+        };
+        int tileCount = 2;
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
         Result result = WaveFunctionCollapse.Run(args);
 
         Assert.That(result, Is.Not.Null);
@@ -77,8 +94,16 @@ public class EndToEndTests
             new AdjacencyRule(tile1, tile0, Direction.East),
             new AdjacencyRule(tile1, tile0, Direction.West)
         ];
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules);
+        
+        IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
+        {
+            { tile0, 1 },
+            { tile1, 1 },
+        };
+        int tileCount = 2;
 
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
+        
         State step0 = args.ToState();
         State step1 = WaveFunctionCollapse.Step(step0);
         State step2 = WaveFunctionCollapse.Step(step1);

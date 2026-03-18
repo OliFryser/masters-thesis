@@ -12,6 +12,9 @@ namespace TilemapAnalysis
 {
     public class TilemapAnalyzer : IDisposable
     {
+        public Dictionary<TileType, int> TileTypeToCount { get; } = new Dictionary<TileType, int>();
+        public int TileCount => Tiles.Count;
+        
         public List<Tile> Tiles { get; } = new List<Tile>();
         private List<Image<Rgba32>> TileSprites { get; } = new List<Image<Rgba32>>();
         
@@ -73,13 +76,20 @@ namespace TilemapAnalysis
 
                     Image<Rgba32> tile = tilemap.Clone(ctx => ctx.Crop(rect));
                     string hash = tile.Hash();
-                    
+                                        
                     if (unique.Add(hash))
                     {
                         TileSprites.Add(tile);
                     }
 
-                    Tiles.Add(new Tile(x, y, hash));
+                    Tile newTile = new Tile(x, y, hash);
+
+                    if (!TileTypeToCount.TryAdd(newTile.Type, 1))
+                    {
+                        TileTypeToCount[newTile.Type]++;
+                    }
+
+                    Tiles.Add(newTile);
                 }
             }
         }
