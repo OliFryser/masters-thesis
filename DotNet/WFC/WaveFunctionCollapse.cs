@@ -172,7 +172,12 @@ namespace WFC
         }
 
         private static float CalculateEntropy(int sumOfWeights, float sumOfWeightsLogWeight)
-            => MathF.Log(sumOfWeights, 2f)
-               - sumOfWeightsLogWeight / MathF.Log(sumOfWeights, 2f);
+        {
+            if (sumOfWeights <= 0)
+                return 0;
+            
+            return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
+        }
+            
     }
 }
