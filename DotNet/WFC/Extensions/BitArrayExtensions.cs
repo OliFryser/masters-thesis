@@ -12,11 +12,9 @@ namespace WFC.Extensions
         {
 #if (NET5_0_OR_GREATER)
             int count = 0;
-            // Copy BitArray to an int array
             int[] ints = new int[(bitArray.Count + 31) / 32];
             bitArray.CopyTo(ints, 0);
 
-            // Use hardware-accelerated PopCount
             foreach (int n in ints)
             {
                 count += BitOperations.PopCount((uint)n);
@@ -68,6 +66,7 @@ namespace WFC.Extensions
                 if (bitArray[i])
                 {
                     count++;
+                    // Det virker lidt langsomt at kalde rng.Next så mange gange?
                     // With probability 1/count, replace the current result
                     if (rng.Next(count) == 0)
                     {
