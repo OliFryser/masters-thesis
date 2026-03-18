@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Domain.Models;
 using Models;
 using WFC.Output;
@@ -36,7 +35,7 @@ namespace WFC.Extensions
 
         public static bool IsCollapsed(this BitArray collapsed)
         {
-            return collapsed.HasAllSet();
+            return collapsed.HasAllSetBits();
         }
         
         public static bool IsFeasible(this Level level)
@@ -48,7 +47,7 @@ namespace WFC.Extensions
                     continue;
                 }
                 
-                if (level.Options[i].HasAnySet())
+                if (level.Options[i].HasAnySetBits())
                 {
                     return true;
                 }

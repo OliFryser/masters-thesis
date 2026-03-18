@@ -10,6 +10,7 @@ namespace WFC.Extensions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(this BitArray bitArray)
         {
+#if (NET5_0_OR_GREATER)
             int count = 0;
             // Copy BitArray to an int array
             int[] ints = new int[(bitArray.Count + 31) / 32];
@@ -19,6 +20,22 @@ namespace WFC.Extensions
             foreach (int n in ints)
             {
                 count += BitOperations.PopCount((uint)n);
+            }
+
+            return count;
+
+
+#else
+            return PopCountOld(bitArray);
+#endif
+        }
+
+        private static int PopCountOld(this BitArray bitArray)
+        {
+            int count = 0;
+            for (int i = 0; i < bitArray.Count; i++)
+            {
+                if (bitArray[i]) count++;
             }
 
             return count;
@@ -60,6 +77,34 @@ namespace WFC.Extensions
             }
 
             return result; // Returns -1 if no set bits were found
+        }
+
+        public static bool HasAnySetBits(this BitArray bitArray)
+        {
+#if (NET5_0_OR_GREATER)
+            return bitArray.HasAnySet();
+#else
+            for (int i = 0; i < bitArray.Count; i++)
+            {
+                if (bitArray[i]) return true;
+            }
+
+            return false;
+#endif
+        }
+        
+        public static bool HasAllSetBits(this BitArray bitArray)
+        {
+#if (NET5_0_OR_GREATER)
+            return bitArray.HasAllSet();
+#else
+            for (int i = 0; i < bitArray.Count; i++)
+            {
+                if (!bitArray[i]) return false;
+            }
+
+            return true;
+#endif
         }
     }
 }

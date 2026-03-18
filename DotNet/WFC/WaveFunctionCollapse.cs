@@ -62,7 +62,7 @@ namespace WFC
             List<int> lowestEntropyIndices = new List<int>();
             for (int i = 0; i < level.Entropy.Length; i++)
             {
-                if (level.Collapsed[i] || !level.Options[i].HasAnySet())
+                if (level.Collapsed[i] || !level.Options[i].HasAnySetBits())
                 {
                     continue;
                 }
