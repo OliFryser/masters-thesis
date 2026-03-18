@@ -26,7 +26,7 @@ namespace WFC
             Complete(state.Level);
             return state;
         }
-        
+
         public static Result Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
@@ -66,14 +66,14 @@ namespace WFC
                 {
                     continue;
                 }
-                
+
                 float entropy = level.Entropy[i];
                 const float threshold = 0.1f;
                 bool amongLowestEntropies = Math.Abs(entropy - lowestEntropy) < threshold;
                 if (amongLowestEntropies)
                 {
                     lowestEntropyIndices.Add(i);
-                } 
+                }
                 else if (entropy < lowestEntropy)
                 {
                     lowestEntropy = entropy;
@@ -81,15 +81,15 @@ namespace WFC
                     lowestEntropyIndices.Add(i);
                 }
             }
-            
+
             return lowestEntropyIndices.GetRandomElement();
         }
 
         private static void CollapseCell(Level level, int cellToCollapseIndex)
         {
-            int chosenTileType = 
+            int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
-                    level.Weights, 
+                    level.Weights,
                     level.SumOfWeights[cellToCollapseIndex]);
             level.Options[cellToCollapseIndex].SetAll(false);
             level.Options[cellToCollapseIndex][chosenTileType] = true;
@@ -99,13 +99,17 @@ namespace WFC
         private static void Propagate(Level level, int collapsedCellIndex, int depth, HashSet<int> visited)
         {
             if (depth <= 0)
+            {
                 return;
+            }
 
             if (visited.Contains(collapsedCellIndex))
+            {
                 return;
-            
+            }
+
             visited.Add(collapsedCellIndex);
-            
+
             foreach ((Direction _, int cellId) in level.NeighborIndices[collapsedCellIndex].Indices)
             {
                 ReduceEntropy(level, cellId);
@@ -119,23 +123,28 @@ namespace WFC
             {
                 return;
             }
-            
+
             Neighbors neighbors = level.NeighborIndices[cellIndex];
-            BitArray previousOptions = (BitArray) level.Options[cellIndex].Clone();
-            
+            BitArray validNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: false);
+
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
-                ExcludeInvalidNeighbors(level, cellIndex, neighborIndex, direction);
+                UpdateValidNeighbors(validNeighbors, level, neighborIndex, direction);
             }
-            
-            UpdateSumOfWeights(level, cellIndex, previousOptions);
-            level.Entropy[cellIndex] = CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
+
+            BitArray validNeighborsInCurrentOptions = validNeighbors.And(level.Options[cellIndex]);
+            BitArray excludedOptions = validNeighborsInCurrentOptions.Xor(level.Options[cellIndex]);
+            UpdateSumOfWeights(level, cellIndex, excludedOptions);
+            level.Options[cellIndex].Xor(excludedOptions);
+
+            level.Entropy[cellIndex] =
+                CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
         }
 
-        private static void ExcludeInvalidNeighbors(Level level, int cellIndex, int neighborIndex, Direction direction)
+        private static void UpdateValidNeighbors(BitArray validNeighbors, Level level, int neighborIndex,
+            Direction direction)
         {
             BitArray neighborOptions = level.Options[neighborIndex];
-            BitArray validOptions = new BitArray(level.Options[cellIndex].Count, defaultValue: false);
 
             for (int i = 0; i < neighborOptions.Count; i++)
             {
@@ -143,30 +152,27 @@ namespace WFC
                 {
                     TileRules rules = level.Rules[i];
                     BitArray validTiles = rules.ValidTileIds[direction.Reverse()];
-                    validOptions.Or(validTiles);
+                    validNeighbors.Or(validTiles);
                 }
             }
-                
-            level.Options[cellIndex].And(validOptions);
         }
 
-        private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray previousOptions)
+        private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray excludedOptions)
         {
-            BitArray excludedOptions = 
-                ((BitArray)level.Options[cellIndex].Clone()).Xor(previousOptions);
-
             for (var i = 0; i < excludedOptions.Count; i++)
             {
-                if (!excludedOptions[i]) 
+                if (!excludedOptions[i])
+                {
                     continue;
-                
+                }
+
                 level.SumOfWeights[cellIndex] -= level.Weights[i];
                 level.SumOfWeightsLogWeights[cellIndex] -= level.Weights[i] * MathF.Log(level.Weights[i], 2f);
             }
         }
 
         private static float CalculateEntropy(int sumOfWeights, float sumOfWeightsLogWeight)
-            => MathF.Log(sumOfWeights, 2f) 
-                - sumOfWeightsLogWeight / MathF.Log(sumOfWeights, 2f);
+            => MathF.Log(sumOfWeights, 2f)
+               - sumOfWeightsLogWeight / MathF.Log(sumOfWeights, 2f);
     }
 }
