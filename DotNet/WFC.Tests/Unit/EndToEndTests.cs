@@ -9,6 +9,11 @@ namespace WFC.Tests.Unit;
 
 public class EndToEndTests
 {
+    private static readonly string ResourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources/";
+    private static readonly string TilemapPath =
+        $"{ResourceDirectory}/Tilemaps/PalletTown.png";
+
+
     [Test]
     public void Wfc_Completes_WithOnlyOneCell()
     {
@@ -45,10 +50,10 @@ public class EndToEndTests
         ];
         IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
         {
-            { tile0, 1 },
-            { tile1, 1 },
+            { tile0, 2 },
+            { tile1, 2 },
         };
-        int tileCount = 2;
+        int tileCount = 4;
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
 
         Result result = WaveFunctionCollapse.Run(args);
@@ -97,10 +102,10 @@ public class EndToEndTests
         
         IReadOnlyDictionary<TileType, int> tileTypeToCount = new Dictionary<TileType, int>
         {
-            { tile0, 1 },
-            { tile1, 1 },
+            { tile0, 2 },
+            { tile1, 2 },
         };
-        int tileCount = 2;
+        int tileCount = 4;
 
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
         
@@ -114,9 +119,7 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteSmall_FromInputTilemap()
     {
-        const string tilemapPath =
-            "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = LevelFactory.Create(10, tilemapPath, 5);
+        Level level = LevelFactory.Create(10, TilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
@@ -129,9 +132,7 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteMedium_FromInputTilemap()
     {
-        const string tilemapPath =
-            "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = LevelFactory.Create(50, tilemapPath, 5);
+       Level level = LevelFactory.Create(50, TilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
@@ -144,9 +145,7 @@ public class EndToEndTests
     [Test]
     public void Wfc_CanCompleteLarge_FromInputTilemap()
     {
-        const string tilemapPath =
-            "/Users/dkWiSkHe/RiderProjects/masters-thesis/UnityMastersThesis/Assets/Resources/Tiles/Pokemon/Tilemaps/PalletTown.png";
-        Level level = LevelFactory.Create(100, tilemapPath, 5);
+        Level level = LevelFactory.Create(100, TilemapPath, 5);
         State startingPoint = new State(level);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())

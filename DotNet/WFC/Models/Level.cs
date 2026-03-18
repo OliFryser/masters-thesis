@@ -8,7 +8,7 @@ namespace Models
     public class Level
     {
         public Level(TileRules[] rules, TileType[] tileTypes, Vector[] position, BitArray[] options, float[] entropy,
-            Neighbors[] neighborIndices, bool[] collapsed, int maxDepth, int totalTileTypeCount, int[] weights, float[] sumOfWeights, float[] sumOfWeightsLogWeights)
+            Neighbors[] neighborIndices, bool[] collapsed, int maxDepth, int totalTileTypeCount, int[] weights, int[] sumOfWeights, float[] sumOfWeightsLogWeights)
         {
             TotalTileTypeCount = totalTileTypeCount;
             TileTypes = tileTypes;
@@ -38,7 +38,7 @@ namespace Models
         public float[] Entropy { get; }
         public Neighbors[] NeighborIndices { get; }
         public bool[] Collapsed { get; }
-        public float[] SumOfWeights { get; }
+        public int[] SumOfWeights { get; }
         public float[] SumOfWeightsLogWeights { get; }
     }
 }

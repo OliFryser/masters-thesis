@@ -105,5 +105,26 @@ namespace WFC.Extensions
             return true;
 #endif
         }
+        
+        public static int GetRandomWeightedSetIndex(this BitArray bitArray, int[] weights, int sumOfWeights)
+        {
+            Random random = new Random();
+            int roll = random.Next(sumOfWeights);
+
+            int sum = 0;
+            for (int i = 0; i < bitArray.Count; i++)
+            {
+                if (!bitArray[i]) 
+                    continue;
+                
+                sum += weights[i];
+                if (sum >= roll)
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException("Sum of weights out of bounds or no valid set index in bitarray");
+        }
     }
 }

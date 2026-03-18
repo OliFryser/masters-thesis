@@ -11,6 +11,7 @@ public class WfcConfig : ScriptableObject
 {
     public AdjacencyRule[] Rules;
     public TileBase[] Tiles;
+    
     public Dictionary<TileType, int> TileTypeToCount;
     public int TileCount = 0;
     public int Width = 50;

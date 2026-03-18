@@ -49,8 +49,8 @@ namespace WFC.Extensions
                 weights[tileTypeIndex] = count;
             }
             
-            float sumOfWeights = weights.Sum();
-            float[] sumOfWeightsArray = new float[numberOfCells];
+            int sumOfWeights = weights.Sum();
+            int[] sumOfWeightsArray = new int[numberOfCells];
             Array.Fill(sumOfWeightsArray, sumOfWeights);
             
             float somOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
