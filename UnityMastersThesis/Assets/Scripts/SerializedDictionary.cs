@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Version_1.Utility
+[Serializable]
+public class SerializedDictionary<TKey, TValue>
 {
-    [Serializable]
-    public class SerializedDictionary<TKey, TValue>
+    [SerializeField] private List<KeyValuePair<TKey, TValue>> _values;
+    public Dictionary<TKey, TValue> ToDictionary() => _values.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    
+    public SerializedDictionary(Dictionary<TKey, TValue> dictionary)
     {
-        [SerializeField] private List<KeyValuePair<TKey, TValue>> _values;
-        public Dictionary<TKey, TValue> Build() => _values.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-        [Serializable]
-        public class KeyValuePair<KvpKey, KvpValue>
+        _values = dictionary.Select(kvp => new KeyValuePair<TKey, TValue>
         {
-            public KvpKey Key;
-            public KvpValue Value;
-        }
+            Key = kvp.Key,
+            Value = kvp.Value,
+        }).ToList();
+    }
+    
+    [Serializable]
+    public class KeyValuePair<TKvpKey, TKvpValue>
+    {
+        public TKvpKey Key;
+        public TKvpValue Value;
     }
 }

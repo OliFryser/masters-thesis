@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Models;
 using TilemapAnalysis;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using Tile = UnityEngine.Tilemaps.Tile;
 
 namespace Editor.ImageAnalyzer
 {
@@ -76,7 +78,7 @@ namespace Editor.ImageAnalyzer
             wfcConfig.name = $"{InputSprite.name}_WfcConfig";
             wfcConfig.Tiles = tiles.ToArray();
             wfcConfig.Rules = convertedRules.ToArray();
-            wfcConfig.TileTypeToCount = tilemapAnalyzer.TileTypeToCount;
+            wfcConfig.TileTypeToCount = new SerializedDictionary<TileType, int>(tilemapAnalyzer.TileTypeToCount);
             wfcConfig.TileCount = tilemapAnalyzer.TileCount;
 
             AssetDatabase.CreateAsset(wfcConfig, ConfigDirectory + wfcConfig.name + ".asset");
