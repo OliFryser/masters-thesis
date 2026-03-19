@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -23,24 +24,18 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private WfcConfig _wfcConfig;
 
     [SerializeField, Range(0f, 1f)] private float _animationSpeed = .5f;
-    
+    [SerializeField] private TileBase _emptyTile;
+
     private State _state;
     
-    [Button("Display Map from layout file")]
-    public void DisplayMapFromJson()
-    {
-        List<Tile> tileLayout =
-            JsonConvert.DeserializeObject<List<Tile>>(_layoutFile.text);
-        
-        DisplayTiles(tileLayout);
-    }
-
-    private void DisplayTiles(List<Tile> tileLayout)
+    private void DisplayTiles(State state)
     {
         _tilemap.ClearAllTiles();
+
+        List<Tile> tileLayout = state.GetMap().Tiles;
         
         foreach (Tile tile in tileLayout)
-        {    
+        {
             try
             {
                 TileBase tileBase = _wfcConfig.Tiles.First(tileBase => tileBase.name == tile.Type.Id);
@@ -51,16 +46,23 @@ public class Visualizer : MonoBehaviour
                 Debug.LogError(e);
             }
         }
+        
+        DisplayEmptyTiles(state.EmptyTiles);
     }
 
-    [Button("Generate and display WFC map")]
-    public void GenerateAndDisplayWfcMap()
+    private void DisplayEmptyTiles(List<EmptyTile> tiles)
     {
-        
-        WfcArgs wfcArgs = _wfcConfig.ToArgs();
-        var result = WaveFunctionCollapse.Run(wfcArgs);
-        var map = result.Map;
-        DisplayTiles(map.Tiles);
+        foreach (EmptyTile tile in tiles)
+        {
+            Vector3Int position = new Vector3Int(tile.Position.X, -tile.Position.Y);
+            _tilemap.SetTile(position, _emptyTile);
+
+            Color color = tile.Options == 0 
+                ? Color.magenta 
+                : new Color(tile.Entropy, tile.Entropy, tile.Entropy, 1f);
+            
+            _tilemap.SetColor(position, color);
+        }
     }
 
     [Button("Step")]
@@ -69,7 +71,7 @@ public class Visualizer : MonoBehaviour
         InitializeState();
 
         _state = WaveFunctionCollapse.Step(_state);
-        DisplayTiles(_state.GetMap().Tiles);
+        DisplayTiles(_state);
     }
 
     private void InitializeState()
@@ -85,9 +87,9 @@ public class Visualizer : MonoBehaviour
     public void Complete()
     {
         InitializeState();
-        
+
         _state = WaveFunctionCollapse.Complete(_state);
-        DisplayTiles(_state.GetMap().Tiles);
+        DisplayTiles(_state);
     }
 
     [Button("Reset")]
@@ -97,8 +99,8 @@ public class Visualizer : MonoBehaviour
         _tilemap.ClearAllTiles();
         StopAnimationInEditor();
     }
-    
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     private float _lastStepTime;
 
     [Button("Start Animation")]
@@ -130,10 +132,10 @@ public class Visualizer : MonoBehaviour
         {
             Step();
             _lastStepTime = currentTime;
-        
+
             // This ensures the Scene View repaints so you see the tiles change
             EditorUtility.SetDirty(_tilemap);
         }
     }
-    #endif
+#endif
 }

@@ -2204,6 +2204,6 @@ MonoBehaviour:
     - Key: 1649389043
       Value: 4
   TileCount: 480
-  Width: 50
-  Height: 50
+  Width: 20
+  Height: 20
   MaxPropagationDepth: 5
