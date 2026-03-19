@@ -47,18 +47,17 @@ namespace WFC.Extensions
                 int tileTypeIndex = tileTypeToIndex[tileType];
                 weights[tileTypeIndex] = count;
             }
-            
-            int sumOfWeights = weights.Sum();
-            int[] sumOfWeightsArray = new int[numberOfCells];
-            Array.Fill(sumOfWeightsArray, sumOfWeights);
-            
-            float sumOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
-            float[] sumOfWeightsLogWeightsArray = new float[numberOfCells];
-            Array.Fill(sumOfWeightsLogWeightsArray, sumOfWeightsLogWeights);
 
-            float[] entropy = 
-                Enumerable.Repeat<float>(MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeights / sumOfWeights, numberOfCells).ToArray();
-            
+            int sumOfWeights = weights.Sum();
+            int[] sumOfWeightsArray = Enumerable.Repeat(sumOfWeights, numberOfCells).ToArray();
+
+            float sumOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
+            float[] sumOfWeightsLogWeightsArray = Enumerable.Repeat(sumOfWeightsLogWeights, numberOfCells).ToArray();
+
+            float[] entropy =
+                Enumerable.Repeat(
+                    MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeights / sumOfWeights, numberOfCells).ToArray();
+
             Level level = new Level(
                 rules,
                 tileTypes,

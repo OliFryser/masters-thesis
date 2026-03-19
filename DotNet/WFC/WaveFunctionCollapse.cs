@@ -125,7 +125,7 @@ namespace WFC
             }
 
             Neighbors neighbors = level.NeighborIndices[cellIndex];
-            BitArray validNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: false);
+            BitArray validNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
 
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
@@ -145,6 +145,7 @@ namespace WFC
             Direction direction)
         {
             BitArray neighborOptions = level.Options[neighborIndex];
+            BitArray validNeighborsInDirection = new BitArray(level.Options[neighborIndex].Count, false);
 
             for (int i = 0; i < neighborOptions.Count; i++)
             {
@@ -152,9 +153,11 @@ namespace WFC
                 {
                     TileRules rules = level.Rules[i];
                     BitArray validTiles = rules.ValidTileIds[direction.Reverse()];
-                    validNeighbors.Or(validTiles);
+                    validNeighborsInDirection.Or(validTiles);
                 }
             }
+            
+            validNeighbors.And(validNeighborsInDirection);
         }
 
         private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray excludedOptions)
