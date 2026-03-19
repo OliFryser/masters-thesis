@@ -156,8 +156,11 @@ namespace WFC
                     validNeighborsInDirection.Or(validTiles);
                 }
             }
-            
-            validNeighbors.And(validNeighborsInDirection);
+
+            if (validNeighborsInDirection.HasAnySetBits())
+            {
+                validNeighbors.And(validNeighborsInDirection);
+            }
         }
 
         private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray excludedOptions)
@@ -178,9 +181,8 @@ namespace WFC
         {
             if (sumOfWeights <= 0)
                 return 0;
-            
+
             return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
         }
-            
     }
 }

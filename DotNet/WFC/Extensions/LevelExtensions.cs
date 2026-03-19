@@ -17,6 +17,7 @@ namespace WFC.Extensions
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -29,7 +30,7 @@ namespace WFC.Extensions
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -37,7 +38,7 @@ namespace WFC.Extensions
         {
             return collapsed.HasAllSetBits();
         }
-        
+
         public static bool IsFeasible(this Level level)
         {
             for (var i = 0; i < level.Options.Length; i++)
@@ -46,7 +47,7 @@ namespace WFC.Extensions
                 {
                     continue;
                 }
-                
+
                 if (level.Options[i].HasAnySetBits())
                 {
                     return true;
@@ -76,12 +77,29 @@ namespace WFC.Extensions
             {
                 if (!level.Collapsed[i])
                     continue;
+
                 int tileIndex = level.Options[i].GetCollapsedTileIndex();
                 TileType tileType = level.TileTypes[tileIndex];
                 tiles.Add(new Tile(level.Position[i].X, level.Position[i].Y, tileType.Id));
             }
-            
+
             return new Map(tiles);
+        }
+
+        public static List<EmptyTile> GetEmptyTiles(this Level level)
+        {
+            List<EmptyTile> tiles = new List<EmptyTile>();
+            for (int i = 0; i < level.Position.Length; i++)
+            {
+                if (level.Collapsed[i])
+                    continue;
+
+                int options = level.Options[i].PopCount();
+                float entropy = level.Entropy[i];
+                tiles.Add(new EmptyTile(level.Position[i].X, level.Position[i].Y, options, entropy));
+            }
+
+            return tiles;
         }
     }
 }
