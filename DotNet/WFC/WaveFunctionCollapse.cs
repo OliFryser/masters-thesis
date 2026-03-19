@@ -30,9 +30,27 @@ namespace WFC
         public static Result Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
+            // RestrictFromBorderTiles(level);
             Complete(level);
             Status status = new Status(level.IsCollapsed());
             return new Result(level.ToMap(), status);
+        }
+
+        private static void RestrictFromBorderTiles(Level level)
+        {
+            BitArray noRulesNorth = new BitArray(level.TotalTileTypeCount, false);
+            BitArray noRulesSouth = new BitArray(level.TotalTileTypeCount, false);
+            BitArray noRulesEast = new BitArray(level.TotalTileTypeCount, false);
+            BitArray noRulesWest = new BitArray(level.TotalTileTypeCount, false);
+
+            for (int i = 0; i < level.Rules.Length; i++)
+            {
+                BitArray tilesAllowedNorth = level.Rules[i].ValidTileIds[Direction.North];
+                if (!tilesAllowedNorth.HasAnySetBits())
+                {
+                    noRulesNorth[i] = true;
+                }
+            }
         }
 
         private static void Step(Level level)
@@ -165,7 +183,7 @@ namespace WFC
 
         private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray excludedOptions)
         {
-            for (var i = 0; i < excludedOptions.Count; i++)
+            for (int i = 0; i < excludedOptions.Count; i++)
             {
                 if (!excludedOptions[i])
                 {
