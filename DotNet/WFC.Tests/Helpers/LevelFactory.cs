@@ -38,7 +38,9 @@ public static class LevelFactory
     /// <returns></returns>
     internal static Level CreateDummyLevelWithUnitWeights(int cellCount, int tileTypeCount)
     {
-        // No rules allowed
+        // Init tile arrays
+        int[] weights = Enumerable.Repeat(1, tileTypeCount).ToArray();
+        
         TileRules[] rules = new TileRules[tileTypeCount];
         for (int i = 0; i < tileTypeCount; i++)
         {
@@ -50,30 +52,29 @@ public static class LevelFactory
                 { Direction.West, new BitArray(tileTypeCount) },
             });
         }
-
+        
+        TileType[] tileTypes = new TileType[tileTypeCount];
+        for (int i = 0; i < tileTypes.Length; i++)
+        {
+            tileTypes[i] = new TileType($"{i}");
+        }
+        
+        // Init cell arrays
+        Vector[] position = new Vector[cellCount];
+        bool[] collapsed = new bool[cellCount];
+        
         BitArray[] options = new BitArray[cellCount];
         for (int i = 0; i < cellCount; i++)
         {
             options[i] = new BitArray(tileTypeCount, true);
         }
 
-        // Dummy initialize all neighbors
         Neighbors[] neighborIndices = new Neighbors[cellCount];
         for (int i = 0; i < cellCount; i++)
         {
             neighborIndices[i] = new Neighbors(new());
         }
-
-        TileType[] tileTypes = new TileType[tileTypeCount];
-        for (int i = 0; i < tileTypes.Length; i++)
-        {
-            tileTypes[i] = new TileType($"{i}");
-        }
-        Vector[] position = new Vector[cellCount];
         
-        bool[] collapsed = new bool[cellCount];
-        int[] weights = Enumerable.Repeat(1, tileTypeCount).ToArray();
-
         float sumOfWeightsLogWeightsNumber = weights.Sum(w => MathF.Log2(w) * w);
         int sumOfWeightsNumber = weights.Sum();
         int[] sumOfWeights = Enumerable.Repeat(sumOfWeightsNumber, cellCount).ToArray();
