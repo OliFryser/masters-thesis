@@ -67,11 +67,13 @@ namespace WFC.Extensions
                 neighborIndices,
                 collapsed,
                 args.MaxPropagationDepth,
-                args.TileCount,
+                args.TileTypes.Count,
                 weights,
                 sumOfWeightsArray,
                 sumOfWeightsLogWeightsArray
             );
+            
+            level.RemoveBorderTilesFromCenterOptions();
 
             return level;
         }

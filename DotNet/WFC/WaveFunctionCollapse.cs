@@ -30,28 +30,11 @@ namespace WFC
         public static Result Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
-            // RestrictFromBorderTiles(level);
             Complete(level);
             Status status = new Status(level.IsCollapsed());
             return new Result(level.ToMap(), status);
         }
 
-        private static void RestrictFromBorderTiles(Level level)
-        {
-            BitArray noRulesNorth = new BitArray(level.TotalTileTypeCount, false);
-            BitArray noRulesSouth = new BitArray(level.TotalTileTypeCount, false);
-            BitArray noRulesEast = new BitArray(level.TotalTileTypeCount, false);
-            BitArray noRulesWest = new BitArray(level.TotalTileTypeCount, false);
-
-            for (int i = 0; i < level.Rules.Length; i++)
-            {
-                BitArray tilesAllowedNorth = level.Rules[i].ValidTileIds[Direction.North];
-                if (!tilesAllowedNorth.HasAnySetBits())
-                {
-                    noRulesNorth[i] = true;
-                }
-            }
-        }
 
         private static void Step(Level level)
         {
@@ -130,77 +113,9 @@ namespace WFC
 
             foreach ((Direction _, int cellId) in level.NeighborIndices[collapsedCellIndex].Indices)
             {
-                ReduceEntropy(level, cellId);
+                level.ReduceEntropy(cellId);
                 Propagate(level, cellId, depth - 1, visited);
             }
-        }
-
-        private static void ReduceEntropy(Level level, int cellIndex)
-        {
-            if (level.Collapsed[cellIndex])
-            {
-                return;
-            }
-
-            Neighbors neighbors = level.NeighborIndices[cellIndex];
-            BitArray validNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
-
-            foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
-            {
-                UpdateValidNeighbors(validNeighbors, level, neighborIndex, direction);
-            }
-
-            BitArray validNeighborsInCurrentOptions = validNeighbors.And(level.Options[cellIndex]);
-            BitArray excludedOptions = validNeighborsInCurrentOptions.Xor(level.Options[cellIndex]);
-            UpdateSumOfWeights(level, cellIndex, excludedOptions);
-            level.Options[cellIndex].Xor(excludedOptions);
-
-            level.Entropy[cellIndex] =
-                CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
-        }
-
-        private static void UpdateValidNeighbors(BitArray validNeighbors, Level level, int neighborIndex,
-            Direction direction)
-        {
-            BitArray neighborOptions = level.Options[neighborIndex];
-            BitArray validNeighborsInDirection = new BitArray(level.Options[neighborIndex].Count, false);
-
-            for (int i = 0; i < neighborOptions.Count; i++)
-            {
-                if (neighborOptions[i])
-                {
-                    TileRules rules = level.Rules[i];
-                    BitArray validTiles = rules.ValidTileIds[direction.Reverse()];
-                    validNeighborsInDirection.Or(validTiles);
-                }
-            }
-
-            if (validNeighborsInDirection.HasAnySetBits())
-            {
-                validNeighbors.And(validNeighborsInDirection);
-            }
-        }
-
-        private static void UpdateSumOfWeights(Level level, int cellIndex, BitArray excludedOptions)
-        {
-            for (int i = 0; i < excludedOptions.Count; i++)
-            {
-                if (!excludedOptions[i])
-                {
-                    continue;
-                }
-
-                level.SumOfWeights[cellIndex] -= level.Weights[i];
-                level.SumOfWeightsLogWeights[cellIndex] -= level.Weights[i] * MathF.Log(level.Weights[i], 2f);
-            }
-        }
-
-        private static float CalculateEntropy(int sumOfWeights, float sumOfWeightsLogWeight)
-        {
-            if (sumOfWeights <= 0)
-                return 0;
-
-            return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
         }
     }
 }
