@@ -57,7 +57,7 @@ namespace WFC
         /// </summary>
         /// <param name="level"></param>
         /// <returns>Index of chosen cell.</returns>
-        private static int PickCell(Level level)
+        internal static int PickCell(Level level)
         {
             float lowestEntropy = float.PositiveInfinity;
             List<int> lowestEntropyIndices = new List<int>();
@@ -86,7 +86,7 @@ namespace WFC
             return lowestEntropyIndices.GetRandomElement();
         }
 
-        private static void CollapseCell(Level level, int cellToCollapseIndex)
+        internal static void CollapseCell(Level level, int cellToCollapseIndex)
         {
             int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
@@ -97,7 +97,7 @@ namespace WFC
             level.Collapsed[cellToCollapseIndex] = true;
         }
 
-        private static void Propagate(Level level, int collapsedCellIndex, int depth, HashSet<int> visited)
+        internal static void Propagate(Level level, int collapsedCellIndex, int depth, HashSet<int> visited)
         {
             if (depth <= 0)
             {
