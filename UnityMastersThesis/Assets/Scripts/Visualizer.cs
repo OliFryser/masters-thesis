@@ -27,13 +27,14 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private TileBase _emptyTile;
 
     private State _state;
+    private List<EmptyTile> _emptyTiles;
     
     private void DisplayTiles(State state)
     {
         _tilemap.ClearAllTiles();
 
         List<Tile> tileLayout = state.GetMap().Tiles;
-        
+
         foreach (Tile tile in tileLayout)
         {
             try
@@ -46,8 +47,9 @@ public class Visualizer : MonoBehaviour
                 Debug.LogError(e);
             }
         }
-        
+
         DisplayEmptyTiles(state.EmptyTiles);
+        _emptyTiles = state.EmptyTiles;
     }
 
     private void DisplayEmptyTiles(List<EmptyTile> tiles)
@@ -57,10 +59,10 @@ public class Visualizer : MonoBehaviour
             Vector3Int position = new Vector3Int(tile.Position.X, -tile.Position.Y);
             _tilemap.SetTile(position, _emptyTile);
 
-            Color color = tile.Options == 0 
-                ? Color.magenta 
+            Color color = tile.Options == 0
+                ? Color.magenta
                 : new Color(tile.Entropy, tile.Entropy, tile.Entropy, 1f);
-            
+
             _tilemap.SetColor(position, color);
         }
     }
@@ -135,6 +137,23 @@ public class Visualizer : MonoBehaviour
 
             // This ensures the Scene View repaints so you see the tiles change
             EditorUtility.SetDirty(_tilemap);
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        if (_emptyTiles == null || _tilemap == null) return;
+
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = new Color(0.4f, 0.2f, 0.6f);
+        style.fontSize = 12;
+        style.alignment = TextAnchor.MiddleCenter;
+
+        foreach (EmptyTile emptyTile in _emptyTiles)
+        {
+            Vector3Int position = new Vector3Int(emptyTile.Position.X, -emptyTile.Position.Y, 0);
+            Vector3 worldPos = _tilemap.CellToWorld(position) + _tilemap.tileAnchor;
+            Handles.Label(worldPos, $"{emptyTile.Options}", style);
         }
     }
 #endif
