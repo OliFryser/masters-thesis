@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Linq;
 using Domain.Models;
 using Models;
 
@@ -21,8 +23,27 @@ namespace WFC.Models
             Weights = weights;
             SumOfWeights = sumOfWeights;
             SumOfWeightsLogWeights = sumOfWeightsLogWeights;
+            
+            // Always the same when constructing,
+            // so it feels like it should be initialized in the constructor
+            // Same story probably for sumOfWeights, SumOfWeightsLogWeights, etc.
+            // It seems error-prone that every caller of the constructor has to do the same logic.
+            SupportCount = new int[position.Length][][];
+            for (int i = 0; i < SupportCount.Length; i++)
+            {
+                SupportCount[i] = new int[tileTypes.Length][];
+                for (int j = 0; j < tileTypes.Length; j++)
+                {
+                    SupportCount[i][j] = Enumerable
+                        .Repeat(
+                            tileTypes.Length, 
+                            Enum.GetValues(typeof(Direction)).Length)
+                        .ToArray();
+                }
+            }
         }
-        
+        // Index as cell, tile, direction
+        public int[][][] SupportCount { get; }
         public int TotalTileTypeCount { get; }
         public int MaxDepth { get; }
 

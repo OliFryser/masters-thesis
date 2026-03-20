@@ -51,6 +51,15 @@ namespace WFC.Extensions
             level.ReduceEntropyForAll(); 
         }
 
+        internal static void BanTile(this Level level, int cellIndex, int tileIndex)
+        {
+            // Ban tile from options
+            // Set SupportCounters to 0 for this cell and tile for all directions
+            // Push onto stack
+            // Update SumsOfWeights and WeightsLogWeights
+            // Update Entropy
+        }
+
         public static void ReduceEntropyForAll(this Level level)
         {
             for (int i = 0; i < level.Position.Length; i++)
