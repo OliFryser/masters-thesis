@@ -6578,6 +6578,6 @@ MonoBehaviour:
     - Key: -1120919810
       Value: 5
   TileCount: 3840
-  Width: 50
-  Height: 50
+  Width: 20
+  Height: 20
   MaxPropagationDepth: 5

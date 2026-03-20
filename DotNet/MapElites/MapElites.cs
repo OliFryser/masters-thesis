@@ -1,38 +1,41 @@
-﻿using MapElites.Extensions;
+﻿using System;
+using MapElites.Extensions;
 using MapElites.Models;
 
 namespace MapElites
 {
     public static class MapElites
     {
-        public static Archive Run(int iterations, int initializationIterations)
+        public static Archive<TIndividual> Run<TIndividual>(
+            Func<TIndividual> individualFactory,
+            Func<TIndividual, TIndividual> individualMutator,
+            Func<TIndividual, Fitness> fitnessEvaluator,
+            Func<TIndividual, Behavior> behaviorEvaluator)
         {
-            Archive archive = new Archive();
+            const int initializationIterations = 3;
+            const int iterations = 10;
+
+            Archive<TIndividual> archive = new Archive<TIndividual>();
             for (int i = 0; i < initializationIterations; i++)
             {
-                Individual individual = GenerateRandomSolution();
-                Fitness fitness = individual.Evaluate();
-                Behavior behavior = individual.GetBehavior();
-                archive.TrySaveInArchive(individual, fitness, behavior);
+                TIndividual individual = individualFactory();
+                Fitness fitness = fitnessEvaluator(individual);
+                Behavior behavior = behaviorEvaluator(individual);
+                Entry<TIndividual> entry = new Entry<TIndividual>(individual, fitness, behavior);
+                archive.TrySaveInArchive(entry);
             }
             
             for (int i = 0; i < iterations - initializationIterations; i++)
             {
-                Individual sampledIndividual = archive.SampleRandomSolution();
-                
-                Individual variedIndividual = sampledIndividual.GetRandomVariation();
-                
-                Fitness fitness = variedIndividual.Evaluate();
-                Behavior behavior = variedIndividual.GetBehavior();
-                archive.TrySaveInArchive(variedIndividual, fitness, behavior);
+                TIndividual sampledIndividual = archive.SampleRandomSolution();
+                TIndividual mutatedIndividual = individualMutator(sampledIndividual);
+                Fitness fitness = fitnessEvaluator(mutatedIndividual);
+                Behavior behavior = behaviorEvaluator(mutatedIndividual);
+                Entry<TIndividual> entry = new Entry<TIndividual>(mutatedIndividual, fitness, behavior);
+                archive.TrySaveInArchive(entry);
             }
             
             return archive;
-        }
-
-        private static Individual GenerateRandomSolution()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

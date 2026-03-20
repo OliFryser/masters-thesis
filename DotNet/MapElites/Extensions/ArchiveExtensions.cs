@@ -6,12 +6,12 @@ namespace MapElites.Extensions
     public static class ArchiveExtensions
     {
         
-        public static Individual SampleRandomSolution(this Archive archive)
+        public static TIndividual SampleRandomSolution<TIndividual>(this Archive<TIndividual> archive)
         {
             throw new System.NotImplementedException();
         }
 
-        public static void TrySaveInArchive(this Archive archive, Individual individual, Fitness fitness, Behavior behavior)
+        public static bool TrySaveInArchive<TIndividual>(this Archive<TIndividual> archive, Entry<TIndividual> entry)
         {
             // Check if cell is empty
             // If empty save
