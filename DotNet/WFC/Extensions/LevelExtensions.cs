@@ -5,6 +5,7 @@ using Domain.Models;
 using Models;
 using WFC.Models;
 using WFC.Output;
+using static WFC.EntropyCalculation;
 
 namespace WFC.Extensions
 {
@@ -119,14 +120,6 @@ namespace WFC.Extensions
             }
         }
 
-        public static float CalculateEntropy(int sumOfWeights, float sumOfWeightsLogWeight)
-        {
-            if (sumOfWeights <= 0)
-                return 0;
-
-            return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
-        }
-
         public static bool IsCollapsed(this Level level)
         {
             for (var i = 0; i < level.Collapsed.Length; i++)
@@ -138,24 +131,6 @@ namespace WFC.Extensions
             }
 
             return true;
-        }
-
-        public static bool IsCollapsed(this bool[] collapsed)
-        {
-            for (var i = 0; i < collapsed.Length; i++)
-            {
-                if (!collapsed[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public static bool IsCollapsed(this BitArray collapsed)
-        {
-            return collapsed.HasAllSetBits();
         }
 
         public static bool IsFeasible(this Level level)
