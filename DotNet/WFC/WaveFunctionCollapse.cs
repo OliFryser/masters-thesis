@@ -38,9 +38,10 @@ namespace WFC
 
         private static void Step(Level level)
         {
+            Stack<StackEntry> propagationStack = new Stack<StackEntry>();
             int cellToCollapseIndex = PickCell(level);
-            CollapseCell(level, cellToCollapseIndex);
-            Propagate(level, cellToCollapseIndex, level.MaxDepth, new HashSet<int>());
+            CollapseCell(level, cellToCollapseIndex, propagationStack);
+            Propagate(level, propagationStack);
         }
 
         private static void Complete(Level level)
@@ -86,36 +87,32 @@ namespace WFC
             return lowestEntropyIndices.GetRandomElement();
         }
 
-        internal static void CollapseCell(Level level, int cellToCollapseIndex)
+        internal static void CollapseCell(Level level, int cellToCollapseIndex, Stack<StackEntry> propagationStack)
         {
             int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
                     level.Weights,
                     level.SumOfWeights[cellToCollapseIndex]);
+            // TODO call BanTile for each option set to false
             level.Options[cellToCollapseIndex].SetAll(false);
             level.Options[cellToCollapseIndex][chosenTileType] = true;
             level.Collapsed[cellToCollapseIndex] = true;
         }
 
-        internal static void Propagate(Level level, int collapsedCellIndex, int depth, HashSet<int> visited)
+        internal static void Propagate(Level level, Stack<StackEntry> stack)
         {
-            if (depth <= 0)
+            while (stack.Count > 0)
             {
-                return;
+                var current = stack.Pop();
+                var fromCellIndex = current.FromCellIndex;
+                var bannedTileIndex = current.BannedTileIndex;
+                foreach ((Direction direction, int cellIndex) in level.NeighborIndices[fromCellIndex].Indices)
+                {
+                    level.UpdateConstraints(cellIndex, fromCellIndex, bannedTileIndex, direction, stack);
+                }
             }
+ 
 
-            if (visited.Contains(collapsedCellIndex))
-            {
-                return;
-            }
-
-            visited.Add(collapsedCellIndex);
-
-            foreach ((Direction _, int cellId) in level.NeighborIndices[collapsedCellIndex].Indices)
-            {
-                level.ReduceEntropy(cellId);
-                Propagate(level, cellId, depth - 1, visited);
-            }
         }
     }
 }

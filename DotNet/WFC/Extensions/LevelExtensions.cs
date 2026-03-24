@@ -50,6 +50,14 @@ namespace WFC.Extensions
 
             level.ReduceEntropyForAll(); 
         }
+        
+        public static void ReduceEntropyForAll(this Level level)
+        {
+            for (int i = 0; i < level.Position.Length; i++)
+            {
+                ReduceEntropy(level, i);
+            }
+        }
 
         internal static void BanTile(this Level level, int cellIndex, int tileIndex)
         {
@@ -58,14 +66,20 @@ namespace WFC.Extensions
             // Push onto stack
             // Update SumsOfWeights and WeightsLogWeights
             // Update Entropy
+            throw new NotImplementedException();
         }
-
-        public static void ReduceEntropyForAll(this Level level)
+        
+        public static void UpdateConstraints(this Level level,
+            int cellIndex,
+            int fromCellIndex,
+            int bannedTileIndex,
+            Direction direction,
+            Stack<StackEntry> stack)
         {
-            for (int i = 0; i < level.Position.Length; i++)
-            {
-                ReduceEntropy(level, i);
-            }
+            
+            // Count down support
+            level.SupportCount[cellIndex][bannedTileIndex][(int) direction]--;
+            
         }
 
         public static void ReduceEntropy(this Level level, int cellIndex)
