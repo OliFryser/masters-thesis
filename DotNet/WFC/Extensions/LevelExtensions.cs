@@ -78,6 +78,7 @@ namespace WFC.Extensions
             {
                 return;
             }
+            
             level.Entropy[cellIndex] =
                 CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
         }
@@ -85,17 +86,17 @@ namespace WFC.Extensions
         private static BitArray GetValidTilesBasedOnNeighbors(Level level, int cellIndex)
         {
             Neighbors neighbors = level.NeighborIndices[cellIndex];
-            BitArray accumulatedValidNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
+            BitArray accumulatedValidTiles = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
 
             foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
             {
-                level.AccumulateValidNeighbors(accumulatedValidNeighbors, neighborIndex, direction);
+                level.AccumulateValidTilesInDirection(accumulatedValidTiles, neighborIndex, direction);
             }
 
-            return accumulatedValidNeighbors;
+            return accumulatedValidTiles;
         }
 
-        internal static void AccumulateValidNeighbors(this Level level, BitArray validNeighbors, int neighborIndex,
+        internal static void AccumulateValidTilesInDirection(this Level level, BitArray validNeighbors, int neighborIndex,
             Direction direction)
         {
             BitArray neighborOptions = level.Options[neighborIndex];
@@ -111,10 +112,7 @@ namespace WFC.Extensions
                 }
             }
 
-            if (validNeighborsInDirection.HasAnySetBits())
-            {
-                validNeighbors.And(validNeighborsInDirection);
-            }
+            validNeighbors.And(validNeighborsInDirection);
         }
 
         internal static void UpdateSumOfWeights(this Level level, int cellIndex, BitArray excludedOptions)
