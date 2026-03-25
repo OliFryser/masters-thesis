@@ -84,10 +84,12 @@ namespace WFC.Extensions
             return new State(level);
         }
 
-        private static Neighbors[] CreateNeighborsArray(Vector[] positions)
+        internal static Neighbors[] CreateNeighborsArray(Vector[] positions)
         {
             Neighbors[] neighbors = new Neighbors[positions.Length];
-
+            Dictionary<Vector, int> positionToIndex = 
+                Enumerable.Range(0, positions.Length).ToDictionary(x => positions[x]);
+            
             for (int i = 0; i < positions.Length; i++)
             {
                 Vector position = positions[i];
@@ -98,28 +100,24 @@ namespace WFC.Extensions
                 Vector downPosition = new Vector(position.X, position.Y - 1);
                 Vector rightPosition = new Vector(position.X + 1, position.Y);
                 Vector leftPosition = new Vector(position.X - 1, position.Y);
-
-                for (int j = 0; j < positions.Length; j++)
+                
+                if (positionToIndex.TryGetValue(upPosition, out int neighbor))
                 {
-                    Vector current = positions[j];
-                    if (current == upPosition)
-                    {
-                        neighborIndices[Direction.North] = j;
-                    }
-                    else if (current == downPosition)
-                    {
-                        neighborIndices[Direction.South] = j;
-                    }
-                    else if (current == rightPosition)
-                    {
-                        neighborIndices[Direction.East] = j;
-                    }
-                    else if (current == leftPosition)
-                    {
-                        neighborIndices[Direction.West] = j;
-                    }
+                    neighborIndices[Direction.North] = neighbor;
                 }
-
+                if (positionToIndex.TryGetValue(downPosition, out neighbor))
+                {
+                    neighborIndices[Direction.South] = neighbor;
+                }
+                if (positionToIndex.TryGetValue(rightPosition, out neighbor))
+                {
+                    neighborIndices[Direction.East] = neighbor;
+                }
+                if (positionToIndex.TryGetValue(leftPosition, out neighbor))
+                {
+                    neighborIndices[Direction.West] = neighbor;
+                }
+                
                 neighbors[i] = new Neighbors(neighborIndices);
             }
 
