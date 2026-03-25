@@ -8,9 +8,9 @@ using WFC.Models;
 
 namespace WFC.Tests.Helpers;
 
-internal static class LevelFactory
+public static class LevelFactory
 {
-    internal static Level Create(int dimension, string inputTilemapPath, int maxPropagationDepth)
+    public static Level Create(int dimension, string inputTilemapPath, int maxPropagationDepth)
     {
         List<Vector> positions = new();
         for (int y = 0; y < dimension; y++)
