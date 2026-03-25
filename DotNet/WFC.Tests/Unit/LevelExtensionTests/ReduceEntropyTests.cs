@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using Domain.Models;
+﻿using Domain.Models;
 using WFC.Extensions;
 using WFC.Tests.Helpers;
 
-namespace WFC.Tests.Unit;
+namespace WFC.Tests.Unit.LevelExtensionTests;
 
 [TestFixture]
 public class ReduceEntropyTests

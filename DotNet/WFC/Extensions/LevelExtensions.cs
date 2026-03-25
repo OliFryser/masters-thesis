@@ -106,7 +106,7 @@ namespace WFC.Extensions
             }
         }
 
-        public static void UpdateSumOfWeights(this Level level, int cellIndex, BitArray excludedOptions)
+        internal static void UpdateSumOfWeights(this Level level, int cellIndex, BitArray excludedOptions)
         {
             for (int i = 0; i < excludedOptions.Count; i++)
             {
