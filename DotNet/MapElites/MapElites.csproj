@@ -9,4 +9,8 @@
       <ProjectReference Include="..\LevelGeneration\LevelGeneration.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
+
 </Project>

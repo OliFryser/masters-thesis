@@ -93,35 +93,41 @@ namespace WFC
         internal static void CollapseCell(Level level, int cellToCollapseIndex, UniqueStack<int> propagationStack)
         {
             BitArray oldOptions = new BitArray(level.Options[cellToCollapseIndex]);
-            
+
             int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
                     level.Weights,
                     level.SumOfWeights[cellToCollapseIndex]);
-            
+
             level.Options[cellToCollapseIndex].SetAll(false);
             level.Options[cellToCollapseIndex][chosenTileType] = true;
             level.Collapsed[cellToCollapseIndex] = true;
-            
+
             // Everything is known about the cell
             level.Entropy[cellToCollapseIndex] = 0f;
-            
+
             BitArray excludedOptions = oldOptions.Xor(level.Options[cellToCollapseIndex]);
             if (excludedOptions.HasAnySetBits())
             {
                 propagationStack.Push(cellToCollapseIndex);
             }
         }
-        
+
         internal static void Propagate(Level level, int collapsedCellIndex, UniqueStack<int> propagationStack)
         {
             foreach ((Direction _, int cellIndex) in level.NeighborIndices[collapsedCellIndex].Indices)
             {
+                if (level.Collapsed[cellIndex])
+                {
+                    continue;
+                }
+
                 BitArray excludedOptions = level.PruneInconsistentOptions(cellIndex);
                 if (!excludedOptions.HasAnySetBits())
                 {
                     continue;
                 }
+
                 level.UpdateSumOfWeights(cellIndex, excludedOptions);
                 level.ReduceEntropy(cellIndex);
                 propagationStack.Push(cellIndex);

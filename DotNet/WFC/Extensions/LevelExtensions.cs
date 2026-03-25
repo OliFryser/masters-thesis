@@ -60,11 +60,14 @@ namespace WFC.Extensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="cellIndex"></param>
+        /// <returns>The BitArray representing the pruned options.</returns>
         internal static BitArray PruneInconsistentOptions(this Level level, int cellIndex)
         {
-            if (level.Collapsed[cellIndex])
-                return new BitArray(level.TotalTileTypeCount);
-
             BitArray accumulatedValidTileNeighbors = GetValidTilesBasedOnNeighbors(level, cellIndex);
             BitArray validNeighborsInCurrentOptions = accumulatedValidTileNeighbors.And(level.Options[cellIndex]);
             BitArray excludedOptions = validNeighborsInCurrentOptions.Xor(level.Options[cellIndex]);
@@ -74,11 +77,6 @@ namespace WFC.Extensions
 
         internal static void ReduceEntropy(this Level level, int cellIndex)
         {
-            if (level.Collapsed[cellIndex])
-            {
-                return;
-            }
-            
             level.Entropy[cellIndex] =
                 CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
         }

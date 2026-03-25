@@ -1,38 +1,38 @@
-﻿using MapElites.Extensions;
+﻿using System;
 using MapElites.Models;
 
 namespace MapElites
 {
     public static class MapElites
     {
-        public static Archive Run(int iterations, int initializationIterations)
+        public static Archive<TIndividual, TBehavior, TKey> Run<TIndividual, TBehavior, TKey>
+        (IPopulationManager<TIndividual, TBehavior, TKey> populationManager, int initializationIterations,
+            int mutationIterations) where TKey : IEquatable<TKey>
         {
-            Archive archive = new Archive();
+            Archive<TIndividual, TBehavior, TKey> archive = new Archive<TIndividual, TBehavior, TKey>();
+
             for (int i = 0; i < initializationIterations; i++)
             {
-                Individual individual = GenerateRandomSolution();
-                Fitness fitness = individual.Evaluate();
-                Behavior behavior = individual.GetBehavior();
-                archive.TrySaveInArchive(individual, fitness, behavior);
+                TIndividual individual = populationManager.CreateRandom();
+                Result<TBehavior> result = populationManager.Evaluate(individual);
+                TKey key = populationManager.GetKey(result.Behavior);
+                Entry<TIndividual, TBehavior> entry =
+                    new Entry<TIndividual, TBehavior>(individual, result.Behavior, result.Fitness);
+                archive.TryAdd(key, entry);
             }
-            
-            for (int i = 0; i < iterations - initializationIterations; i++)
-            {
-                Individual sampledIndividual = archive.SampleRandomSolution();
-                
-                Individual variedIndividual = sampledIndividual.GetRandomVariation();
-                
-                Fitness fitness = variedIndividual.Evaluate();
-                Behavior behavior = variedIndividual.GetBehavior();
-                archive.TrySaveInArchive(variedIndividual, fitness, behavior);
-            }
-            
-            return archive;
-        }
 
-        private static Individual GenerateRandomSolution()
-        {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < mutationIterations; i++)
+            {
+                TIndividual individual = archive.Sample();
+                TIndividual mutation = populationManager.Mutate(individual);
+                Result<TBehavior> result = populationManager.Evaluate(mutation);
+                TKey key = populationManager.GetKey(result.Behavior);
+                Entry<TIndividual, TBehavior> entry =
+                    new Entry<TIndividual, TBehavior>(mutation, result.Behavior, result.Fitness);
+                archive.TryAdd(key, entry);
+            }
+
+            return archive;
         }
     }
 }
