@@ -8,9 +8,9 @@ using WFC.Models;
 
 namespace WFC.Tests.Helpers;
 
-public static class LevelFactory
+internal static class LevelFactory
 {
-    public static Level Create(int dimension, string inputTilemapPath, int maxPropagationDepth)
+    internal static Level Create(int dimension, string inputTilemapPath, int maxPropagationDepth)
     {
         List<Vector> positions = new();
         for (int y = 0; y < dimension; y++)
@@ -38,9 +38,14 @@ public static class LevelFactory
     /// <returns></returns>
     internal static Level CreateDummyLevelWithUnitWeights(int cellCount, int tileTypeCount)
     {
-        // Init tile arrays
         int[] weights = Enumerable.Repeat(1, tileTypeCount).ToArray();
-        
+        return CreateDummyLevel(cellCount, weights);
+    }
+
+    internal static Level CreateDummyLevel(int cellCount, int[] weights)
+    {
+        var tileTypeCount = weights.Length;
+       
         TileRules[] rules = new TileRules[tileTypeCount];
         for (int i = 0; i < tileTypeCount; i++)
         {

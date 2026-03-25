@@ -27,20 +27,24 @@ namespace WFC
             return state;
         }
 
-        public static Result Run(in WfcArgs args)
+        public static State Run(in WfcArgs args)
         {
             Level level = args.ToLevel();
             Complete(level);
-            Status status = new Status(level.IsCollapsed());
-            return new Result(level.ToMap(), status);
+            return new State(level);
         }
 
 
         private static void Step(Level level)
         {
+            var propagationStack = new UniqueStack<int>();
             int cellToCollapseIndex = PickCell(level);
-            CollapseCell(level, cellToCollapseIndex);
-            Propagate(level, cellToCollapseIndex, level.MaxDepth, new HashSet<int>());
+            CollapseCell(level, cellToCollapseIndex, propagationStack);
+            while (propagationStack.Count > 0)
+            {
+                int cellIndex = propagationStack.Pop();
+                Propagate(level, cellIndex, propagationStack);
+            }
         }
 
         private static void Complete(Level level)
@@ -86,35 +90,41 @@ namespace WFC
             return lowestEntropyIndices.GetRandomElement();
         }
 
-        internal static void CollapseCell(Level level, int cellToCollapseIndex)
+        internal static void CollapseCell(Level level, int cellToCollapseIndex, UniqueStack<int> propagationStack)
         {
+            BitArray oldOptions = new BitArray(level.Options[cellToCollapseIndex]);
+            
             int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
                     level.Weights,
                     level.SumOfWeights[cellToCollapseIndex]);
+            
             level.Options[cellToCollapseIndex].SetAll(false);
             level.Options[cellToCollapseIndex][chosenTileType] = true;
             level.Collapsed[cellToCollapseIndex] = true;
+            
+            // Everything is known about the cell
+            level.Entropy[cellToCollapseIndex] = 0f;
+            
+            BitArray excludedOptions = oldOptions.Xor(level.Options[cellToCollapseIndex]);
+            if (excludedOptions.HasAnySetBits())
+            {
+                propagationStack.Push(cellToCollapseIndex);
+            }
         }
-
-        internal static void Propagate(Level level, int collapsedCellIndex, int depth, HashSet<int> visited)
+        
+        internal static void Propagate(Level level, int collapsedCellIndex, UniqueStack<int> propagationStack)
         {
-            if (depth <= 0)
+            foreach ((Direction _, int cellIndex) in level.NeighborIndices[collapsedCellIndex].Indices)
             {
-                return;
-            }
-
-            if (visited.Contains(collapsedCellIndex))
-            {
-                return;
-            }
-
-            visited.Add(collapsedCellIndex);
-
-            foreach ((Direction _, int cellId) in level.NeighborIndices[collapsedCellIndex].Indices)
-            {
-                level.ReduceEntropy(cellId);
-                Propagate(level, cellId, depth - 1, visited);
+                BitArray excludedOptions = level.PruneInconsistentOptions(cellIndex);
+                if (!excludedOptions.HasAnySetBits())
+                {
+                    return;
+                }
+                level.UpdateSumOfWeights(cellIndex, excludedOptions);
+                level.ReduceEntropy(cellIndex);
+                propagationStack.Push(cellIndex);
             }
         }
     }

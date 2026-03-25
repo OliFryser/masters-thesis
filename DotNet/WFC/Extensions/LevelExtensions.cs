@@ -9,9 +9,9 @@ using static WFC.EntropyCalculation;
 
 namespace WFC.Extensions
 {
-    public static class LevelExtensions
+    internal static class LevelExtensions
     {
-        public static void RemoveBorderTilesFromCenterOptions(this Level level)
+        internal static void RemoveBorderTilesFromCenterOptions(this Level level)
         {
             BitArray hasNorthRules = new BitArray(level.TotalTileTypeCount, false);
             BitArray hasSouthRules = new BitArray(level.TotalTileTypeCount, false);
@@ -52,39 +52,50 @@ namespace WFC.Extensions
             level.ReduceEntropyForAll(); 
         }
 
-        public static void ReduceEntropyForAll(this Level level)
+        private static void ReduceEntropyForAll(this Level level)
         {
             for (int i = 0; i < level.Position.Length; i++)
             {
-                ReduceEntropy(level, i);
+                level.ReduceEntropy(i);
             }
         }
 
-        public static void ReduceEntropy(this Level level, int cellIndex)
+        internal static BitArray PruneInconsistentOptions(this Level level, int cellIndex)
+        {
+            if (level.Collapsed[cellIndex])
+                return new BitArray(level.TotalTileTypeCount);
+
+            BitArray accumulatedValidTileNeighbors = GetValidTilesBasedOnNeighbors(level, cellIndex);
+            BitArray validNeighborsInCurrentOptions = accumulatedValidTileNeighbors.And(level.Options[cellIndex]);
+            BitArray excludedOptions = validNeighborsInCurrentOptions.Xor(level.Options[cellIndex]);
+            level.Options[cellIndex].Xor(excludedOptions);
+            return excludedOptions;
+        }
+
+        internal static void ReduceEntropy(this Level level, int cellIndex)
         {
             if (level.Collapsed[cellIndex])
             {
                 return;
             }
-
-            Neighbors neighbors = level.NeighborIndices[cellIndex];
-            BitArray validNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
-
-            foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
-            {
-                level.UpdateValidNeighbors(validNeighbors, neighborIndex, direction);
-            }
-
-            BitArray validNeighborsInCurrentOptions = validNeighbors.And(level.Options[cellIndex]);
-            BitArray excludedOptions = validNeighborsInCurrentOptions.Xor(level.Options[cellIndex]);
-            level.UpdateSumOfWeights(cellIndex, excludedOptions);
-            level.Options[cellIndex].Xor(excludedOptions);
-
             level.Entropy[cellIndex] =
                 CalculateEntropy(level.SumOfWeights[cellIndex], level.SumOfWeightsLogWeights[cellIndex]);
         }
 
-        public static void UpdateValidNeighbors(this Level level, BitArray validNeighbors, int neighborIndex,
+        private static BitArray GetValidTilesBasedOnNeighbors(Level level, int cellIndex)
+        {
+            Neighbors neighbors = level.NeighborIndices[cellIndex];
+            BitArray accumulatedValidNeighbors = new BitArray(level.Options[cellIndex].Count, defaultValue: true);
+
+            foreach ((Direction direction, int neighborIndex) in neighbors.Indices)
+            {
+                level.AccumulateValidNeighbors(accumulatedValidNeighbors, neighborIndex, direction);
+            }
+
+            return accumulatedValidNeighbors;
+        }
+
+        internal static void AccumulateValidNeighbors(this Level level, BitArray validNeighbors, int neighborIndex,
             Direction direction)
         {
             BitArray neighborOptions = level.Options[neighborIndex];
@@ -120,7 +131,7 @@ namespace WFC.Extensions
             }
         }
 
-        public static bool IsCollapsed(this Level level)
+        internal static bool IsCollapsed(this Level level)
         {
             for (var i = 0; i < level.Collapsed.Length; i++)
             {
@@ -133,7 +144,7 @@ namespace WFC.Extensions
             return true;
         }
 
-        public static bool IsFeasible(this Level level)
+        internal static bool IsFeasible(this Level level)
         {
             for (var i = 0; i < level.Options.Length; i++)
             {
@@ -151,7 +162,7 @@ namespace WFC.Extensions
             return false;
         }
 
-        public static bool CanStep(this Level level)
+        internal static bool CanStep(this Level level)
         {
             for (int i = 0; i < level.Collapsed.Length; i++)
             {
@@ -164,7 +175,7 @@ namespace WFC.Extensions
             return false;
         }
 
-        public static Map ToMap(this Level level)
+        internal static Map ToMap(this Level level)
         {
             List<Tile> tiles = new List<Tile>();
             for (int i = 0; i < level.Position.Length; i++)
@@ -180,7 +191,7 @@ namespace WFC.Extensions
             return new Map(tiles);
         }
 
-        public static List<EmptyTile> GetEmptyTiles(this Level level)
+        internal static List<EmptyTile> GetEmptyTiles(this Level level)
         {
             List<EmptyTile> tiles = new List<EmptyTile>();
             for (int i = 0; i < level.Position.Length; i++)
