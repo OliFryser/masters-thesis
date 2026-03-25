@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
 using TilemapAnalysis;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -26,8 +25,8 @@ namespace Editor.ImageAnalyzer
         [MenuItem("Window/Services/Image Analysis")]
         public static void ShowWindow()
         {
-            ImageAnalysisWindow wnd = GetWindow<ImageAnalysisWindow>();
-            wnd.titleContent = new GUIContent("ImageAnalysisWindow");
+            ImageAnalysisWindow window = GetWindow<ImageAnalysisWindow>();
+            window.titleContent = new GUIContent("Image Analysis Service");
         }
 
         public void CreateGUI()
