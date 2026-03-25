@@ -28,11 +28,9 @@ public class EndToEndTests
         };
         int tileCount = 1;
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
-        Result result = WaveFunctionCollapse.Run(args);
+        State result = WaveFunctionCollapse.Run(args);
 
-        Assert.That(result, Is.Not.Null);
-
-        Assert.That(result.Status.Success, Is.True);
+        Assert.That(result.IsCollapsed, Is.True);
     }
 
     [Test]
@@ -57,11 +55,9 @@ public class EndToEndTests
         int tileCount = 4;
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
 
-        Result result = WaveFunctionCollapse.Run(args);
+        State result = WaveFunctionCollapse.Run(args);
 
-        Assert.That(result, Is.Not.Null);
-
-        Assert.That(result.Status.Success, Is.True);
+        Assert.That(result.IsCollapsed, Is.True);
     }
 
     [Test]
@@ -79,11 +75,9 @@ public class EndToEndTests
         };
         int tileCount = 2;
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, tileTypeToCount, tileCount);
-        Result result = WaveFunctionCollapse.Run(args);
+        State result = WaveFunctionCollapse.Run(args);
 
-        Assert.That(result, Is.Not.Null);
-
-        Assert.That(result.Status.Success, Is.False);
+        Assert.That(result.IsCollapsed, Is.False);
     }
 
     [Test]
