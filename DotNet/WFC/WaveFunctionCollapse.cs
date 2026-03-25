@@ -120,7 +120,7 @@ namespace WFC
                 BitArray excludedOptions = level.PruneInconsistentOptions(cellIndex);
                 if (!excludedOptions.HasAnySetBits())
                 {
-                    return;
+                    continue;
                 }
                 level.UpdateSumOfWeights(cellIndex, excludedOptions);
                 level.ReduceEntropy(cellIndex);

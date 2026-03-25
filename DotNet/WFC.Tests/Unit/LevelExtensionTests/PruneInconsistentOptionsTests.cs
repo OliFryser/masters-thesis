@@ -21,11 +21,13 @@ public class PruneInconsistentOptionsTests
         level.ChooseOptionForCell(cell: 0, tile: 0);
         
         // Act
-        level.PruneInconsistentOptions(1);
+        var prunedOptions = level.PruneInconsistentOptions(1);
 
         // Assert
-        var optionsForCell1 = level.GetOptionsForCell(1);
+        Assert.That(prunedOptions[0], Is.True, "Tile 0 should be pruned.");
+        Assert.That(prunedOptions[1], Is.False, "Tile 1 should not be pruned.");
         
+        var optionsForCell1 = level.GetOptionsForCell(1);
         
         Assert.That(optionsForCell1[0], Is.False, "Tile 0 should be pruned from Cell 1.");
         Assert.That(optionsForCell1[1], Is.True, "Tile 1 should remain valid in Cell 1.");
