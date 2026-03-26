@@ -6,6 +6,6 @@ using Pokémon;
 var resourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources/";
 var tilemapPath = resourceDirectory + "Tilemaps/PalletTown.png";
 
-MapElitesArgs mapElitesArgs = new MapElitesArgs(10, 20);
+MapElitesArgs mapElitesArgs = new MapElitesArgs(10, 20, Console.WriteLine);
 PopulationManager populationManager = new PopulationManager(tilemapPath);
 Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(populationManager, mapElitesArgs);

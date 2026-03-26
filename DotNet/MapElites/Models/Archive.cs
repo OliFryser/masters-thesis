@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WFC.Extensions;
 
 namespace MapElites.Models
@@ -9,6 +10,7 @@ namespace MapElites.Models
         where TEntry : Entry<TIndividual, TBehavior>
     {
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
+        public int Count => _archive.Count;
 
         internal bool TryAdd(TKey key, TEntry entry)
         {
@@ -36,5 +38,7 @@ namespace MapElites.Models
 
             return _archive.Values.GetRandomElement().Individual;
         }
+
+        internal float GetMaxFitness() => _archive.Values.Select(e => e.Fitness).Max();
     }
 }

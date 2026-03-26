@@ -13,6 +13,7 @@ namespace MapElites
             where TEntry : Entry<TIndividual, TBehavior>
         {
             Archive<TKey, TEntry, TIndividual, TBehavior> archive = new Archive<TKey, TEntry, TIndividual, TBehavior>();
+            Action<string> logger = args.Logger;
 
             for (int i = 0; i < args.InitializationIterations; i++)
             {
@@ -20,9 +21,16 @@ namespace MapElites
 
                 EvaluateAndSave(individual);
             }
-
+            logger("Archive Initialized. Archive Size: " + archive.Count);
+            
             for (int i = 0; i < args.MutationIterations; i++)
             {
+                if (i % 10 == 0)
+                {
+                    logger("Mutation Iterations: " + i);
+                    logger("Archive size: " + archive.Count);
+                    logger("Max Fitness: " + archive.GetMaxFitness());
+                }
                 TIndividual individual = archive.SampleRandom();
 
                 TIndividual mutation = populationManager.Mutate(individual);
