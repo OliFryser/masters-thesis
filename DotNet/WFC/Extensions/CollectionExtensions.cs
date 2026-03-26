@@ -12,8 +12,8 @@ namespace WFC.Extensions
             int randomIndex = random.Next(size);
             return collection.ToList()[randomIndex];
         }
-
-        public static T GetRandomElement<T>(this ICollection<T> collection) =>
-            collection.GetRandomElement(new Random());
+        
+        public static T GetRandomElement<T>(this ICollection<T> collection)
+            => GetRandomElement(collection, new Random());
     }
 }

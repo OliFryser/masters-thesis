@@ -85,9 +85,12 @@ namespace WFC.Extensions
             throw new ArgumentException("No valid tile was set as an option!");
         }
         
-        public static int GetRandomWeightedSetIndex(this BitArray bitArray, int[] weights, int sumOfWeights)
+        public static int GetRandomWeightedSetIndex(
+            this BitArray bitArray,
+            int[] weights, 
+            int sumOfWeights, 
+            Random random)
         {
-            Random random = new Random();
             int roll = random.Next(sumOfWeights);
 
             int sum = 0;

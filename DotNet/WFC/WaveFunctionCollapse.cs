@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using Domain.Models;
 using WFC.Args;
 using WFC.Extensions;
-using Models;
 using WFC.Models;
-using WFC.Output;
 
 namespace WFC
 {
@@ -17,29 +15,29 @@ namespace WFC
             if (state.Level.IsCollapsed() || !state.Level.IsFeasible())
                 return state;
 
-            Step(state.Level);
+            Step(state.Level, state.Random);
             return state;
         }
 
         public static State Complete(State state)
         {
-            Complete(state.Level);
+            Complete(state.Level, state.Random);
             return state;
         }
 
         public static State Run(in WfcArgs args)
         {
-            Level level = args.ToLevel();
-            Complete(level);
-            return new State(level);
+            State state = args.ToState();
+            Complete(state.Level, state.Random);
+            return state;
         }
 
 
-        private static void Step(Level level)
+        private static void Step(Level level, Random random)
         {
             var propagationStack = new UniqueStack<int>();
-            int cellToCollapseIndex = PickCell(level);
-            CollapseCell(level, cellToCollapseIndex, propagationStack);
+            int cellToCollapseIndex = PickCell(level, random);
+            CollapseCell(level, cellToCollapseIndex, propagationStack, random);
             while (propagationStack.Count > 0)
             {
                 int cellIndex = propagationStack.Pop();
@@ -47,11 +45,11 @@ namespace WFC
             }
         }
 
-        private static void Complete(Level level)
+        private static void Complete(Level level, Random random)
         {
             while (!level.IsCollapsed() && level.IsFeasible())
             {
-                Step(level);
+                Step(level, random);
             }
         }
 
@@ -60,8 +58,9 @@ namespace WFC
         /// Assumes at least one cell has not collapsed. 
         /// </summary>
         /// <param name="level"></param>
+        /// <param name="random"></param>
         /// <returns>Index of chosen cell.</returns>
-        internal static int PickCell(Level level)
+        internal static int PickCell(Level level, Random random)
         {
             float lowestEntropy = float.PositiveInfinity;
             List<int> lowestEntropyIndices = new List<int>();
@@ -87,32 +86,37 @@ namespace WFC
                 }
             }
 
-            return lowestEntropyIndices.GetRandomElement();
+            return lowestEntropyIndices.GetRandomElement(random);
         }
 
-        internal static void CollapseCell(Level level, int cellToCollapseIndex, UniqueStack<int> propagationStack)
+        internal static void CollapseCell(
+            Level level, 
+            int cellToCollapseIndex, 
+            UniqueStack<int> propagationStack, 
+            Random random)
         {
             BitArray oldOptions = new BitArray(level.Options[cellToCollapseIndex]);
-
+            
             int chosenTileType =
                 level.Options[cellToCollapseIndex].GetRandomWeightedSetIndex(
                     level.Weights,
-                    level.SumOfWeights[cellToCollapseIndex]);
-
+                    level.SumOfWeights[cellToCollapseIndex],
+                    random);
+            
             level.Options[cellToCollapseIndex].SetAll(false);
             level.Options[cellToCollapseIndex][chosenTileType] = true;
             level.Collapsed[cellToCollapseIndex] = true;
-
+            
             // Everything is known about the cell
             level.Entropy[cellToCollapseIndex] = 0f;
-
+            
             BitArray excludedOptions = oldOptions.Xor(level.Options[cellToCollapseIndex]);
             if (excludedOptions.HasAnySetBits())
             {
                 propagationStack.Push(cellToCollapseIndex);
             }
         }
-
+        
         internal static void Propagate(Level level, int collapsedCellIndex, UniqueStack<int> propagationStack)
         {
             foreach ((Direction _, int cellIndex) in level.NeighborIndices[collapsedCellIndex].Indices)

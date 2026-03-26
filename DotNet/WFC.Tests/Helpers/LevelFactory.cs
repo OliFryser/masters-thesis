@@ -25,7 +25,7 @@ public static class LevelFactory
         List<TileType> tiles = analyzer.Tiles.Select(tile => tile.Type).ToHashSet().ToList();
         List<AdjacencyRule> rules = analyzer.GetAdjacencyRules();
         
-        WfcArgs args = new WfcArgs(positions, tiles, rules, analyzer.TileTypeToCount, analyzer.TileCount, maxPropagationDepth);
+        WfcArgs args = new WfcArgs(positions, tiles, rules, analyzer.TileTypeToCount, analyzer.TileCount);
         return args.ToLevel();
     }
     
@@ -97,7 +97,6 @@ public static class LevelFactory
             entropy: entropy,
             neighborIndices: neighborIndices,
             collapsed: collapsed,
-            maxDepth: 10,
             totalTileTypeCount: tileTypeCount,
             weights: weights,
             sumOfWeights: sumOfWeights,

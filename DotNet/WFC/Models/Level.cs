@@ -6,8 +6,18 @@ namespace WFC.Models
 {
     public class Level
     {
-        public Level(TileRules[] rules, TileType[] tileTypes, Vector[] position, BitArray[] options, float[] entropy,
-            Neighbors[] neighborIndices, bool[] collapsed, int maxDepth, int totalTileTypeCount, int[] weights, int[] sumOfWeights, float[] sumOfWeightsLogWeights)
+        public Level(
+            TileRules[] rules, 
+            TileType[] tileTypes, 
+            Vector[] position, 
+            BitArray[] options, 
+            float[] entropy,
+            Neighbors[] neighborIndices, 
+            bool[] collapsed, 
+            int totalTileTypeCount, 
+            int[] weights, 
+            int[] sumOfWeights, 
+            float[] sumOfWeightsLogWeights)
         {
             TotalTileTypeCount = totalTileTypeCount;
             TileTypes = tileTypes;
@@ -17,15 +27,13 @@ namespace WFC.Models
             Entropy = entropy;
             NeighborIndices = neighborIndices;
             Collapsed = collapsed;
-            MaxDepth = maxDepth;
             Weights = weights;
             SumOfWeights = sumOfWeights;
             SumOfWeightsLogWeights = sumOfWeightsLogWeights;
         }
         
         public int TotalTileTypeCount { get; }
-        public int MaxDepth { get; }
-
+        
         // Index by tile
         public TileRules[] Rules { get; }
         public TileType[] TileTypes { get; }
