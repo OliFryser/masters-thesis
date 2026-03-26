@@ -5,13 +5,14 @@ namespace MapElites
 {
     public static class MapElites
     {
-        public static Archive<TIndividual, TBehavior, TKey> Run<TIndividual, TBehavior, TKey>(
-            IPopulationManager<TIndividual, TBehavior, TKey> populationManager,
+        public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
+            IPopulationManager<TKey, TEntry, TIndividual, TBehavior> populationManager,
             int initializationIterations,
             int mutationIterations)
-            where TKey : IEquatable<TKey>
+            where TKey : IEquatable<TKey> 
+            where TEntry : Entry<TIndividual, TBehavior>, new()
         {
-            Archive<TIndividual, TBehavior, TKey> archive = new Archive<TIndividual, TBehavior, TKey>();
+            Archive<TKey, TEntry, TIndividual, TBehavior> archive = new Archive<TKey, TEntry, TIndividual, TBehavior>();
 
             for (int i = 0; i < initializationIterations; i++)
             {
@@ -33,12 +34,13 @@ namespace MapElites
 
             void EvaluateAndSave(TIndividual individual)
             {
-                Result<TBehavior> result = populationManager.Evaluate(individual);
+                TEntry entry = populationManager.Evaluate(individual);
 
-                TKey key = populationManager.GetKey(result.Behavior);
+                TKey key = populationManager.GetKey(entry.Behavior);
 
-                Entry<TIndividual, TBehavior> entry =
-                    new Entry<TIndividual, TBehavior>(individual, result.Behavior, result.Fitness);
+                // individual, result.Behavior, result.Fitness
+                // TEntry entry = new TEntry();
+                // Entry<TIndividual, TBehavior> entry = new Entry<TIndividual, TBehavior>();
 
                 archive.TryAdd(key, entry);
             }

@@ -20,11 +20,13 @@ namespace MapElites
     {
         TIndividual Mutate(TIndividual individual);
     }
-    
-    public interface IPopulationManager<TIndividual, TBehavior, out TKey> 
-        : IPopulationFactory<TIndividual>, IPopulationMutator<TIndividual> where TKey : IEquatable<TKey>
+
+    public interface IPopulationManager<out TKey, out TEntry, TIndividual, in TBehavior>
+        : IPopulationFactory<TIndividual>, IPopulationMutator<TIndividual>
+        where TKey : IEquatable<TKey>
+        where TEntry : Entry<TIndividual, TBehavior>
     {
-        Result<TBehavior> Evaluate(TIndividual individual);
+        TEntry Evaluate(TIndividual individual);
 
         TKey GetKey(TBehavior behavior);
     }
@@ -49,8 +51,15 @@ namespace MapElites
             throw new NotImplementedException();
         }
     }
-    
-    public class SamplePopulationManager : IPopulationManager<SampleIndividual, SampleBehavior, SampleKey>
+
+    public class SampleEntry : Entry<SampleIndividual, SampleBehavior>
+    {
+        public SampleEntry(SampleIndividual individual, SampleBehavior behavior, float fitness) : base(individual, behavior, fitness)
+        {
+        }
+    }
+
+    public class SamplePopulationManager : IPopulationManager<SampleKey, SampleEntry, SampleIndividual, SampleBehavior>
     {
         public SampleIndividual CreateRandom()
         {
@@ -62,7 +71,7 @@ namespace MapElites
             throw new NotImplementedException();
         }
 
-        public Result<SampleBehavior> Evaluate(SampleIndividual individual)
+        public SampleEntry Evaluate(SampleIndividual individual)
         {
             throw new NotImplementedException();
         }
@@ -78,7 +87,7 @@ namespace MapElites
         public void Test()
         {
             SamplePopulationManager populationManager = new SamplePopulationManager();
-            Archive<SampleIndividual, SampleBehavior, SampleKey> archive = MapElites.Run(populationManager, 10, 10);
+            Archive<SampleKey, SampleEntry, SampleIndividual, SampleBehavior> archive;
         }
     }
 }

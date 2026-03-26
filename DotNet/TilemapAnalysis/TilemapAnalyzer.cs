@@ -14,6 +14,7 @@ namespace TilemapAnalysis
     {
         public Dictionary<TileType, int> TileTypeToCount { get; } = new Dictionary<TileType, int>();
         public int TileCount => Tiles.Count;
+        public int TileTypeCount => TileTypeToCount.Count;
         
         public List<Tile> Tiles { get; } = new List<Tile>();
         private List<Image<Rgba32>> TileSprites { get; } = new List<Image<Rgba32>>();

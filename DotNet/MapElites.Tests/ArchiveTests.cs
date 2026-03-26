@@ -8,9 +8,9 @@ public class Tests
     public void SamplingArchive_WithOneEntry_ReturnsTheEntry()
     {
         // Arrange
-        Archive<SampleIndividual, SampleBehavior, int> archive = new();
+        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
-        Entry<SampleIndividual, SampleBehavior> entry = new(individual, new SampleBehavior(), 0);
+        SampleEntry entry = new(individual, new SampleBehavior(), 0);
         archive.TryAdd(0, entry);
 
         // Act 
@@ -24,7 +24,7 @@ public class Tests
     public void SamplingArchive_WithZeroEntries_ThrowsException()
     {
         // Arrange
-        Archive<SampleIndividual, SampleBehavior, int> archive = new();
+        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
 
         // Act 
         Func<SampleIndividual> sample = archive.SampleRandom;
@@ -37,9 +37,9 @@ public class Tests
     public void TryAddingEntry_ToEmptyArchive_WillSucceed()
     {
         // Arrange
-        Archive<SampleIndividual, SampleBehavior, int> archive = new();
+        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
-        Entry<SampleIndividual, SampleBehavior> entry = new(individual, new SampleBehavior(), 0);
+        SampleEntry entry = new(individual, new SampleBehavior(), 0);
 
         // Act 
         bool success = archive.TryAdd(0, entry);
@@ -52,11 +52,11 @@ public class Tests
     public void TryAddingEntry_ThatAlreadyExistsWithBetterFitness_WillFail()
     {
         // Arrange
-        Archive<SampleIndividual, SampleBehavior, int> archive = new();
+        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
-        Entry<SampleIndividual, SampleBehavior> entryHighFitness = new(individual, new SampleBehavior(), 10);
+        SampleEntry entryHighFitness = new(individual, new SampleBehavior(), 10);
         archive.TryAdd(0, entryHighFitness);
-        Entry<SampleIndividual, SampleBehavior> entryLowFitness = new(individual, new SampleBehavior(), 0);
+        SampleEntry entryLowFitness = new(individual, new SampleBehavior(), 0);
 
         // Act 
         bool success = archive.TryAdd(0, entryLowFitness);
@@ -69,11 +69,11 @@ public class Tests
     public void TryAddingEntry_ThatExistsWithLowerFitness_WillSucceed()
     {
         // Arrange
-        Archive<SampleIndividual, SampleBehavior, int> archive = new();
+        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
-        Entry<SampleIndividual, SampleBehavior> entryLowFitness = new(individual, new SampleBehavior(), 0);
+        SampleEntry entryLowFitness = new(individual, new SampleBehavior(), 0);
         archive.TryAdd(0, entryLowFitness);
-        Entry<SampleIndividual, SampleBehavior> entryHighFitness = new(individual, new SampleBehavior(), 10);
+        SampleEntry entryHighFitness = new(individual, new SampleBehavior(), 10);
 
         // Act 
         bool success = archive.TryAdd(0, entryHighFitness);

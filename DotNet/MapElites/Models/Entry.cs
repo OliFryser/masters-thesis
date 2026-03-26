@@ -1,6 +1,6 @@
 namespace MapElites.Models
 {
-    internal class Entry<TIndividual, TBehavior>
+    public class Entry<TIndividual, TBehavior>
     {
         public Entry(TIndividual individual, TBehavior behavior, float fitness)
         {

@@ -4,14 +4,15 @@ using WFC.Extensions;
 
 namespace MapElites.Models
 {
-    public class Archive<TIndividual, TBehavior, TKey> where TKey : IEquatable<TKey>
+    public class Archive<TKey, TEntry, TIndividual, TBehavior> 
+        where TKey : IEquatable<TKey> 
+        where TEntry : Entry<TIndividual, TBehavior>
     {
-        private readonly Dictionary<TKey, Entry<TIndividual, TBehavior>> _archive =
-            new Dictionary<TKey, Entry<TIndividual, TBehavior>>();
+        private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
 
-        internal bool TryAdd(TKey key, Entry<TIndividual, TBehavior> entry)
+        internal bool TryAdd(TKey key, TEntry entry)
         {
-            if (_archive.TryGetValue(key, out Entry<TIndividual, TBehavior> existingEntry))
+            if (_archive.TryGetValue(key, out TEntry existingEntry))
             {
                 if (entry.Fitness > existingEntry.Fitness)
                 {
