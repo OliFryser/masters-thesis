@@ -1,4 +1,5 @@
 ﻿using System;
+using MapElites.Args;
 using MapElites.Models;
 
 namespace MapElites
@@ -7,21 +8,20 @@ namespace MapElites
     {
         public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
             IPopulationManager<TKey, TEntry, TIndividual, TBehavior> populationManager,
-            int initializationIterations,
-            int mutationIterations)
+            MapElitesArgs args)
             where TKey : IEquatable<TKey> 
-            where TEntry : Entry<TIndividual, TBehavior>, new()
+            where TEntry : Entry<TIndividual, TBehavior>
         {
             Archive<TKey, TEntry, TIndividual, TBehavior> archive = new Archive<TKey, TEntry, TIndividual, TBehavior>();
 
-            for (int i = 0; i < initializationIterations; i++)
+            for (int i = 0; i < args.InitializationIterations; i++)
             {
                 TIndividual individual = populationManager.CreateRandom();
 
                 EvaluateAndSave(individual);
             }
 
-            for (int i = 0; i < mutationIterations; i++)
+            for (int i = 0; i < args.MutationIterations; i++)
             {
                 TIndividual individual = archive.SampleRandom();
 

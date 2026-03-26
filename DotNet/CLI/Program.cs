@@ -1,9 +1,11 @@
 ﻿using System;
-// using ImageAnalysis;
-//
-// var resourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources/";
-// var tilemap = resourceDirectory + "Tilemaps/PalletTown.png";
-//     
-// TilemapAnalyzer analyzer = new TilemapAnalyzer(tilemap, resourceDirectory + "PalletTown");
-// analyzer.Analyze();
-Console.WriteLine("Hello World!");
+using MapElites.Args;
+using MapElites.Models;
+using Pokémon;
+
+var resourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources/";
+var tilemapPath = resourceDirectory + "Tilemaps/PalletTown.png";
+
+MapElitesArgs mapElitesArgs = new MapElitesArgs(10, 20);
+PopulationManager populationManager = new PopulationManager(tilemapPath);
+Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(populationManager, mapElitesArgs);
