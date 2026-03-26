@@ -66,7 +66,6 @@ namespace WFC.Extensions
                 entropy,
                 neighborIndices,
                 collapsed,
-                args.MaxPropagationDepth,
                 args.TileTypes.Count,
                 weights,
                 sumOfWeightsArray,
@@ -81,7 +80,7 @@ namespace WFC.Extensions
         public static State ToState(this WfcArgs args)
         {
             Level level = args.ToLevel();
-            return new State(level);
+            return new State(level, args.Seed);
         }
 
         internal static Neighbors[] CreateNeighborsArray(Vector[] positions)
