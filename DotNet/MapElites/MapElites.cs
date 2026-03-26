@@ -17,21 +17,21 @@ namespace MapElites
             {
                 TIndividual individual = populationManager.CreateRandom();
 
-                Map(individual);
+                EvaluateAndSave(individual);
             }
 
             for (int i = 0; i < mutationIterations; i++)
             {
-                TIndividual individual = archive.Sample();
+                TIndividual individual = archive.SampleRandom();
 
                 TIndividual mutation = populationManager.Mutate(individual);
 
-                Map(mutation);
+                EvaluateAndSave(mutation);
             }
 
             return archive;
 
-            void Map(TIndividual individual)
+            void EvaluateAndSave(TIndividual individual)
             {
                 Result<TBehavior> result = populationManager.Evaluate(individual);
 
