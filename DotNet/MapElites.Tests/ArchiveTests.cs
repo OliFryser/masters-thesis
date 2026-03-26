@@ -17,7 +17,7 @@ public class Tests
         SampleIndividual sampledIndividual = archive.SampleRandom();
 
         // Assert
-        Assert.ReferenceEquals(sampledIndividual, individual);
+        Assert.That(sampledIndividual, Is.EqualTo(individual));
     }
 
     [Test]
