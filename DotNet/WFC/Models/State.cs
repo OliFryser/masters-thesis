@@ -14,7 +14,7 @@ namespace WFC.Models
         public List<EmptyTile> EmptyTiles => Level.GetEmptyTiles();
         public Random Random { get; }
         
-        public State(Level level, int? seed = null)
+        public State(Level level, int? seed)
         {
             Level = level;
             Random = seed != null ? new Random(seed.Value) : new Random();

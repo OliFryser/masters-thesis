@@ -25,7 +25,7 @@ public class OptionsBenchmarker
     public void IterationSetup()
     {
         Level level = LevelFactory.Create(Dimension, TilemapPath, PropagationDepth);
-        _startingState = new State(level);
+        _startingState = new State(level, 0);
     }
 
     [Benchmark]

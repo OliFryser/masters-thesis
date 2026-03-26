@@ -115,7 +115,7 @@ public class EndToEndTests
     public void Wfc_CanCompleteSmall_FromInputTilemap()
     {
         Level level = LevelFactory.Create(10, TilemapPath, 5);
-        State startingPoint = new State(level);
+        State startingPoint = new State(level, 0);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
         {
@@ -128,7 +128,7 @@ public class EndToEndTests
     public void Wfc_CanCompleteMedium_FromInputTilemap()
     {
        Level level = LevelFactory.Create(50, TilemapPath, 5);
-        State startingPoint = new State(level);
+        State startingPoint = new State(level, 0);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
         {
@@ -141,7 +141,7 @@ public class EndToEndTests
     public void Wfc_CanCompleteLarge_FromInputTilemap()
     {
         Level level = LevelFactory.Create(100, TilemapPath, 5);
-        State startingPoint = new State(level);
+        State startingPoint = new State(level, 0);
         State state = WaveFunctionCollapse.Complete(startingPoint);
         using (Assert.EnterMultipleScope())
         {

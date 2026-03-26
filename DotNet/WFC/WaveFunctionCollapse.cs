@@ -27,8 +27,7 @@ namespace WFC
 
         public static State Run(in WfcArgs args)
         {
-            Level level = args.ToLevel();
-            State state = new State(level);
+            State state = args.ToState();
             Complete(state.Level, state.Random);
             return state;
         }
