@@ -10,9 +10,5 @@
       <ProjectReference Include="..\Pokémon\Pokémon.csproj" />
       <ProjectReference Include="..\TilemapAnalysis\TilemapAnalysis.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\PalletTown\" />
-    </ItemGroup>
     
 </Project>
