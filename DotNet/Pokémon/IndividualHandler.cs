@@ -12,7 +12,6 @@ namespace Pokémon
 {
     public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior>
     {
-        private int TileCount { get; }
         private int TileTypeCount { get; }
         private List<TileType> TileTypes { get; }
         private List<AdjacencyRule> AdjacencyRules { get; }
@@ -22,7 +21,6 @@ namespace Pokémon
         public IndividualHandler(string inputTilemapPath)
         {
             using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(inputTilemapPath);
-            TileCount = tilemapAnalyzer.TileCount;
             TileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
             TileTypeCount = tilemapAnalyzer.TileTypeCount;
             AdjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
@@ -101,8 +99,8 @@ namespace Pokémon
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
             var numberOfDoors = tiles.Count(t => DoorTiles.Contains(t.Type));
             return new Behavior(
-                numberOfFlowers / (float)TileCount,
-                numberOfDoors / (float)TileCount);
+                numberOfFlowers / (float)tiles.Count,
+                numberOfDoors / (float)tiles.Count);
         }
 
         private Behavior GetAverageBehavior(Behavior[] behaviors)
