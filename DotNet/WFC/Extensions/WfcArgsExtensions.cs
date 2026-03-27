@@ -52,6 +52,12 @@ namespace WFC.Extensions
             int[] sumOfWeightsArray = Enumerable.Repeat(sumOfWeights, numberOfCells).ToArray();
 
             float sumOfWeightsLogWeights = weights.Sum(weight => weight * MathF.Log(weight, 2f));
+
+            if (float.IsNaN(sumOfWeightsLogWeights))
+            {
+                sumOfWeightsLogWeights = 0;
+            }
+            
             float[] sumOfWeightsLogWeightsArray = Enumerable.Repeat(sumOfWeightsLogWeights, numberOfCells).ToArray();
 
             float[] entropy =

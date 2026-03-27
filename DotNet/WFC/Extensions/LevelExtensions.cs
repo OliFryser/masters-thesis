@@ -32,7 +32,7 @@ namespace WFC.Extensions
             {
                 excludedOptions[i] = new BitArray(level.Options[i].Count, true);
             }
-            
+
             for (int i = 0; i < level.NeighborIndices.Length; i++)
             {
                 Dictionary<Direction, int> neighborIndices = level.NeighborIndices[i].Indices;
@@ -49,7 +49,7 @@ namespace WFC.Extensions
                 level.Options[i].Xor(excludedOptions[i]);
             }
 
-            level.ReduceEntropyForAll(); 
+            level.ReduceEntropyForAll();
         }
 
         private static void ReduceEntropyForAll(this Level level)
@@ -94,7 +94,8 @@ namespace WFC.Extensions
             return accumulatedValidTiles;
         }
 
-        internal static void AccumulateValidTilesInDirection(this Level level, BitArray validNeighbors, int neighborIndex,
+        internal static void AccumulateValidTilesInDirection(this Level level, BitArray validNeighbors,
+            int neighborIndex,
             Direction direction)
         {
             BitArray neighborOptions = level.Options[neighborIndex];
@@ -123,7 +124,13 @@ namespace WFC.Extensions
                 }
 
                 level.SumOfWeights[cellIndex] -= level.Weights[i];
-                level.SumOfWeightsLogWeights[cellIndex] -= level.Weights[i] * MathF.Log(level.Weights[i], 2f);
+                var weightLogWeight = level.Weights[i] * MathF.Log(level.Weights[i], 2f);
+                if (float.IsNaN(weightLogWeight))
+                {
+                    weightLogWeight = 0f;
+                }
+
+                level.SumOfWeightsLogWeights[cellIndex] -= weightLogWeight;
             }
         }
 

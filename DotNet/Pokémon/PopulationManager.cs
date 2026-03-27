@@ -13,6 +13,7 @@ namespace Pokémon
     public class PopulationManager : IPopulationManager<Key, Entry, Individual, Behavior>
     {
         private int TileCount { get; }
+        private int TileTypeCount { get; }
         private List<TileType> TileTypes { get; }
         private List<AdjacencyRule> AdjacencyRules { get; }
         private HashSet<TileType> DoorTiles { get; }
@@ -22,7 +23,8 @@ namespace Pokémon
         {
             using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(inputTilemapPath);
             TileCount = tilemapAnalyzer.TileCount;
-            TileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToList();
+            TileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
+            TileTypeCount = tilemapAnalyzer.TileTypeCount;
             AdjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
             DoorTiles = new HashSet<TileType>()
             {
@@ -37,15 +39,12 @@ namespace Pokémon
 
         public Individual CreateRandom()
         {
-            Dictionary<TileType, int> weights = new Dictionary<TileType, int>();
             Random random = new Random();
-            for (int i = 0; i < TileCount; i++)
-            {
-                int weight = random.Next(TileCount);
-                TileType tileType = TileTypes[i];
-                weights.Add(tileType, weight);
-            }
-
+            
+            Dictionary<TileType, int> weights = TileTypes.ToDictionary(
+                keySelector: t => t,
+                elementSelector: t => random.Next(TileTypeCount));
+            
             return new Individual(weights);
         }
 
@@ -63,8 +62,8 @@ namespace Pokémon
 
         public Entry Evaluate(Individual individual)
         {
-            int iterations = 100;
-            List<Vector> positions = GetPositions(20, 20).ToList();
+            int iterations = 10;
+            List<Vector> positions = GetPositions(10, 10).ToList();
             int amountComplete = 0;
             Behavior[] behaviors = new Behavior[iterations];
             
