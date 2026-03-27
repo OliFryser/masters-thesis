@@ -11,5 +11,12 @@ namespace WFC
 
             return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
         }
+
+        internal static float WeightLogWeight(int weight)
+        {
+            return weight <= 0
+                ? 0f
+                : weight * MathF.Log(weight, 2f);
+        }
     }
 }

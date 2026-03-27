@@ -11,6 +11,5 @@ namespace Pokémon
         }
 
         public Dictionary<TileType, int> Weights { get; }
-        
     }
 }
