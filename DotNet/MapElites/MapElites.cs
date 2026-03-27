@@ -7,7 +7,7 @@ namespace MapElites
     public static class MapElites
     {
         public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
-            IPopulationManager<TKey, TEntry, TIndividual, TBehavior> populationManager,
+            IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
             MapElitesArgs args)
             where TKey : IEquatable<TKey>
             where TEntry : Entry<TIndividual, TBehavior>
@@ -17,10 +17,10 @@ namespace MapElites
 
             for (int i = 0; i < args.InitializationIterations; i++)
             {
-                TIndividual individual = populationManager.CreateRandom();
+                TIndividual individual = individualHandler.CreateRandom();
 
                 EvaluateAndSave(individual);
-                
+
                 logger($"Initialization Iterations: {i}");
                 logger($"Archive size: {archive.Count}");
                 logger($"Max Fitness: {archive.GetMaxFitness()}\n");
@@ -32,10 +32,10 @@ namespace MapElites
             {
                 TIndividual individual = archive.SampleRandom();
 
-                TIndividual mutation = populationManager.Mutate(individual);
+                TIndividual mutation = individualHandler.Mutate(individual);
 
                 EvaluateAndSave(mutation);
-                
+
                 logger($"Mutation Iterations: {i}");
                 logger($"Archive size: {archive.Count}");
                 logger($"Max Fitness: {archive.GetMaxFitness()}\n");
@@ -45,9 +45,9 @@ namespace MapElites
 
             void EvaluateAndSave(TIndividual individual)
             {
-                TEntry entry = populationManager.Evaluate(individual);
+                TEntry entry = individualHandler.Evaluate(individual);
 
-                TKey key = populationManager.GetKey(entry.Behavior);
+                TKey key = individualHandler.GetKey(entry.Behavior);
 
                 archive.TryAdd(key, entry);
             }

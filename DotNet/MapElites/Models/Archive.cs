@@ -5,8 +5,8 @@ using WFC.Extensions;
 
 namespace MapElites.Models
 {
-    public class Archive<TKey, TEntry, TIndividual, TBehavior> 
-        where TKey : IEquatable<TKey> 
+    public class Archive<TKey, TEntry, TIndividual, TBehavior>
+        where TKey : IEquatable<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
@@ -40,5 +40,11 @@ namespace MapElites.Models
         }
 
         internal float GetMaxFitness() => _archive.Values.Select(e => e.Fitness).Max();
+
+        public TIndividual GetMaxFitnessIndividual()
+            => _archive.Values
+                .OrderByDescending(entry => entry.Fitness)
+                .Select(entry => entry.Individual)
+                .FirstOrDefault();
     }
 }
