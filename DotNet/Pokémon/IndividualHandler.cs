@@ -10,7 +10,7 @@ using WFC.Models;
 
 namespace Pokémon
 {
-    public class PopulationManager : IPopulationManager<Key, Entry, Individual, Behavior>
+    public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior>
     {
         private int TileCount { get; }
         private int TileTypeCount { get; }
@@ -19,7 +19,7 @@ namespace Pokémon
         private HashSet<TileType> DoorTiles { get; }
         private HashSet<TileType> FlowerTiles { get; }
 
-        public PopulationManager(string inputTilemapPath)
+        public IndividualHandler(string inputTilemapPath)
         {
             using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(inputTilemapPath);
             TileCount = tilemapAnalyzer.TileCount;

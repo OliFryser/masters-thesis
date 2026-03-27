@@ -11,26 +11,6 @@ namespace MapElites
     {
     }
 
-    public interface IPopulationFactory<out TIndividual>
-    {
-        TIndividual CreateRandom();
-    }
-
-    public interface IPopulationMutator<TIndividual>
-    {
-        TIndividual Mutate(TIndividual individual);
-    }
-
-    public interface IPopulationManager<out TKey, out TEntry, TIndividual, in TBehavior>
-        : IPopulationFactory<TIndividual>, IPopulationMutator<TIndividual>
-        where TKey : IEquatable<TKey>
-        where TEntry : Entry<TIndividual, TBehavior>
-    {
-        TEntry Evaluate(TIndividual individual);
-
-        TKey GetKey(TBehavior behavior);
-    }
-
     public class SampleKey : IEquatable<SampleKey>
     {
         public bool Equals(SampleKey? other)
@@ -54,12 +34,13 @@ namespace MapElites
 
     public class SampleEntry : Entry<SampleIndividual, SampleBehavior>
     {
-        public SampleEntry(SampleIndividual individual, SampleBehavior behavior, float fitness) : base(individual, behavior, fitness)
+        public SampleEntry(SampleIndividual individual, SampleBehavior behavior, float fitness) : base(individual,
+            behavior, fitness)
         {
         }
     }
 
-    public class SamplePopulationManager : IPopulationManager<SampleKey, SampleEntry, SampleIndividual, SampleBehavior>
+    public class SampleIndividualHandler : IIndividualHandler<SampleKey, SampleEntry, SampleIndividual, SampleBehavior>
     {
         public SampleIndividual CreateRandom()
         {
@@ -86,7 +67,7 @@ namespace MapElites
     {
         public void Test()
         {
-            SamplePopulationManager populationManager = new SamplePopulationManager();
+            SampleIndividualHandler individualHandler = new SampleIndividualHandler();
             Archive<SampleKey, SampleEntry, SampleIndividual, SampleBehavior> archive;
         }
     }
