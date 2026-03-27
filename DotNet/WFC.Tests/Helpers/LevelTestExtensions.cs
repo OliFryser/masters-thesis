@@ -9,6 +9,12 @@ public static class LevelTestExtensions
 {
     extension(Level level)
     {
+        /// <summary>
+        /// Adds a neighbor connection.
+        /// </summary>
+        /// <param name="cellIndexFrom"></param>
+        /// <param name="cellIndexTo"></param>
+        /// <param name="neighborDirection">Direction is relative to the <see cref="cellIndexFrom"/></param>
         public void AddNeighborConnection(int cellIndexFrom, int cellIndexTo, Direction neighborDirection)
         {
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(cellIndexFrom, level.Position.Length);
