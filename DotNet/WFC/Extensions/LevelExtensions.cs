@@ -124,13 +124,7 @@ namespace WFC.Extensions
                 }
 
                 level.SumOfWeights[cellIndex] -= level.Weights[i];
-                var weightLogWeight = level.Weights[i] * MathF.Log(level.Weights[i], 2f);
-                if (float.IsNaN(weightLogWeight))
-                {
-                    weightLogWeight = 0f;
-                }
-
-                level.SumOfWeightsLogWeights[cellIndex] -= weightLogWeight;
+                level.SumOfWeightsLogWeights[cellIndex] -= WeightLogWeight(level.Weights[i]);
             }
         }
 
