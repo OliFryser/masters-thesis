@@ -9,7 +9,7 @@ namespace MapElites
         public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
             IPopulationManager<TKey, TEntry, TIndividual, TBehavior> populationManager,
             MapElitesArgs args)
-            where TKey : IEquatable<TKey> 
+            where TKey : IEquatable<TKey>
             where TEntry : Entry<TIndividual, TBehavior>
         {
             Archive<TKey, TEntry, TIndividual, TBehavior> archive = new Archive<TKey, TEntry, TIndividual, TBehavior>();
@@ -20,22 +20,25 @@ namespace MapElites
                 TIndividual individual = populationManager.CreateRandom();
 
                 EvaluateAndSave(individual);
+                
+                logger($"Initialization Iterations: {i}");
+                logger($"Archive size: {archive.Count}");
+                logger($"Max Fitness: {archive.GetMaxFitness()}\n");
             }
-            logger("Archive Initialized. Archive Size: " + archive.Count);
-            
+
+            logger($"Archive Initialized. Archive Size: {archive.Count}\n");
+
             for (int i = 0; i < args.MutationIterations; i++)
             {
-                if (i % 10 == 0)
-                {
-                    logger("Mutation Iterations: " + i);
-                    logger("Archive size: " + archive.Count);
-                    logger("Max Fitness: " + archive.GetMaxFitness());
-                }
                 TIndividual individual = archive.SampleRandom();
 
                 TIndividual mutation = populationManager.Mutate(individual);
 
                 EvaluateAndSave(mutation);
+                
+                logger($"Mutation Iterations: {i}");
+                logger($"Archive size: {archive.Count}");
+                logger($"Max Fitness: {archive.GetMaxFitness()}\n");
             }
 
             return archive;
@@ -45,10 +48,6 @@ namespace MapElites
                 TEntry entry = populationManager.Evaluate(individual);
 
                 TKey key = populationManager.GetKey(entry.Behavior);
-
-                // individual, result.Behavior, result.Fitness
-                // TEntry entry = new TEntry();
-                // Entry<TIndividual, TBehavior> entry = new Entry<TIndividual, TBehavior>();
 
                 archive.TryAdd(key, entry);
             }
