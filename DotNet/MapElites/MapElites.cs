@@ -9,7 +9,7 @@ namespace MapElites
         public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
             IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
             MapElitesArgs args)
-            where TKey : IEquatable<TKey>
+            where TKey : BaseKey<TKey>
             where TEntry : Entry<TIndividual, TBehavior>
         {
             Archive<TKey, TEntry, TIndividual, TBehavior> archive = new Archive<TKey, TEntry, TIndividual, TBehavior>();

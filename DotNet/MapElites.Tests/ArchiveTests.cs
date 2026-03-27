@@ -4,14 +4,22 @@ namespace MapElites.Tests;
 
 public class Tests
 {
+    public class TestKey(int keyIndex) : BaseKey<TestKey>
+    {
+        private int KeyIndex { get; } = keyIndex;
+
+        public override bool Equals(TestKey? other) => other?.KeyIndex == KeyIndex;
+        public override int GetHashCode() => HashCode.Combine(KeyIndex);
+    }
+    
     [Test]
     public void SamplingArchive_WithOneEntry_ReturnsTheEntry()
     {
         // Arrange
-        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entry = new(individual, new SampleBehavior(), 0);
-        archive.TryAdd(0, entry);
+        archive.TryAdd(new TestKey(0), entry);
 
         // Act 
         SampleIndividual sampledIndividual = archive.SampleRandom();
@@ -24,7 +32,7 @@ public class Tests
     public void SamplingArchive_WithZeroEntries_ThrowsException()
     {
         // Arrange
-        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
 
         // Act 
         Func<SampleIndividual> sample = archive.SampleRandom;
@@ -37,12 +45,12 @@ public class Tests
     public void TryAddingEntry_ToEmptyArchive_WillSucceed()
     {
         // Arrange
-        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entry = new(individual, new SampleBehavior(), 0);
 
         // Act 
-        bool success = archive.TryAdd(0, entry);
+        bool success = archive.TryAdd(new TestKey(0), entry);
 
         // Assert
         Assert.That(success, Is.True);
@@ -52,14 +60,14 @@ public class Tests
     public void TryAddingEntry_ThatAlreadyExistsWithBetterFitness_WillFail()
     {
         // Arrange
-        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entryHighFitness = new(individual, new SampleBehavior(), 10);
-        archive.TryAdd(0, entryHighFitness);
+        archive.TryAdd(new TestKey(0), entryHighFitness);
         SampleEntry entryLowFitness = new(individual, new SampleBehavior(), 0);
 
         // Act 
-        bool success = archive.TryAdd(0, entryLowFitness);
+        bool success = archive.TryAdd(new TestKey(0), entryLowFitness);
 
         // Assert
         Assert.That(success, Is.False);
@@ -69,14 +77,14 @@ public class Tests
     public void TryAddingEntry_ThatExistsWithLowerFitness_WillSucceed()
     {
         // Arrange
-        Archive<int, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entryLowFitness = new(individual, new SampleBehavior(), 0);
-        archive.TryAdd(0, entryLowFitness);
+        archive.TryAdd(new TestKey(0), entryLowFitness);
         SampleEntry entryHighFitness = new(individual, new SampleBehavior(), 10);
 
         // Act 
-        bool success = archive.TryAdd(0, entryHighFitness);
+        bool success = archive.TryAdd(new TestKey(0), entryHighFitness);
 
         // Assert
         Assert.That(success, Is.True);
