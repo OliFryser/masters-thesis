@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
 using WFC.Args;
-using Models;
 using WFC.Models;
 
 namespace WFC.Extensions

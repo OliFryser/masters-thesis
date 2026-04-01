@@ -1,7 +1,6 @@
-using System;
 using MapElites.Models;
 
-namespace MapElites
+namespace MapElites.Tests
 {
     public class SampleIndividual
     {

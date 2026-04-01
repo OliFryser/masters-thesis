@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MapElites.Extensions;
 using WFC.Extensions;
 
 namespace MapElites.Models
@@ -42,9 +43,6 @@ namespace MapElites.Models
         internal float GetMaxFitness() => _archive.Values.Select(e => e.Fitness).Max();
 
         public TIndividual GetMaxFitnessIndividual()
-            => _archive.Values
-                .OrderByDescending(entry => entry.Fitness)
-                .Select(entry => entry.Individual)
-                .FirstOrDefault();
+            => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Domain.Models;
-using Models;
 using WFC.Models;
 using WFC.Output;
 using static WFC.EntropyCalculation;

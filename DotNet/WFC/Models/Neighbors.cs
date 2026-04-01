@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Domain.Models;
 
-namespace Models
+namespace WFC.Models
 {
     public struct Neighbors
     {
