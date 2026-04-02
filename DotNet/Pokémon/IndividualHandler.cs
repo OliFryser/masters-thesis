@@ -26,12 +26,12 @@ namespace Pokémon
             AdjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
             DoorTiles = new HashSet<TileType>()
             {
-                new TileType("-744959885"),
-                new TileType("666136432"),
+                new TileType("8003a2e1d3f57ad878dc5ae8443ba9a1b2012142"),
+                new TileType("f0e58e8686e7e54af622e5bfe3bb38953ed16430"),
             };
             FlowerTiles = new HashSet<TileType>()
             {
-                new TileType("2146349780"),
+                new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
         }
 
@@ -63,7 +63,7 @@ namespace Pokémon
         public Entry Evaluate(Individual individual)
         {
             int iterations = 10;
-            List<Vector> positions = GetPositions(10, 10).ToList();
+            List<Vector> positions = GetPositions(20, 20).ToList();
             int amountComplete = 0;
             Behavior[] behaviors = new Behavior[iterations];
 

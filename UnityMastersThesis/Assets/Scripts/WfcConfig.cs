@@ -13,10 +13,9 @@ public class WfcConfig : ScriptableObject
     public AdjacencyRule[] Rules;
     public TileBase[] Tiles;
     public SerializedDictionary<string, int> TileTypeToCount;
-    public int TileCount = 0;
+    public int TileCount;
     public int Width = 50;
     public int Height = 50;
-    public int MaxPropagationDepth = 5;
     
     public WfcArgs ToArgs()
     {
