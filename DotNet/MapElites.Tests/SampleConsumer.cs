@@ -10,9 +10,9 @@ namespace MapElites.Tests
     {
     }
 
-    public class SampleKey : IEquatable<SampleKey>
+    public class SampleKey : BaseKey<SampleKey>
     {
-        public bool Equals(SampleKey? other)
+        public override bool Equals(SampleKey? other)
         {
             throw new NotImplementedException();
         }

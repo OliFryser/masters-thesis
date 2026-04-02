@@ -7,7 +7,7 @@ using WFC.Extensions;
 namespace MapElites.Models
 {
     public class Archive<TKey, TEntry, TIndividual, TBehavior>
-        where TKey : IEquatable<TKey>
+        where TKey : BaseKey<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
