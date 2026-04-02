@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using Domain.Models;
-using Models;
 using WFC;
 using WFC.Args;
 using WFC.Models;

@@ -1,6 +1,5 @@
 using System.Collections;
 using Domain.Models;
-using Models;
 
 namespace WFC.Models
 {

@@ -1,6 +1,5 @@
 using System.Collections;
 using Domain.Models;
-using Models;
 using TilemapAnalysis;
 using WFC.Args;
 using WFC.Extensions;
