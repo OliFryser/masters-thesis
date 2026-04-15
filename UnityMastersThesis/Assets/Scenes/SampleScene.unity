@@ -575,7 +575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1dc17dafe2fbce4d80cd5fbbb0bb368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
-  _layoutFile: {fileID: 4900000, guid: 27a0a7c2d8569c5479483db3a7227692, type: 3}
   _tilemap: {fileID: 1980183780}
   _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
   _animationSpeed: 0

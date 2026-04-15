@@ -18,7 +18,6 @@ using UnityEditor;
 
 public class Visualizer : MonoBehaviour
 {
-    [SerializeField] private TextAsset _layoutFile;
     [SerializeField] private Tilemap _tilemap;
 
     [SerializeField] private WfcConfig _wfcConfig;
