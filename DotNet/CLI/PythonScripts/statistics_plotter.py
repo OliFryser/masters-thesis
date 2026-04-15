@@ -12,7 +12,6 @@ def parse_text_file(text_file_path: str) -> dict[str, list[float]]:
     header_to_data: dict[str, list[float]] = {}
     current_header = None
 
-    # 1. Parse the file
     try:
         with open(text_file_path, "r", encoding="utf-8") as f:
             for line in f:
@@ -55,7 +54,7 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
     plt.legend()
 
     plt.savefig(output_file_path)
-    plt.close()  # Close plot to free memory
+    plt.close()
 
     print(f"Successfully saved plot to: {output_file_path}")
 
