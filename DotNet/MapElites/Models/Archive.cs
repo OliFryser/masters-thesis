@@ -30,6 +30,11 @@ namespace MapElites.Models
             return true;
         }
 
+        public bool TryGet(TKey key, out TEntry entry)
+        {
+            return _archive.TryGetValue(key, out entry);
+        }
+
         internal TIndividual SampleRandom()
         {
             if (_archive.Count == 0)
@@ -44,5 +49,7 @@ namespace MapElites.Models
 
         public TIndividual GetMaxFitnessIndividual()
             => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
+        
+        public IEnumerable<TKey> Keys => _archive.Keys;
     }
 }

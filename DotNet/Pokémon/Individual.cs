@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Domain.Models;
+using WFC.Models;
 
 namespace Pokémon
 {
@@ -11,5 +12,6 @@ namespace Pokémon
         }
 
         public Dictionary<TileType, int> Weights { get; }
+        public State? WfcInstance { get; set; }
     }
 }

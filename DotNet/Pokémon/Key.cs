@@ -15,7 +15,7 @@ namespace Pokémon
         public override int GetHashCode() => HashCode.Combine(FlowerBucket, DoorBucket);
 
 
-        private int FlowerBucket { get; }
-        private int DoorBucket { get; }
+        public int FlowerBucket { get; }
+        public int DoorBucket { get; }
     }
 }

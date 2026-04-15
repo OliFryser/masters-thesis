@@ -71,6 +71,12 @@ namespace Pokémon
             {
                 WfcArgs args = new WfcArgs(positions, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
+
+                if (i == 0)
+                {
+                    individual.WfcInstance = state;
+                }
+                
                 if (state.IsCollapsed)
                 {
                     amountComplete++;
@@ -86,9 +92,9 @@ namespace Pokémon
 
         public Key GetKey(Behavior behavior)
         {
-            int numberOfBuckets = 5;
-            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * numberOfBuckets);
-            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * numberOfBuckets);
+            int numberOfBucketsPerAxis = 50;
+            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * numberOfBucketsPerAxis);
+            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * numberOfBucketsPerAxis);
 
             return new Key(flowerBucket, doorBucket);
         }
