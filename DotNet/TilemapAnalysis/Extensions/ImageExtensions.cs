@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Security.Cryptography;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -8,18 +9,13 @@ namespace TilemapAnalysis.Extensions
     {
         public static string Hash(this Image<Rgba32> image)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            byte[] pixelBytes = new byte[image.Width * image.Height * 4];
+            image.CopyPixelDataTo(pixelBytes);
 
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    Rgba32 color = image[x, y];
-                    stringBuilder.Append(color.ToHex());
-                }
-            }
-
-            return stringBuilder.ToString().GetHashCode().ToString();
+            using SHA1 sha1 = SHA1.Create();
+            
+            byte[] hashBytes = sha1.ComputeHash(pixelBytes);
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
     }
 }
