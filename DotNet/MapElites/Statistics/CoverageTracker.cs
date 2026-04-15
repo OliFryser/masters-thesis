@@ -17,7 +17,7 @@ namespace MapElites.Statistics
 
         public void SaveToFile(string outputPath)
         {
-            FileWriter.WriteStatisticEntriesToFile(outputPath, "coverage.txt", "Coverage", CoverageValues);
+            FileWriter.WriteStatisticEntriesToFile(outputPath, "Coverage.txt", "Coverage", CoverageValues);
         }
     }
 }
