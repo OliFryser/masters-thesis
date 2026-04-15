@@ -43,7 +43,7 @@ public class WfcConfig : ScriptableObject
         }
         List<TileType> tiles = new(tileIds);
         var tileTypeToCount = TileTypeToCount.ToDictionary().ToDictionary(kvp => new TileType(kvp.Key), kvp => kvp.Value);
-        return new WfcArgs(positions, tiles, rules, tileTypeToCount, TileCount);
+        return new WfcArgs(positions, tiles, rules, tileTypeToCount);
     }
 }
 
