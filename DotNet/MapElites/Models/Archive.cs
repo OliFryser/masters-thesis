@@ -44,5 +44,8 @@ namespace MapElites.Models
 
         public TIndividual GetMaxFitnessIndividual()
             => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
+
+        internal float GetAverageFitness()
+            => _archive.Values.Average(x => x.Fitness);
     }
 }

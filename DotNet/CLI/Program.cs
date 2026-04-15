@@ -4,10 +4,13 @@ using MapElites.Args;
 using MapElites.Models;
 using Pokémon;
 
-string resourceDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../../Resources";
+string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
+string resourceDirectory = $"{baseDirectory}/Resources";
 string tilemapPath = $"{resourceDirectory}/Tilemaps/PalletTown.png";
+// Save in folder named timestamp
+string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HHmmssffff}";
 
-MapElitesArgs mapElitesArgs = new(100, 1000, Console.WriteLine);
+MapElitesArgs mapElitesArgs = new(100, 1000, Console.WriteLine, outputPath);
 IndividualHandler individualHandler = new(tilemapPath);
 
 Stopwatch stopwatch = Stopwatch.StartNew();
