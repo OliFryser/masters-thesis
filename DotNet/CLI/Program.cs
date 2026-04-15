@@ -12,7 +12,7 @@ string resourceDirectory = $"{baseDirectory}/Resources";
 string tilemapPath = $"{resourceDirectory}/Tilemaps/PalletTown.png";
 
 // Save in folder named timestamp
-string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HHmmssffff}";
+string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HHmmss}";
 // Ensure path exists
 Directory.CreateDirectory(outputPath);
 
