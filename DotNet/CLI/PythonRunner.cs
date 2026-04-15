@@ -23,7 +23,10 @@ public static class PythonRunner
 
         using StreamReader reader = process.StandardOutput;
         string result = reader.ReadToEnd();
-        Console.WriteLine("Output: " + result);
+        if (!string.IsNullOrEmpty(result))
+        {
+            Console.WriteLine("Output: " + result);
+        }
 
         string errors = process.StandardError.ReadToEnd();
         if (!string.IsNullOrEmpty(errors))
