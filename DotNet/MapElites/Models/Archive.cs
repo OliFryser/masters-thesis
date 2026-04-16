@@ -12,12 +12,12 @@ namespace MapElites.Models
     {
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
         public int Count => _archive.Count;
-        public int MaxCapacity { get; }
+        public int BucketCapacity { get; }
         
         
-        public Archive(int maxCapacity)
+        public Archive(int bucketCapacity)
         {
-            MaxCapacity = maxCapacity;
+            BucketCapacity = bucketCapacity;
         }
 
         internal bool TryAdd(TKey key, TEntry entry)

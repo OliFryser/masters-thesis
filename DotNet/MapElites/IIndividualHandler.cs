@@ -18,8 +18,11 @@ namespace MapElites
         where TKey : IEquatable<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
+        int BucketCapacity { get; }
+        
         TEntry Evaluate(TIndividual individual);
 
         TKey GetKey(TBehavior behavior);
+        
     }
 }

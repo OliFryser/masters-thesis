@@ -17,6 +17,9 @@ namespace Pokémon
         private List<AdjacencyRule> AdjacencyRules { get; }
         private HashSet<TileType> DoorTiles { get; }
         private HashSet<TileType> FlowerTiles { get; }
+        public int BucketCapacity { get; }
+
+        private int NumberOfBucketsPerAxis { get; }
 
         public IndividualHandler(string inputTilemapPath)
         {
@@ -33,6 +36,9 @@ namespace Pokémon
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
+
+            NumberOfBucketsPerAxis = 5;
+            BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
         }
 
         public Individual CreateRandom()
@@ -60,6 +66,7 @@ namespace Pokémon
             return new Individual(newWeights);
         }
 
+
         public Entry Evaluate(Individual individual)
         {
             int iterations = 10;
@@ -86,9 +93,8 @@ namespace Pokémon
 
         public Key GetKey(Behavior behavior)
         {
-            int numberOfBuckets = 5;
-            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * numberOfBuckets);
-            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * numberOfBuckets);
+            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * NumberOfBucketsPerAxis);
+            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * NumberOfBucketsPerAxis);
 
             return new Key(flowerBucket, doorBucket);
         }
