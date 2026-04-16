@@ -12,6 +12,13 @@ namespace MapElites.Models
     {
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
         public int Count => _archive.Count;
+        public int BucketCapacity { get; }
+        
+        
+        public Archive(int bucketCapacity)
+        {
+            BucketCapacity = bucketCapacity;
+        }
 
         internal bool TryAdd(TKey key, TEntry entry)
         {
@@ -44,5 +51,8 @@ namespace MapElites.Models
 
         public TIndividual GetMaxFitnessIndividual()
             => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
+
+        internal float GetAverageFitness()
+            => _archive.Values.Average(x => x.Fitness);
     }
 }
