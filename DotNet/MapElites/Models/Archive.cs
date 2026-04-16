@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using MapElites.Extensions;
 using WFC.Extensions;
+using System.Text.Json.Serialization;
 
 namespace MapElites.Models
 {
@@ -13,8 +16,7 @@ namespace MapElites.Models
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
         public int Count => _archive.Count;
         public int BucketCapacity { get; }
-        
-        
+
         public Archive(int bucketCapacity)
         {
             BucketCapacity = bucketCapacity;
@@ -56,7 +58,7 @@ namespace MapElites.Models
 
         public TIndividual GetMaxFitnessIndividual()
             => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
-        
+
         public IEnumerable<TKey> Keys => _archive.Keys;
 
         internal float GetAverageFitness()

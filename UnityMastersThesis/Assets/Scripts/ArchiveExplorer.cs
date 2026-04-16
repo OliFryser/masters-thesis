@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Domain.Models;
 using MapElites.Args;
@@ -54,6 +55,8 @@ public class ArchiveExplorer : MonoBehaviour
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}");
         
         _archive = MapElites.MapElites.Run(individualHandler, args);
+        
+        // SaveToJson(_archive);
 
         int maxDoorBucket = _archive.Keys.Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.Keys.Max(k => k.FlowerBucket);
@@ -116,4 +119,12 @@ public class ArchiveExplorer : MonoBehaviour
 
         return state;
     }
+    
+    
+    // private void SaveToJson(Archive<Key, Entry, Individual, Behavior> archive)
+    // {
+    //     const string baseDirectory = "Assets/Resources/Archives/";
+    //     string filePath = $"{baseDirectory}{archive.GetHashCode()}.json";
+    //     File.WriteAllText(filePath, archive.ToJson());
+    // }
 }
