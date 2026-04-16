@@ -78,6 +78,12 @@ namespace Pokémon
             {
                 WfcArgs args = new WfcArgs(positions, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
+
+                if (i == 0)
+                {
+                    individual.WfcInstance = state;
+                }
+                
                 if (state.IsCollapsed)
                 {
                     amountComplete++;
