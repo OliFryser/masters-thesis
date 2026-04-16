@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace MapElites.Statistics
@@ -18,7 +19,7 @@ namespace MapElites.Statistics
                 streamWriter.WriteLine(header);
                 foreach (var entry in entries)
                 {
-                    streamWriter.WriteLine(entry?.ToString());
+                    streamWriter.WriteLine(entry?.ToString().Replace(",", "."));
                 }
 
                 streamWriter.Close();

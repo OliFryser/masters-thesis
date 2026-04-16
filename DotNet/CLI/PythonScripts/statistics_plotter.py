@@ -49,6 +49,7 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
             plt.plot([i for i in range(len(values))], values, label=header)
 
     plt.title(figname)
+    print(figname, len(values))
     plt.xlabel("Iteration")
     plt.ylabel(figname)
     plt.legend()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
 using MapElites;
-using TilemapAnalysis;
+using Pokémon.Args;
 using WFC;
 using WFC.Args;
 using WFC.Models;
@@ -15,18 +15,20 @@ namespace Pokémon
         private int TileTypeCount { get; }
         private List<TileType> TileTypes { get; }
         private List<AdjacencyRule> AdjacencyRules { get; }
+        private List<Vector> Coordinates { get; }
         private HashSet<TileType> DoorTiles { get; }
         private HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
 
-        private int NumberOfBucketsPerAxis { get; }
+        private static int NumberOfBucketsPerAxis => 5;
 
-        public IndividualHandler(string inputTilemapPath)
+        public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
-            using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(inputTilemapPath);
-            TileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-            TileTypeCount = tilemapAnalyzer.TileTypeCount;
-            AdjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+            TileTypeCount = individualHandlerArgs.TileTypeCount;
+            TileTypes = individualHandlerArgs.TileTypes;
+            AdjacencyRules = individualHandlerArgs.AdjacencyRules;
+            Coordinates = individualHandlerArgs.Coordinates;
+            
             DoorTiles = new HashSet<TileType>()
             {
                 new TileType("8003a2e1d3f57ad878dc5ae8443ba9a1b2012142"),
@@ -37,7 +39,6 @@ namespace Pokémon
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
 
-            NumberOfBucketsPerAxis = 5;
             BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
         }
 
@@ -70,13 +71,12 @@ namespace Pokémon
         public Entry Evaluate(Individual individual)
         {
             int iterations = 10;
-            List<Vector> positions = GetPositions(20, 20).ToList();
             int amountComplete = 0;
             Behavior[] behaviors = new Behavior[iterations];
 
             for (int i = 0; i < iterations; i++)
             {
-                WfcArgs args = new WfcArgs(positions, TileTypes, AdjacencyRules, individual.Weights, i);
+                WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
 
                 if (i == 0)
@@ -121,17 +121,6 @@ namespace Pokémon
             float averageDoorPercentage = behaviors.Select(b => b.DoorPercentage).Average();
 
             return new Behavior(averageFlowerPercentage, averageDoorPercentage);
-        }
-
-        private IEnumerable<Vector> GetPositions(int width, int height)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    yield return new Vector(x, y);
-                }
-            }
         }
     }
 }
