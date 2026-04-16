@@ -12,7 +12,7 @@ namespace MapElites.Statistics
         
         public void AddPoint(Archive<TEntry, TKey, TIndividual, TBehavior> archive)
         {
-            CoverageValues.Add(archive.Count);
+            CoverageValues.Add(archive.Count / archive.MaxCapacity);
         }
 
         public void SaveToFile(string outputPath)
