@@ -13,6 +13,7 @@ using WFC.Models;
 using Tile = Domain.Models.Tile;
 
 #if UNITY_EDITOR
+using Pokémon;
 using UnityEditor;
 #endif
 
@@ -137,6 +138,11 @@ public class Visualizer : MonoBehaviour
             // This ensures the Scene View repaints so you see the tiles change
             EditorUtility.SetDirty(_tilemap);
         }
+    }
+
+    public void Display(Individual individual)
+    {
+        DisplayTiles(individual.WfcInstance);
     }
     
     private void OnDrawGizmos()
