@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Domain.Models;
 using MapElites.Args;
 using MapElites.Models;
 using NaughtyAttributes;
 using Pokémon;
+using Pokémon.Args;
+using TilemapAnalysis;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ArchiveExplorer : MonoBehaviour
 {
@@ -34,9 +37,18 @@ public class ArchiveExplorer : MonoBehaviour
     public void GenerateArchive()
     {
         string tilemapPath = AssetDatabase.GetAssetPath(_inputTilemap);
-        IndividualHandler individualHandler = new(tilemapPath);
+        int mapDimensions = 20;
+        using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+        List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
+        int tileTypeCount = tilemapAnalyzer.TileTypeCount;
+        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+
+        IndividualHandlerArgs individualHandlerArgs =
+            IndividualHandlerArgs.Create(20, tileTypeCount, tileTypes, adjacencyRules);
         
-        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log);
+        IndividualHandler individualHandler = new(individualHandlerArgs);
+        
+        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}");
         
         _archive = MapElites.MapElites.Run(individualHandler, args);
 

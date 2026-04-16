@@ -111,8 +111,8 @@ namespace Pokémon
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
             var numberOfDoors = tiles.Count(t => DoorTiles.Contains(t.Type));
             return new Behavior(
-                numberOfFlowers / (float)tiles.Count,
-                numberOfDoors / (float)tiles.Count);
+                numberOfFlowers / (float)Coordinates.Count,
+                numberOfDoors / (float)Coordinates.Count);
         }
 
         private Behavior GetAverageBehavior(Behavior[] behaviors)

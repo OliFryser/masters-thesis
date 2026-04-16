@@ -16,7 +16,7 @@ public class Tests
     public void SamplingArchive_WithOneEntry_ReturnsTheEntry()
     {
         // Arrange
-        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(1);
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entry = new(individual, new SampleBehavior(), 0);
         archive.TryAdd(new TestKey(0), entry);
@@ -32,7 +32,7 @@ public class Tests
     public void SamplingArchive_WithZeroEntries_ThrowsException()
     {
         // Arrange
-        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(1);
 
         // Act 
         Func<SampleIndividual> sample = archive.SampleRandom;
@@ -45,7 +45,7 @@ public class Tests
     public void TryAddingEntry_ToEmptyArchive_WillSucceed()
     {
         // Arrange
-        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(1);
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entry = new(individual, new SampleBehavior(), 0);
 
@@ -60,7 +60,7 @@ public class Tests
     public void TryAddingEntry_ThatAlreadyExistsWithBetterFitness_WillFail()
     {
         // Arrange
-        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(2);
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entryHighFitness = new(individual, new SampleBehavior(), 10);
         archive.TryAdd(new TestKey(0), entryHighFitness);
@@ -77,7 +77,7 @@ public class Tests
     public void TryAddingEntry_ThatExistsWithLowerFitness_WillSucceed()
     {
         // Arrange
-        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new();
+        Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(2);
         SampleIndividual individual = new SampleIndividual();
         SampleEntry entryLowFitness = new(individual, new SampleBehavior(), 0);
         archive.TryAdd(new TestKey(0), entryLowFitness);

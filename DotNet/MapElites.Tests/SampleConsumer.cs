@@ -41,6 +41,7 @@ namespace MapElites.Tests
 
     public class SampleIndividualHandler : IIndividualHandler<SampleKey, SampleEntry, SampleIndividual, SampleBehavior>
     {
+        public int BucketCapacity { get; }
         public SampleIndividual CreateRandom()
         {
             throw new NotImplementedException();
@@ -50,6 +51,7 @@ namespace MapElites.Tests
         {
             throw new NotImplementedException();
         }
+
 
         public SampleEntry Evaluate(SampleIndividual individual)
         {
