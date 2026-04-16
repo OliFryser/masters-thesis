@@ -140,9 +140,9 @@ public class Visualizer : MonoBehaviour
         }
     }
 
-    public void Display(Individual individual)
+    public void Display(State state)
     {
-        DisplayTiles(individual.WfcInstance);
+        DisplayTiles(state);
     }
     
     private void OnDrawGizmos()

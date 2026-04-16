@@ -88,13 +88,19 @@ namespace Editor.ImageAnalyzer
 
         private List<TileBase> ConvertTiles(TilemapAnalyzer tilemapAnalyzer)
         {
-            tilemapAnalyzer.WriteTileSpritesToFolder(ParentDirectory + "/TileSprites");
+            string tileSpritesFolder = ParentDirectory + "/TileSprites";
+            if (!AssetDatabase.IsValidFolder(tileSpritesFolder))
+                AssetDatabase.CreateFolder(ParentDirectory, "TileSprites");
+            
+            tilemapAnalyzer.WriteTileSpritesToFolder(tileSpritesFolder);
             AssetDatabase.Refresh();
             
             var guids = GetTilesSprites();
+            
             string tileFolder = ParentDirectory + "/Tiles";
             if (!AssetDatabase.IsValidFolder(tileFolder))
                 AssetDatabase.CreateFolder(ParentDirectory, "Tiles");
+            
             List<TileBase> convertedTiles = new List<TileBase>();
             guids.ToList().ForEach(guid =>
             {

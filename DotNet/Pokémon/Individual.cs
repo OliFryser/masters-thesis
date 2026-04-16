@@ -6,12 +6,13 @@ namespace Pokémon
 {
     public class Individual
     {
-        public Individual(Dictionary<TileType, int> weights)
+        public Individual(Dictionary<TileType, int> weights, int seed)
         {
             Weights = weights;
+            Seed = seed;
         }
 
         public Dictionary<TileType, int> Weights { get; }
-        public State? WfcInstance { get; set; }
+        public int Seed { get; }
     }
 }
