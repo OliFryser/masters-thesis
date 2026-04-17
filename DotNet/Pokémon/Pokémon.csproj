@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LevelGeneration\LevelGeneration.csproj" />
       <ProjectReference Include="..\MapElites\MapElites.csproj" />
       <ProjectReference Include="..\TilemapAnalysis\TilemapAnalysis.csproj" />
     </ItemGroup>
