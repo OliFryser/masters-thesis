@@ -12,7 +12,11 @@ namespace TilemapAnalysis
 {
     public class TilemapAnalyzer : IDisposable
     {
-        public Dictionary<TileType, int> TileTypeToCount { get; } = new Dictionary<TileType, int>();
+        
+        private Dictionary<TileType, int> TileTypeToCount { get; } = new Dictionary<TileType, int>();
+        public List<TileWeight> Weights
+            => TileTypeToCount.Select(kvp => new TileWeight(kvp.Key, kvp.Value)).ToList();
+            
         public int TileCount => Tiles.Count;
         public int TileTypeCount => TileTypeToCount.Count;
         

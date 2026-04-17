@@ -84,12 +84,10 @@ namespace Editor.ImageAnalyzer
             }
 
             WfcConfig wfcConfig = CreateInstance<WfcConfig>();
-            wfcConfig.name = $"{InputSprite.name}_WfcConfig_1";
+            wfcConfig.name = $"{InputSprite.name}_WfcConfig";
             wfcConfig.Tiles = tiles.ToArray();
             wfcConfig.Rules = convertedRules.ToArray();
-            wfcConfig.TileTypeToCount = 
-                new SerializedDictionary<string, int>(tilemapAnalyzer.TileTypeToCount.ToDictionary(kvp => kvp.Key.Id, kvp => kvp.Value));
-            wfcConfig.TileCount = tilemapAnalyzer.TileCount;
+            wfcConfig.Weights = tilemapAnalyzer.Weights.Select(w => new SerializedTileWeight(w)).ToList();
 
             AssetDatabase.CreateAsset(wfcConfig, ConfigDirectory + wfcConfig.name + ".asset");
             AssetDatabase.SaveAssets();

@@ -12,8 +12,7 @@ public class WfcConfig : ScriptableObject
 {
     public AdjacencyRule[] Rules;
     public TileBase[] Tiles;
-    public SerializedDictionary<string, int> TileTypeToCount;
-    public int TileCount;
+    public List<SerializedTileWeight> Weights;
     public int Width = 10;
     public int Height = 10;
 
@@ -29,6 +28,7 @@ public class WfcConfig : ScriptableObject
         }
 
         List<Domain.Models.AdjacencyRule> rules = new();
+
         foreach (var rule in Rules)
         {
             TileType fromTile = new TileType(rule.From.name);
@@ -37,12 +37,11 @@ public class WfcConfig : ScriptableObject
             rules.Add(new Domain.Models.AdjacencyRule(fromTile, toTile, rule.Direction));
         }
 
-        var tileTypeToCount =
-            TileTypeToCount.ToDictionary().ToDictionary(kvp => new TileType(kvp.Key), kvp => kvp.Value);
+        List<TileWeight> tileWeights = Weights.Select(w => w.ToTileWeight()).ToList();
 
-        List<TileType> tiles = tileTypeToCount.Select(kvp => new TileType(kvp.Key.Id)).ToList();
-        
-        return new WfcArgs(positions, tiles, rules, tileTypeToCount);
+        List<TileType> tiles = tileWeights.Select(tileWeight => tileWeight.TileType).ToList();
+
+        return new WfcArgs(positions, tiles, rules, tileWeights);
     }
 }
 
@@ -59,4 +58,20 @@ public struct AdjacencyRule
     public TileBase From;
     public TileBase To;
     public Direction Direction;
+}
+
+[Serializable]
+public struct SerializedTileWeight
+{
+    public SerializedTileWeight(TileWeight tileWeight)
+    {
+        Weight = tileWeight.Weight;
+        TileTypeId = tileWeight.TileType.Id;
+    }
+
+    public TileWeight ToTileWeight()
+        => new TileWeight(new TileType(TileTypeId), Weight);
+
+    public int Weight;
+    public string TileTypeId;
 }
