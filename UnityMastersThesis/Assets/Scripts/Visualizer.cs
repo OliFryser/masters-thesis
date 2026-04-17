@@ -132,7 +132,11 @@ public class Visualizer : MonoBehaviour
         float currentTime = (float)EditorApplication.timeSinceStartup;
         if (currentTime - _lastStepTime >= _animationSpeed)
         {
-            Step();
+            for (int i = 0; i < 20; i++)
+            {
+                Step();
+            }
+            
             _lastStepTime = currentTime;
 
             // This ensures the Scene View repaints so you see the tiles change
@@ -140,9 +144,10 @@ public class Visualizer : MonoBehaviour
         }
     }
 
-    public void Display(Individual individual)
+    public void Display(State state)
     {
-        DisplayTiles(individual.WfcInstance);
+        _state = state;
+        DisplayTiles(state);
     }
     
     private void OnDrawGizmos()

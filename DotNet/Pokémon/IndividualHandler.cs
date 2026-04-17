@@ -34,6 +34,7 @@ namespace Pokémon
                 new TileType("8003a2e1d3f57ad878dc5ae8443ba9a1b2012142"),
                 new TileType("f0e58e8686e7e54af622e5bfe3bb38953ed16430"),
             };
+            
             FlowerTiles = new HashSet<TileType>()
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
@@ -46,27 +47,26 @@ namespace Pokémon
         {
             Random random = new Random();
 
-            Dictionary<TileType, int> weights = TileTypes.ToDictionary(
-                keySelector: t => t,
-                elementSelector: t => random.Next(TileTypeCount));
+            // Technically, it would be more correct to use the total tile count from the
+            // input image, but does it matter, since the weights are relative?
+            List<TileWeight> weights = TileTypes.Select(t => new TileWeight(t, random.Next(TileTypeCount))).ToList();
 
-            return new Individual(weights);
+            return new Individual(weights, 0);
         }
 
         public Individual Mutate(Individual individual)
         {
-            Dictionary<TileType, int> newWeights = new Dictionary<TileType, int>();
+            List<TileWeight> newWeights = new List<TileWeight>();
             Random random = new Random();
-            foreach ((TileType tileType, int weight) in individual.Weights)
+            foreach (TileWeight tileWeight in individual.Weights)
             {
-                int noise = random.Next(-5, 5);
-                int mutatedWeight = (int)MathF.Max(weight + noise, 0);
-                newWeights.Add(tileType, mutatedWeight);
+                int noise = (random.Next(0, 2) * 2 - 1) * 500;
+                int mutatedWeight = (int)MathF.Max(tileWeight.Weight + noise, 0);
+                newWeights.Add(new TileWeight(tileWeight.TileType, mutatedWeight));
             }
 
-            return new Individual(newWeights);
+            return new Individual(newWeights, 0);
         }
-
 
         public Entry Evaluate(Individual individual)
         {
@@ -78,11 +78,6 @@ namespace Pokémon
             {
                 WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
-
-                if (i == 0)
-                {
-                    individual.WfcInstance = state;
-                }
                 
                 if (state.IsCollapsed)
                 {

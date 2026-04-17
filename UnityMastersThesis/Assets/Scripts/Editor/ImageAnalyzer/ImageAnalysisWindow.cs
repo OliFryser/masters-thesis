@@ -77,9 +77,7 @@ namespace Editor.ImageAnalyzer
             wfcConfig.name = $"{InputSprite.name}_WfcConfig";
             wfcConfig.Tiles = tiles.ToArray();
             wfcConfig.Rules = convertedRules.ToArray();
-            wfcConfig.TileTypeToCount = 
-                new SerializedDictionary<string, int>(tilemapAnalyzer.TileTypeToCount.ToDictionary(kvp => kvp.Key.Id, kvp => kvp.Value));
-            wfcConfig.TileCount = tilemapAnalyzer.TileCount;
+            wfcConfig.Weights = tilemapAnalyzer.Weights.Select(w => new SerializedTileWeight(w)).ToList();
 
             AssetDatabase.CreateAsset(wfcConfig, ConfigDirectory + wfcConfig.name + ".asset");
             AssetDatabase.SaveAssets();
@@ -88,13 +86,19 @@ namespace Editor.ImageAnalyzer
 
         private List<TileBase> ConvertTiles(TilemapAnalyzer tilemapAnalyzer)
         {
-            tilemapAnalyzer.WriteTileSpritesToFolder(ParentDirectory + "/TileSprites");
+            string tileSpritesFolder = ParentDirectory + "/TileSprites";
+            if (!AssetDatabase.IsValidFolder(tileSpritesFolder))
+                AssetDatabase.CreateFolder(ParentDirectory, "TileSprites");
+            
+            tilemapAnalyzer.WriteTileSpritesToFolder(tileSpritesFolder);
             AssetDatabase.Refresh();
             
             var guids = GetTilesSprites();
+            
             string tileFolder = ParentDirectory + "/Tiles";
             if (!AssetDatabase.IsValidFolder(tileFolder))
                 AssetDatabase.CreateFolder(ParentDirectory, "Tiles");
+            
             List<TileBase> convertedTiles = new List<TileBase>();
             guids.ToList().ForEach(guid =>
             {

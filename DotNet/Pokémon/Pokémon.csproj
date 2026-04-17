@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\LevelGeneration\LevelGeneration.csproj" />
       <ProjectReference Include="..\MapElites\MapElites.csproj" />
+      <ProjectReference Include="..\WFC\WFC.csproj" />
     </ItemGroup>
 
     <ItemGroup>

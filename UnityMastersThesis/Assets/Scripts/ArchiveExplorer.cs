@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Domain.Models;
 using MapElites.Args;
@@ -10,6 +11,9 @@ using Pokémon.Args;
 using TilemapAnalysis;
 using UnityEditor;
 using UnityEngine;
+using WFC;
+using WFC.Args;
+using WFC.Models;
 
 public class ArchiveExplorer : MonoBehaviour
 {
@@ -37,20 +41,22 @@ public class ArchiveExplorer : MonoBehaviour
     public void GenerateArchive()
     {
         string tilemapPath = AssetDatabase.GetAssetPath(_inputTilemap);
-        int mapDimensions = 20;
+        const int mapDimensions = 20;
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
         int tileTypeCount = tilemapAnalyzer.TileTypeCount;
         List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
         IndividualHandlerArgs individualHandlerArgs =
-            IndividualHandlerArgs.Create(20, tileTypeCount, tileTypes, adjacencyRules);
+            IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules);
         
         IndividualHandler individualHandler = new(individualHandlerArgs);
         
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}");
         
         _archive = MapElites.MapElites.Run(individualHandler, args);
+        
+        // SaveToJson(_archive);
 
         int maxDoorBucket = _archive.Keys.Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.Keys.Max(k => k.FlowerBucket);
@@ -67,10 +73,10 @@ public class ArchiveExplorer : MonoBehaviour
             Debug.LogWarning("Archive has not been generated.");
             return;
         }
-        
+
         Individual maxFitnessIndividual = _archive.GetMaxFitnessIndividual();
-        
-        _visualizer.Display(maxFitnessIndividual);
+        State state = GetState(maxFitnessIndividual);
+        _visualizer.Display(state);
     }
 
     [Button]
@@ -85,7 +91,8 @@ public class ArchiveExplorer : MonoBehaviour
         Key key = new Key(_flowerKey, _doorKey);
         if (_archive.TryGet(key, out Entry entry))
         {
-            _visualizer.Display(entry.Individual);
+            State state = GetState(entry.Individual);
+            _visualizer.Display(state);
         }
     }
 
@@ -94,4 +101,30 @@ public class ArchiveExplorer : MonoBehaviour
         _hasArchive = _archive != null;
         return _hasArchive;
     }
+
+    private State GetState(Individual individual)
+    {
+        const int mapDimensions = 20;
+        List<Vector> coordinates = Pokémon.LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
+        
+        string tilemapPath = AssetDatabase.GetAssetPath(_inputTilemap);
+        using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+        List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
+        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+        
+        Individual maxFitnessIndividual = _archive.GetMaxFitnessIndividual();
+        
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, maxFitnessIndividual.Weights, maxFitnessIndividual.Seed);
+        State state = WaveFunctionCollapse.Run(args);
+
+        return state;
+    }
+    
+    
+    // private void SaveToJson(Archive<Key, Entry, Individual, Behavior> archive)
+    // {
+    //     const string baseDirectory = "Assets/Resources/Archives/";
+    //     string filePath = $"{baseDirectory}{archive.GetHashCode()}.json";
+    //     File.WriteAllText(filePath, archive.ToJson());
+    // }
 }
