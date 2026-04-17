@@ -9,20 +9,20 @@ namespace WFC.Args
             IReadOnlyCollection<Vector> coordinates, 
             IReadOnlyCollection<TileType> tileTypes,
             IReadOnlyCollection<AdjacencyRule> adjacencyRules,
-            IReadOnlyDictionary<TileType, int> tileTypeToCount,
+            IReadOnlyCollection<TileWeight> weights,
             int? seed = null)
         {
             Coordinates = coordinates;
             TileTypes = tileTypes;
             AdjacencyRules = adjacencyRules;
-            TileTypeToCount = tileTypeToCount;
+            Weights = weights;
             Seed = seed;
         }
         
         public IReadOnlyCollection<Vector> Coordinates { get; }
         public IReadOnlyCollection<TileType> TileTypes { get; }
         public IReadOnlyCollection<AdjacencyRule> AdjacencyRules { get; }
-        public IReadOnlyDictionary<TileType, int> TileTypeToCount { get; }
+        public IReadOnlyCollection<TileWeight> Weights { get; }
         public int? Seed { get; }
     }
 }

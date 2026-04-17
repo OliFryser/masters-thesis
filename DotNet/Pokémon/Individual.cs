@@ -5,13 +5,13 @@ namespace Pokémon
 {
     public class Individual
     {
-        public Individual(Dictionary<TileType, int> weights, int seed)
+        public Individual(List<TileWeight> weights, int seed)
         {
             Weights = weights;
             Seed = seed;
         }
 
-        public Dictionary<TileType, int> Weights { get; }
+        public List<TileWeight> Weights { get; }
         public int Seed { get; }
     }
 }

@@ -41,10 +41,10 @@ namespace WFC.Extensions
             bool[] collapsed = new bool[numberOfCells];
 
             int[] weights = new int[numberOfTiles];
-            foreach ((TileType tileType, int count) in args.TileTypeToCount)
+            foreach (TileWeight tileWeight in args.Weights)
             {
-                int tileTypeIndex = tileTypeToIndex[tileType];
-                weights[tileTypeIndex] = count;
+                int tileTypeIndex = tileTypeToIndex[tileWeight.TileType];
+                weights[tileTypeIndex] = tileWeight.Weight;
             }
 
             int sumOfWeights = weights.Sum();

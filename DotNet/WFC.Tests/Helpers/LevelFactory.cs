@@ -24,7 +24,7 @@ public static class LevelFactory
         List<TileType> tiles = analyzer.Tiles.Select(tile => tile.Type).ToHashSet().ToList();
         List<AdjacencyRule> rules = analyzer.GetAdjacencyRules();
         
-        WfcArgs args = new WfcArgs(positions, tiles, rules, analyzer.TileTypeToCount, analyzer.TileCount);
+        WfcArgs args = new WfcArgs(positions, tiles, rules, analyzer.Weights, analyzer.TileCount);
         return args.ToLevel();
     }
     
