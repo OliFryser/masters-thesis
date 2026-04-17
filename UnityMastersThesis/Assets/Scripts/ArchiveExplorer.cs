@@ -104,27 +104,24 @@ public class ArchiveExplorer : MonoBehaviour
 
     private State GetState(Individual individual)
     {
+        WfcArgs args = GetWfcArgs(individual);
+        State state = WaveFunctionCollapse.Run(args);
+        return state;
+    }
+
+    private WfcArgs GetWfcArgs(Individual individual)
+    {
         const int mapDimensions = 20;
         List<Vector> coordinates = Pokémon.LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
         
         string tilemapPath = AssetDatabase.GetAssetPath(_inputTilemap);
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules()
+            .Concat(tilemapAnalyzer.GetSymmetryRules()).ToList();
         
-        Individual maxFitnessIndividual = _archive.GetMaxFitnessIndividual();
-        
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, maxFitnessIndividual.Weights, maxFitnessIndividual.Seed);
-        State state = WaveFunctionCollapse.Run(args);
+        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, individual.Weights, individual.Seed);
 
-        return state;
+        return args;
     }
-    
-    
-    // private void SaveToJson(Archive<Key, Entry, Individual, Behavior> archive)
-    // {
-    //     const string baseDirectory = "Assets/Resources/Archives/";
-    //     string filePath = $"{baseDirectory}{archive.GetHashCode()}.json";
-    //     File.WriteAllText(filePath, archive.ToJson());
-    // }
 }

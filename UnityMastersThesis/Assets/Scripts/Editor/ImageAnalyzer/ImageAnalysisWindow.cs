@@ -63,9 +63,19 @@ namespace Editor.ImageAnalyzer
             using var tilemapAnalyzer = new TilemapAnalyzer(AssetDatabase.GetAssetPath(InputSprite));
 
             List<TileBase> tiles = HasTiles() ? GetTiles().ToList() : ConvertTiles(tilemapAnalyzer);
-            List<Domain.Models.AdjacencyRule> rules = tilemapAnalyzer.GetAdjacencyRules();
+            List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+            List<Domain.Models.AdjacencyRule> symmetryRules = tilemapAnalyzer.GetSymmetryRules();
+            // IEnumerable<Domain.Models.AdjacencyRule> rules = adjacencyRules.Concat(symmetryRules);
             List<AdjacencyRule> convertedRules = new List<AdjacencyRule>();
-            foreach (var rule in rules)
+            foreach (var rule in adjacencyRules)
+            {
+                var fromTile = tiles.First(t => t.name == rule.From.Id);
+                var toTile = tiles.First(t => t.name == rule.To.Id);
+                var convertedRule = new AdjacencyRule(fromTile, toTile, rule.Direction);
+                convertedRules.Add(convertedRule);
+            }
+            
+            foreach (var rule in symmetryRules)
             {
                 var fromTile = tiles.First(t => t.name == rule.From.Id);
                 var toTile = tiles.First(t => t.name == rule.To.Id);
