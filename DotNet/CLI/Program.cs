@@ -9,7 +9,10 @@ using MapElites.Args;
 using MapElites.Models;
 using Pokémon;
 using Pokémon.Args;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using TilemapAnalysis;
+using TilemapAnalysis.Extensions;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
 string resourceDirectory = $"{baseDirectory}/Resources";
@@ -22,6 +25,7 @@ Directory.CreateDirectory(outputPath);
 
 RunMapElites();
 RunPythonStatistics();
+
 return;
 
 void RunMapElites()
@@ -52,4 +56,21 @@ void RunPythonStatistics()
     PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
 
     Console.WriteLine();
+}
+
+void RunTilemapAnalysis()
+{
+    TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+    HashSet<string> uniqueHashes = new HashSet<string>();
+
+    HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites
+        .Where(image => uniqueHashes.Add(image.Hash())).ToHashSet();
+
+    (int matches, int notMatches) = uniqueImages.MatchingBorders();
+    Console.WriteLine($"Matches: {matches} | NotMatches: {notMatches}");
+
+    int ruleCount = tilemapAnalyzer.GetAdjacencyRules().Count;
+    Console.WriteLine($"Adjacency rule count: {ruleCount}");
+
+    int symmetryCount = tilemapAnalyzer.GetSymmetryRules().Count;
 }

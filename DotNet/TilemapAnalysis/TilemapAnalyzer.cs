@@ -21,7 +21,7 @@ namespace TilemapAnalysis
         public int TileTypeCount => TileTypeToCount.Count;
         
         public List<Tile> Tiles { get; } = new List<Tile>();
-        private List<Image<Rgba32>> TileSprites { get; } = new List<Image<Rgba32>>();
+        public List<Image<Rgba32>> TileSprites { get; } = new List<Image<Rgba32>>();
         
         public TilemapAnalyzer(string inputTilemapPath)
         {
@@ -58,6 +58,49 @@ namespace TilemapAnalysis
                 Vector southNeighborPosition = new Vector(fromTile.Position.X, fromTile.Position.Y - 1);
                 if (positionToTile.TryGetValue(southNeighborPosition, out toTile))
                     rules.Add(new AdjacencyRule(fromTile.Type, toTile.Type, Direction.South));
+            }
+
+            return rules.ToList();
+        }
+
+        public List<AdjacencyRule> GetSymmetryRules()
+        {
+            HashSet<AdjacencyRule> rules = new HashSet<AdjacencyRule>();
+            
+            foreach (Image<Rgba32> image1 in TileSprites)
+            {
+                string image1Hash = image1.Hash();
+                TileBorders tileBorders1 = image1.ToTileBorders();
+                
+                foreach (Image<Rgba32> image2 in TileSprites)
+                {
+                    string image2Hash = image2.Hash();
+                    TileBorders tileBorders2 = image2.ToTileBorders();
+
+                    if (tileBorders1.Left.AreEqual(tileBorders2.Right))
+                    {
+                        AdjacencyRule westRule = new AdjacencyRule(
+                            new TileType(image1Hash), new TileType(image2Hash), Direction.West);
+                        
+                        AdjacencyRule eastRule = new AdjacencyRule(
+                            new TileType(image2Hash), new TileType(image1Hash), Direction.East);
+                        
+                        rules.Add(westRule);
+                        rules.Add(eastRule);
+                    }
+
+                    if (tileBorders1.Top.AreEqual(tileBorders2.Bottom))
+                    {
+                        AdjacencyRule southRule = new AdjacencyRule(
+                            new TileType(image1Hash), new TileType(image2Hash), Direction.South);
+                        
+                        AdjacencyRule northRule = new AdjacencyRule(
+                            new TileType(image2Hash), new TileType(image1Hash), Direction.North);
+                        
+                        rules.Add(northRule);
+                        rules.Add(southRule);
+                    }
+                }
             }
 
             return rules.ToList();
