@@ -12,7 +12,6 @@ using Pokémon.Args;
 using TilemapAnalysis;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
-string pythonScriptsRoot = $"{AppDomain.CurrentDomain.BaseDirectory}/PythonScripts";
 string resourceDirectory = $"{baseDirectory}/Resources";
 string tilemapPath = $"{resourceDirectory}/Tilemaps/PalletTown.png";
 
@@ -21,25 +20,36 @@ string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HH
 // Ensure path exists
 Directory.CreateDirectory(outputPath);
 
-using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
-List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+RunMapElites();
+RunPythonStatistics();
+return;
 
-int mapDimension = 20;
+void RunMapElites()
+{
+    using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+    List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
+    int tileTypeCount = tilemapAnalyzer.TileTypeCount;
+    List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
-IndividualHandlerArgs individualHandlerArgs =
-    IndividualHandlerArgs.Create(mapDimension, tileTypeCount, tileTypes, adjacencyRules);
+    int mapDimension = 20;
 
-MapElitesArgs mapElitesArgs = new(10, 10, Console.WriteLine, outputPath);
-IndividualHandler individualHandler = new(individualHandlerArgs);
+    IndividualHandlerArgs individualHandlerArgs =
+        IndividualHandlerArgs.Create(mapDimension, tileTypeCount, tileTypes, adjacencyRules);
 
-Stopwatch stopwatch = Stopwatch.StartNew();
-Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
-stopwatch.Stop();
+    MapElitesArgs mapElitesArgs = new(10, 10, Console.WriteLine, outputPath);
+    IndividualHandler individualHandler = new(individualHandlerArgs);
 
-Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
+    stopwatch.Stop();
 
-PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
+    Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
+}
 
-Console.WriteLine();
+void RunPythonStatistics()
+{
+    string pythonScriptsRoot = $"{AppDomain.CurrentDomain.BaseDirectory}/PythonScripts";
+    PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
+
+    Console.WriteLine();
+}
