@@ -14,9 +14,9 @@ public class WfcConfig : ScriptableObject
     public TileBase[] Tiles;
     public SerializedDictionary<string, int> TileTypeToCount;
     public int TileCount;
-    public int Width = 50;
-    public int Height = 50;
-    
+    public int Width = 10;
+    public int Height = 10;
+
     public WfcArgs ToArgs()
     {
         List<Vector> positions = new();
@@ -27,21 +27,21 @@ public class WfcConfig : ScriptableObject
                 positions.Add(new Vector(x, y));
             }
         }
-        HashSet<TileType> tileIds = new HashSet<TileType>();
+
         List<Domain.Models.AdjacencyRule> rules = new();
         foreach (var rule in Rules)
         {
             TileType fromTile = new TileType(rule.From.name);
             TileType toTile = new TileType(rule.To.name);
 
-            tileIds.Add(fromTile);
-            tileIds.Add(toTile);
-            
             rules.Add(new Domain.Models.AdjacencyRule(fromTile, toTile, rule.Direction));
-            rules.Add(new Domain.Models.AdjacencyRule(toTile, fromTile, rule.Direction.Reverse()));
         }
-        List<TileType> tiles = new(tileIds);
-        var tileTypeToCount = TileTypeToCount.ToDictionary().ToDictionary(kvp => new TileType(kvp.Key), kvp => kvp.Value);
+
+        var tileTypeToCount =
+            TileTypeToCount.ToDictionary().ToDictionary(kvp => new TileType(kvp.Key), kvp => kvp.Value);
+
+        List<TileType> tiles = tileTypeToCount.Select(kvp => new TileType(kvp.Key.Id)).ToList();
+        
         return new WfcArgs(positions, tiles, rules, tileTypeToCount);
     }
 }
@@ -55,7 +55,7 @@ public struct AdjacencyRule
         To = to;
         Direction = direction;
     }
-    
+
     public TileBase From;
     public TileBase To;
     public Direction Direction;

@@ -2204,5 +2204,5 @@ MonoBehaviour:
     - Key: efb3b2cf1e2c0e9ec35834aebf2874e2293ef85e
       Value: 4
   TileCount: 480
-  Width: 25
-  Height: 25
+  Width: 50
+  Height: 50
