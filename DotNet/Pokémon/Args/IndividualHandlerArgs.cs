@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
-using TilemapAnalysis;
 
 namespace Pokémon.Args
 {
@@ -24,8 +23,8 @@ namespace Pokémon.Args
                 }
             }
         }
-        
-        public IndividualHandlerArgs(int tileTypeCount, List<TileType> tileTypes, List<AdjacencyRule> adjacencyRules, List<Vector> coordinates)
+
+        private IndividualHandlerArgs(int tileTypeCount, List<TileType> tileTypes, List<AdjacencyRule> adjacencyRules, List<Vector> coordinates)
         {
             TileTypeCount = tileTypeCount;
             TileTypes = tileTypes;

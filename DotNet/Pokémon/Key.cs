@@ -14,8 +14,8 @@ namespace Pokémon
         public override bool Equals(Key? other) => FlowerBucket == other?.FlowerBucket && DoorBucket == other.DoorBucket;
         public override int GetHashCode() => HashCode.Combine(FlowerBucket, DoorBucket);
 
-
-        public int FlowerBucket { get; }
-        public int DoorBucket { get; }
+        
+        public int FlowerBucket { get; private set; }
+        public int DoorBucket { get; private set; }
     }
 }

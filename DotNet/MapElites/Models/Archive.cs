@@ -20,6 +20,11 @@ namespace MapElites.Models
             BucketCapacity = bucketCapacity;
         }
 
+        internal Archive(int bucketCapacity, Dictionary<TKey, TEntry> entries) : this(bucketCapacity)
+        {
+            _archive = entries;
+        }
+
         internal bool TryAdd(TKey key, TEntry entry)
         {
             if (_archive.TryGetValue(key, out TEntry existingEntry))
@@ -61,5 +66,8 @@ namespace MapElites.Models
 
         internal float GetAverageFitness()
             => _archive.Values.Average(x => x.Fitness);
+
+        internal Dictionary<TKey, TEntry> GetKeysAndEntries()
+            => _archive.ToDictionary(x => x.Key, x => x.Value);
     }
 }

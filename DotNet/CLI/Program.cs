@@ -9,6 +9,7 @@ using MapElites.Args;
 using MapElites.Models;
 using Pokémon;
 using Pokémon.Args;
+using Pokémon.Json;
 using TilemapAnalysis;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
@@ -39,6 +40,9 @@ Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(indi
 stopwatch.Stop();
 
 Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
+
+string json = JsonSerializer.ConvertToJson(mapDimension, archive);
+JsonSerializer.WriteToFile($"{outputPath}/Archive.json", json);
 
 PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
 

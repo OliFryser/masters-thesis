@@ -15,7 +15,7 @@ namespace MapElites.Statistics
         {
             try
             {
-                using var streamWriter = File.AppendText( $"{filePath}/{fileName}");
+                using StreamWriter streamWriter = File.AppendText( $"{filePath}/{fileName}");
                 streamWriter.WriteLine(header);
                 foreach (var entry in entries)
                 {
