@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using MapElites.Extensions;
-using WFC.Extensions;
-using System.Text.Json.Serialization;
+using Domain.Extensions;
 
 namespace MapElites.Models
 {

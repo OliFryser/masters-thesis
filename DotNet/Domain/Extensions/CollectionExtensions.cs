@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WFC.Extensions
+namespace Domain.Extensions
 {
     public static class CollectionExtensions
     {
