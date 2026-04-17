@@ -2,7 +2,6 @@ using System;
 
 namespace Domain.Models
 {
-    [Serializable]
     public struct TileWeight
     {
         public TileWeight(TileType tileType, int weight)
