@@ -47,22 +47,22 @@ namespace Pokémon
         {
             Random random = new Random();
 
-            Dictionary<TileType, int> weights = TileTypes.ToDictionary(
-                keySelector: t => t,
-                elementSelector: t => random.Next(TileTypeCount));
+            // Technically, it would be more correct to use the total tile count from the
+            // input image, but does it matter, since the weights are relative?
+            List<TileWeight> weights = TileTypes.Select(t => new TileWeight(t, random.Next(TileTypeCount))).ToList();
 
             return new Individual(weights, 0);
         }
 
         public Individual Mutate(Individual individual)
         {
-            Dictionary<TileType, int> newWeights = new Dictionary<TileType, int>();
+            List<TileWeight> newWeights = new List<TileWeight>();
             Random random = new Random();
-            foreach ((TileType tileType, int weight) in individual.Weights)
+            foreach (TileWeight tileWeight in individual.Weights)
             {
                 int noise = (random.Next(0, 2) * 2 - 1) * 500;
-                int mutatedWeight = (int)MathF.Max(weight + noise, 0);
-                newWeights.Add(tileType, mutatedWeight);
+                int mutatedWeight = (int)MathF.Max(tileWeight.Weight + noise, 0);
+                newWeights.Add(new TileWeight(tileWeight.TileType, mutatedWeight));
             }
 
             return new Individual(newWeights, 0);
