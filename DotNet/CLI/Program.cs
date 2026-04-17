@@ -23,22 +23,9 @@ string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HH
 // Ensure path exists
 Directory.CreateDirectory(outputPath);
 
-TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
-HashSet<string> uniqueHashes = new HashSet<string>();
+RunMapElites();
+RunPythonStatistics();
 
-HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites
-    .Where(image => uniqueHashes.Add(image.Hash())).ToHashSet();
-
-(int matches, int notMatches) = uniqueImages.MatchingBorders();
-Console.WriteLine($"Matches: {matches} | NotMatches: {notMatches}");
-
-int ruleCount = tilemapAnalyzer.GetAdjacencyRules().Count;
-Console.WriteLine($"Adjacency rule count: {ruleCount}");
-
-int symmetryCount = tilemapAnalyzer.GetSymmetryRules().Count;
-
-// RunMapElites();
-// RunPythonStatistics();
 return;
 
 void RunMapElites()
@@ -69,4 +56,21 @@ void RunPythonStatistics()
     PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
 
     Console.WriteLine();
+}
+
+void RunTilemapAnalysis()
+{
+    TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+    HashSet<string> uniqueHashes = new HashSet<string>();
+
+    HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites
+        .Where(image => uniqueHashes.Add(image.Hash())).ToHashSet();
+
+    (int matches, int notMatches) = uniqueImages.MatchingBorders();
+    Console.WriteLine($"Matches: {matches} | NotMatches: {notMatches}");
+
+    int ruleCount = tilemapAnalyzer.GetAdjacencyRules().Count;
+    Console.WriteLine($"Adjacency rule count: {ruleCount}");
+
+    int symmetryCount = tilemapAnalyzer.GetSymmetryRules().Count;
 }
