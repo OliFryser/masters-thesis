@@ -19,6 +19,7 @@ namespace Pokémon
         private HashSet<TileType> DoorTiles { get; }
         private HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
+        private int EvaluationIterations { get; }
 
         private static int NumberOfBucketsPerAxis => 5;
 
@@ -28,6 +29,7 @@ namespace Pokémon
             TileTypes = individualHandlerArgs.TileTypes;
             AdjacencyRules = individualHandlerArgs.AdjacencyRules;
             Coordinates = individualHandlerArgs.Coordinates;
+            EvaluationIterations = individualHandlerArgs.EvaluationIterations;
             
             DoorTiles = new HashSet<TileType>()
             {
@@ -70,11 +72,10 @@ namespace Pokémon
 
         public Entry Evaluate(Individual individual)
         {
-            int iterations = 10;
             int amountComplete = 0;
-            Behavior[] behaviors = new Behavior[iterations];
+            Behavior[] behaviors = new Behavior[EvaluationIterations];
 
-            for (int i = 0; i < iterations; i++)
+            for (int i = 0; i < EvaluationIterations; i++)
             {
                 WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
