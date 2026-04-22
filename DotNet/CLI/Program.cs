@@ -17,7 +17,8 @@ using JsonSerializer = Pokémon.Json.JsonSerializer;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
 string resourceDirectory = $"{baseDirectory}/Resources";
-string tilemapPath = $"{resourceDirectory}/Tilemaps/PalletTown.png";
+string tilemapName = "PalletTown.png";
+string tilemapPath = $"{resourceDirectory}/Tilemaps/{tilemapName}";
 
 // Save in folder named timestamp
 string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HHmmss}";
@@ -37,7 +38,9 @@ void RunMapElites()
     List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
     int mapDimension = 20;
-    int evaluationIterations = 5;
+    int evaluationIterations = 1;
+    int initializationIterations = 1;
+    int mutationIterations = 1;
     
     IndividualHandlerArgs individualHandlerArgs =
         IndividualHandlerArgs.Create(
@@ -47,7 +50,7 @@ void RunMapElites()
             adjacencyRules, 
             evaluationIterations);
 
-    MapElitesArgs mapElitesArgs = new(10, 10, Console.WriteLine, outputPath);
+    MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, outputPath);
     IndividualHandler individualHandler = new(individualHandlerArgs);
 
     Stopwatch stopwatch = Stopwatch.StartNew();
@@ -59,6 +62,8 @@ void RunMapElites()
     JsonSerializer.SaveToFile($"{outputPath}/Archive.json", archive, mapDimension);
     
     Console.WriteLine("Saved archive to JSON");
+    
+    LabLogSaver.SaveLog($"{outputPath}/Lab.log", mapElitesArgs, individualHandlerArgs, tilemapName);
 }
 
 void RunPythonStatistics()
