@@ -39,6 +39,6 @@ namespace Pokémon
 
         private int FlowerBucket { get; set; }
         private int DoorBucket { get; set; }
-        private int TileTypesUsedBucket { get; set; } // Add in .ToString()
+        private int TileTypesUsedBucket { get; set; }
     }
 }
