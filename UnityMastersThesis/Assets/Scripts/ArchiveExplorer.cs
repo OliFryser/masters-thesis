@@ -20,10 +20,12 @@ public class ArchiveExplorer : MonoBehaviour
     [Header("Archive Settings")] 
     [SerializeField] private int _flowerKey;
     [SerializeField] private int _doorKey;
+    [SerializeField] private int _tileTypesUsedKey;
     
     [Header("Map Elites Configuration")]
     [SerializeField, Range(1, 100)] private int _initialIterations = 1;
     [SerializeField, Range(0, 100)] private int _mutationIterations;
+    [SerializeField, Range(1, 100)] private int _evaluationIterations = 5;
     [SerializeField] private Texture2D _inputTilemap;
     
     [Header("Visualizer")]
@@ -48,21 +50,32 @@ public class ArchiveExplorer : MonoBehaviour
         List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
         IndividualHandlerArgs individualHandlerArgs =
-            IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules);
+            IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations);
         
         IndividualHandler individualHandler = new(individualHandlerArgs);
         
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}");
         
         _archive = MapElites.MapElites.Run(individualHandler, args);
+
+        int c = 0;
+        foreach (Key archiveKey in _archive.Keys)
+        {
+            print($"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
+            c++;
+        }
+        
+        
         
         // SaveToJson(_archive);
 
         int maxDoorBucket = _archive.Keys.Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.Keys.Max(k => k.FlowerBucket);
+        int maxTileTypesUsedKey = _archive.Keys.Max(k => k.TileTypesUsedBucket);
         
         _doorKey = maxDoorBucket;
         _flowerKey = maxFlowerBucket;
+        _tileTypesUsedKey = maxTileTypesUsedKey;
     }
 
     [Button]
@@ -88,7 +101,7 @@ public class ArchiveExplorer : MonoBehaviour
             return;
         }
         
-        Key key = new Key(_flowerKey, _doorKey);
+        Key key = new Key(_flowerKey, _doorKey, _tileTypesUsedKey);
         if (_archive.TryGet(key, out Entry entry))
         {
             State state = GetState(entry.Individual);
