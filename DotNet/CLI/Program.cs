@@ -7,6 +7,7 @@ using CLI;
 using Domain.Models;
 using MapElites.Args;
 using MapElites.Models;
+using Newtonsoft.Json;
 using Pokémon;
 using Pokémon.Args;
 using Pokémon.Json;
@@ -14,6 +15,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using TilemapAnalysis;
 using TilemapAnalysis.Extensions;
+using JsonSerializer = Pokémon.Json.JsonSerializer;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
 string resourceDirectory = $"{baseDirectory}/Resources";
@@ -50,8 +52,9 @@ void RunMapElites()
 
     Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
     
-    string json = JsonSerializer.ConvertToJson(mapDimension, archive);
-    JsonSerializer.WriteToFile($"{outputPath}/Archive.json", json);
+    JsonSerializer.SaveToFile($"{outputPath}/Archive.json", archive, mapDimension);
+    
+    Console.WriteLine("Saved archive to JSON");
 }
 
 void RunPythonStatistics()

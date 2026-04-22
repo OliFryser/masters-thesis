@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using MapElites.Json;
 using MapElites.Models;
@@ -7,7 +8,29 @@ namespace Pokémon.Json
 {
     public static class JsonSerializer
     {
-        public static string ConvertToJson(int mapDimension, Archive<Key, Entry, Individual, Behavior> archive)
+        private static JsonSerializerSettings Settings => new JsonSerializerSettings
+        {
+            Converters = new List<JsonConverter> { new KeyConverter() },
+        };
+        
+        public static void SaveToFile(
+            string filePath,
+            Archive<Key, Entry, Individual, Behavior> archive, 
+            int mapDimension)
+        {
+            string json = ConvertToJson(mapDimension, archive);
+            WriteToFile(filePath, json);
+        }
+        
+        public static SaveData ReadFromFile(string filePath)
+        {
+            string json = File.ReadAllText(filePath);
+            return ReadFromJson(json);
+        }
+        
+        private static string ConvertToJson(
+            int mapDimension, 
+            Archive<Key, Entry, Individual, Behavior> archive)
         {
             ArchiveSaveData<Key, Entry> archiveSaveData = ArchiveConverter.GetSaveDataFromArchive(archive);
             SaveData saveData = new SaveData
@@ -15,18 +38,18 @@ namespace Pokémon.Json
                 MapDimension = mapDimension,
                 Archive = archiveSaveData,
             };
-            
-            return JsonConvert.SerializeObject(saveData);
+
+            return JsonConvert.SerializeObject(saveData, Settings);
         }
-
-        public static SaveData ReadFromJson(string json)
-            => JsonConvert.DeserializeObject<SaveData>(json);
-
-        public static void WriteToFile(string filePath, string json)
+        
+        private static void WriteToFile(string filePath, string json)
         {
             using StreamWriter streamWriter = new StreamWriter(filePath);
             streamWriter.Write(json);
             streamWriter.Close();
         }
+
+        private static SaveData ReadFromJson(string json)
+            => JsonConvert.DeserializeObject<SaveData>(json, Settings);
     }
 }
