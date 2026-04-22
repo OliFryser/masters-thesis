@@ -24,7 +24,7 @@ namespace Pokémon
         public static bool TryParse(string input, out Key? key)
         {
             string[] parts = input.Split(",");
-            if (input.Length != 3
+            if (parts.Length != 3
                 || !int.TryParse(parts[0], out int flowerBucket)
                 || !int.TryParse(parts[1], out int doorBucket)
                 || !int.TryParse(parts[2], out int tileTypesUsedBucket))
