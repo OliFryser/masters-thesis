@@ -23,6 +23,7 @@ namespace MapElites
             
             Archive<TKey, TEntry, TIndividual, TBehavior> archive = 
                 new Archive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity);
+            
             Action<string> logger = args.Logger;
 
             for (int i = 0; i < args.InitializationIterations; i++)
