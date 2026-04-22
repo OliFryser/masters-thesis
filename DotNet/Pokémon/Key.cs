@@ -37,8 +37,8 @@ namespace Pokémon
             return true;
         }
 
-        private int FlowerBucket { get; set; }
-        private int DoorBucket { get; set; }
-        private int TileTypesUsedBucket { get; set; }
+        public int FlowerBucket { get; set; }
+        public int DoorBucket { get; set; }
+        public int TileTypesUsedBucket { get; set; }
     }
 }
