@@ -7,10 +7,8 @@ using CLI;
 using Domain.Models;
 using MapElites.Args;
 using MapElites.Models;
-using Newtonsoft.Json;
 using Pokémon;
 using Pokémon.Args;
-using Pokémon.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using TilemapAnalysis;
@@ -39,9 +37,15 @@ void RunMapElites()
     List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
     int mapDimension = 20;
-
+    int evaluationIterations = 5;
+    
     IndividualHandlerArgs individualHandlerArgs =
-        IndividualHandlerArgs.Create(mapDimension, tileTypeCount, tileTypes, adjacencyRules);
+        IndividualHandlerArgs.Create(
+            mapDimension, 
+            tileTypeCount, 
+            tileTypes, 
+            adjacencyRules, 
+            evaluationIterations);
 
     MapElitesArgs mapElitesArgs = new(10, 10, Console.WriteLine, outputPath);
     IndividualHandler individualHandler = new(individualHandlerArgs);
