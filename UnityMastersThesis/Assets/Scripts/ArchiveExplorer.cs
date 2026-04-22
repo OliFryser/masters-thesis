@@ -20,6 +20,7 @@ public class ArchiveExplorer : MonoBehaviour
     [Header("Archive Settings")] 
     [SerializeField] private int _flowerKey;
     [SerializeField] private int _doorKey;
+    [SerializeField] private int _tileTypesUsedKey;
     
     [Header("Map Elites Configuration")]
     [SerializeField, Range(1, 100)] private int _initialIterations = 1;
@@ -60,9 +61,11 @@ public class ArchiveExplorer : MonoBehaviour
 
         int maxDoorBucket = _archive.Keys.Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.Keys.Max(k => k.FlowerBucket);
+        int maxTileTypesUsedKey = _archive.Keys.Max(k => k.TileTypesUsedBucket);
         
         _doorKey = maxDoorBucket;
         _flowerKey = maxFlowerBucket;
+        _tileTypesUsedKey = maxTileTypesUsedKey;
     }
 
     [Button]
@@ -88,7 +91,7 @@ public class ArchiveExplorer : MonoBehaviour
             return;
         }
         
-        Key key = new Key(_flowerKey, _doorKey);
+        Key key = new Key(_flowerKey, _doorKey, _tileTypesUsedKey);
         if (_archive.TryGet(key, out Entry entry))
         {
             State state = GetState(entry.Individual);
