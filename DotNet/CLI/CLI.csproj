@@ -16,5 +16,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Output\MapElites\" />
+    </ItemGroup>
     
 </Project>

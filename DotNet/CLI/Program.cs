@@ -13,6 +13,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using TilemapAnalysis;
 using TilemapAnalysis.Extensions;
+using JsonSerializer = Pokémon.Json.JsonSerializer;
 
 string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
 string resourceDirectory = $"{baseDirectory}/Resources";
@@ -36,9 +37,15 @@ void RunMapElites()
     List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
     int mapDimension = 20;
-
+    int evaluationIterations = 5;
+    
     IndividualHandlerArgs individualHandlerArgs =
-        IndividualHandlerArgs.Create(mapDimension, tileTypeCount, tileTypes, adjacencyRules);
+        IndividualHandlerArgs.Create(
+            mapDimension, 
+            tileTypeCount, 
+            tileTypes, 
+            adjacencyRules, 
+            evaluationIterations);
 
     MapElitesArgs mapElitesArgs = new(10, 10, Console.WriteLine, outputPath);
     IndividualHandler individualHandler = new(individualHandlerArgs);
@@ -48,6 +55,10 @@ void RunMapElites()
     stopwatch.Stop();
 
     Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
+    
+    JsonSerializer.SaveToFile($"{outputPath}/Archive.json", archive, mapDimension);
+    
+    Console.WriteLine("Saved archive to JSON");
 }
 
 void RunPythonStatistics()
