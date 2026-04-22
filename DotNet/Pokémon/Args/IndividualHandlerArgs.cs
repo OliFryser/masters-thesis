@@ -10,29 +10,33 @@ namespace Pokémon.Args
             int mapDimensions, 
             int tileTypeCount, 
             List<TileType> tileTypes,
-            List<AdjacencyRule> adjacencyRules)
+            List<AdjacencyRule> adjacencyRules,
+            int evaluationIterations)
         {
             List<Vector> coordinates = 
                 LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
             
-            return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates);
+            return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates, evaluationIterations);
         }
 
         public IndividualHandlerArgs(
             int tileTypeCount, 
             List<TileType> tileTypes, 
             List<AdjacencyRule> adjacencyRules,
-            List<Vector> coordinates)
+            List<Vector> coordinates,
+            int evaluationIterations)
         {
             TileTypeCount = tileTypeCount;
             TileTypes = tileTypes;
             AdjacencyRules = adjacencyRules;
             Coordinates = coordinates;
+            EvaluationIterations = evaluationIterations;
         }
 
         public int TileTypeCount { get; }
         public List<TileType> TileTypes { get; }
         public List<AdjacencyRule> AdjacencyRules { get; }
         public List<Vector> Coordinates { get; }
+        public int EvaluationIterations { get; }
     }
 }
