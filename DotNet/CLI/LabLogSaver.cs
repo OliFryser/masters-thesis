@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using MapElites.Args;
 using Pokémon.Args;
 
@@ -7,33 +8,38 @@ namespace CLI
 {
     public static class LabLogSaver
     {
-        private static string NewLine => Environment.NewLine;
-        
         public static void SaveLog(
             string filepath,
             MapElitesArgs mapElitesArgs, 
             IndividualHandlerArgs individualHandlerArgs, 
             string tilemapPath)
         {
-            string saveString = $"TileMap: {tilemapPath}{NewLine}{NewLine}" +
-                                $"{GetLogFromIndividualHandlerArgs(individualHandlerArgs)}{NewLine}{NewLine}" +
-                                $"{GetLogFromMapElitesArgs(mapElitesArgs)}";
-            
-            File.WriteAllText(filepath, saveString);
+            using StreamWriter streamWriter = new StreamWriter(filepath);
+            streamWriter.WriteLine($"TileMap: {tilemapPath}");
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromIndividualHandlerArgs(individualHandlerArgs));
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromMapElitesArgs(mapElitesArgs));
         }
 
         private static string GetLogFromMapElitesArgs(MapElitesArgs mapElitesArgs)
         {
-            return $"-- MAP-Elites config --{NewLine}" +
-                   $"InitializationIteration: {mapElitesArgs.InitializationIterations}{NewLine}" +
-                   $"MutationIterations: {mapElitesArgs.MutationIterations}{NewLine}";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("-- MAP-Elites config --");
+            stringBuilder.AppendLine($"InitializationIteration: {mapElitesArgs.InitializationIterations}");
+            stringBuilder.AppendLine($"MutationIterations: {mapElitesArgs.MutationIterations}");
+
+            return stringBuilder.ToString();
         }
 
         private static string GetLogFromIndividualHandlerArgs(IndividualHandlerArgs individualHandlerArgs)
         {
-            return $"-- Individual Handler config --{NewLine}" +
-                   $"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}{NewLine}" +
-                   $"MapDimensions: {individualHandlerArgs.EvaluationIterations}{NewLine}";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("-- Individual Handler config --");
+            stringBuilder.AppendLine($"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}");
+            stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.EvaluationIterations}");
+            
+            return stringBuilder.ToString();
         }
     }
 }
