@@ -19,7 +19,7 @@ namespace MapElites.Statistics
                 streamWriter.WriteLine(header);
                 foreach (var entry in entries)
                 {
-                    streamWriter.WriteLine(entry?.ToString().Replace(",", "."));
+                    streamWriter.WriteLine(entry?.ToString()?.Replace(",", "."));
                 }
 
                 streamWriter.Close();
