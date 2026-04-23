@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using Domain.Models;
 using MapElites.Args;
+using MapElites.Json;
 using MapElites.Models;
 using NaughtyAttributes;
 using Pokémon;
 using Pokémon.Args;
+using Pokémon.Json;
 using TilemapAnalysis;
 using UnityEditor;
 using UnityEngine;
@@ -30,6 +32,7 @@ public class ArchiveExplorer : MonoBehaviour
     
     [Header("Visualizer")]
     [SerializeField] private Visualizer _visualizer;
+    [SerializeField] private TextAsset _archiveJsonFile;
     [SerializeField] private bool _hasArchive;
     
     private Archive<Key, Entry, Individual, Behavior> _archive;
@@ -76,6 +79,14 @@ public class ArchiveExplorer : MonoBehaviour
         _doorKey = maxDoorBucket;
         _flowerKey = maxFlowerBucket;
         _tileTypesUsedKey = maxTileTypesUsedKey;
+    }
+
+    [Button]
+    public void LoadArchiveFromFile()
+    {
+        string path = AssetDatabase.GetAssetPath(_archiveJsonFile);
+        SaveData saveData = JsonSerializer.ReadFromFile(path);
+        _archive = ArchiveConverter.GetArchiveFromSaveData<Key, Entry, Individual, Behavior>(saveData.Archive);
     }
 
     [Button]
