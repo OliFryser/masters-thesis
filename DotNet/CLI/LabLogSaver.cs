@@ -12,12 +12,28 @@ namespace CLI
             string filepath,
             MapElitesArgs mapElitesArgs, 
             IndividualHandlerArgs individualHandlerArgs, 
-            string tilemapPath)
+            string tilemapName)
         {
             using StreamWriter streamWriter = new StreamWriter(filepath);
-            streamWriter.WriteLine($"TileMap: {tilemapPath}");
+            streamWriter.WriteLine("--- Log for MAP-Elites run ---");
+            streamWriter.WriteLine($"TileMap: {tilemapName}");
             streamWriter.WriteLine();
             streamWriter.WriteLine(GetLogFromIndividualHandlerArgs(individualHandlerArgs));
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromMapElitesArgs(mapElitesArgs));
+        }
+        
+        public static void SaveLog(
+            string filepath,
+            MapElitesArgs mapElitesArgs, 
+            ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs, 
+            string tilemapName)
+        {
+            using StreamWriter streamWriter = new StreamWriter(filepath);
+            streamWriter.WriteLine("--- Log for Constrained MAP-Elites run ---");
+            streamWriter.WriteLine($"TileMap: {tilemapName}");
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromConstrainedIndividualHandlerArgs(constrainedIndividualHandlerArgs));
             streamWriter.WriteLine();
             streamWriter.WriteLine(GetLogFromMapElitesArgs(mapElitesArgs));
         }
@@ -39,6 +55,14 @@ namespace CLI
             stringBuilder.AppendLine($"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}");
             stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.EvaluationIterations}");
             
+            return stringBuilder.ToString();
+        }
+
+        private static string GetLogFromConstrainedIndividualHandlerArgs(ConstrainedIndividualHandlerArgs args)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(GetLogFromIndividualHandlerArgs(args.IndividualHandlerArgs));
+            stringBuilder.AppendLine($"Feasibility Threshold: {args.FeasibilityThreshold}");
             return stringBuilder.ToString();
         }
     }

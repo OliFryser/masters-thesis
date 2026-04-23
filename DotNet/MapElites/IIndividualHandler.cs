@@ -24,4 +24,12 @@ namespace MapElites
 
         TKey GetKey(TBehavior behavior);
     }
+    
+    public interface IConstrainedIndividualHandler<out TKey, out TEntry, TIndividual, in TBehavior>
+        :  IIndividualHandler<TKey, TEntry, TIndividual, TBehavior>
+        where TKey : IEquatable<TKey>
+        where TEntry : ConstrainedEntry<TIndividual, TBehavior>
+    {
+    }
+
 }

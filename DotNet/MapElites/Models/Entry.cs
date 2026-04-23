@@ -16,7 +16,7 @@ namespace MapElites.Models
 
     public class ConstrainedEntry<TIndividual, TBehavior> : Entry<TIndividual, TBehavior>
     {
-        protected ConstrainedEntry(TIndividual individual, TBehavior behavior, float fitness, 
+        public ConstrainedEntry(TIndividual individual, TBehavior behavior, float fitness, 
             float feasibility, float feasibilityThreshold) : base(individual, behavior, fitness)
         {
             Feasibility = feasibility;

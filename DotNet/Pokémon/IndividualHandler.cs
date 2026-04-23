@@ -10,18 +10,18 @@ using WFC.Models;
 
 namespace Pokémon
 {
-    public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior>
+    public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior> 
     {
-        private int TileTypeCount { get; }
-        private List<TileType> TileTypes { get; }
-        private List<AdjacencyRule> AdjacencyRules { get; }
-        private List<Vector> Coordinates { get; }
-        private HashSet<TileType> DoorTiles { get; }
-        private HashSet<TileType> FlowerTiles { get; }
+        protected int TileTypeCount { get; }
+        protected List<TileType> TileTypes { get; }
+        protected List<AdjacencyRule> AdjacencyRules { get; }
+        protected List<Vector> Coordinates { get; }
+        protected HashSet<TileType> DoorTiles { get; }
+        protected HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
-        private int EvaluationIterations { get; }
+        protected int EvaluationIterations { get; }
 
-        private static int NumberOfBucketsPerAxis => 5;
+        protected static int NumberOfBucketsPerAxis => 5;
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -70,7 +70,7 @@ namespace Pokémon
             return new Individual(newWeights, 0);
         }
 
-        public Entry Evaluate(Individual individual)
+        public virtual Entry Evaluate(Individual individual)
         {
             int amountComplete = 0;
             Behavior[] behaviors = new Behavior[EvaluationIterations];
@@ -102,7 +102,7 @@ namespace Pokémon
             return new Key(flowerBucket, doorBucket, tileTypesUsedBucket);
         }
 
-        private Behavior GetBehavior(State state)
+        protected Behavior GetBehavior(State state)
         {
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
@@ -114,7 +114,7 @@ namespace Pokémon
                 numberOfTileTypes / (float)TileTypeCount);
         }
 
-        private Behavior GetAverageBehavior(Behavior[] behaviors)
+        protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
             float averageDoorPercentage = behaviors.Select(b => b.DoorPercentage).Average();

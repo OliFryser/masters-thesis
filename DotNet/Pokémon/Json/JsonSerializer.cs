@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MapElites.Json;
@@ -20,6 +21,14 @@ namespace Pokémon.Json
         {
             string json = ConvertToJson(mapDimension, archive);
             WriteToFile(filePath, json);
+        }
+        
+        public static void SaveToFile(
+            string filePath,
+            IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive, 
+            int mapDimension)
+        {
+            throw new NotImplementedException();
         }
         
         public static SaveData ReadFromFile(string filePath)

@@ -16,15 +16,9 @@ using TilemapAnalysis;
 using TilemapAnalysis.Extensions;
 using JsonSerializer = Pokémon.Json.JsonSerializer;
 
-string baseDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
-string resourceDirectory = $"{baseDirectory}/Resources";
-string tilemapName = "PalletTown.png";
-string tilemapPath = $"{resourceDirectory}/Tilemaps/{tilemapName}";
+Directory.CreateDirectory(FilePaths.OutputPath);
 
-// Save in folder named timestamp
-string outputPath = $"{baseDirectory}/Output/MapElites/{DateTime.Now:yyyyMMdd-HHmmss}";
-// Ensure path exists
-Directory.CreateDirectory(outputPath);
+ConstrainedMapElitesRunner.Run();
 
 RunMapElites();
 RunPythonStatistics();
@@ -33,7 +27,7 @@ return;
 
 void RunMapElites()
 {
-    using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+    using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
     List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
     int tileTypeCount = tilemapAnalyzer.TileTypeCount;
     List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
@@ -53,7 +47,8 @@ void RunMapElites()
 
     List<IStatisticsTracker> statisticsTrackers = [new FitnessTracker(), new CoverageTracker()];
     
-    MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, outputPath, statisticsTrackers);
+    MapElitesArgs mapElitesArgs = 
+        new(initializationIterations, mutationIterations, Console.WriteLine, FilePaths.OutputPath, statisticsTrackers);
     IndividualHandler individualHandler = new(individualHandlerArgs);
 
     Stopwatch stopwatch = Stopwatch.StartNew();
@@ -62,24 +57,24 @@ void RunMapElites()
 
     Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
     
-    JsonSerializer.SaveToFile($"{outputPath}/Archive.json", archive, mapDimension);
+    JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive, mapDimension);
     
     Console.WriteLine("Saved archive to JSON");
     
-    LabLogSaver.SaveLog($"{outputPath}/Lab.log", mapElitesArgs, individualHandlerArgs, tilemapName);
+    LabLogSaver.SaveLog($"{FilePaths.OutputPath}/Lab.log", mapElitesArgs, individualHandlerArgs, FilePaths.TilemapName);
 }
 
 void RunPythonStatistics()
 {
     string pythonScriptsRoot = $"{AppDomain.CurrentDomain.BaseDirectory}/PythonScripts";
-    PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", outputPath);
+    PythonRunner.RunPythonScript($"{pythonScriptsRoot}/statistics_plotter.py", FilePaths.OutputPath);
 
     Console.WriteLine();
 }
 
 void RunTilemapAnalysis()
 {
-    TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
+    TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
     HashSet<string> uniqueHashes = new HashSet<string>();
 
     HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites
