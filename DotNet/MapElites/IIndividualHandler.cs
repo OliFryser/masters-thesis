@@ -23,6 +23,5 @@ namespace MapElites
         TEntry Evaluate(TIndividual individual);
 
         TKey GetKey(TBehavior behavior);
-        
     }
 }

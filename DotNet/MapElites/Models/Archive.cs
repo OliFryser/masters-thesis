@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MapElites.Extensions;
 using Domain.Extensions;
 
 namespace MapElites.Models
 {
-    public class Archive<TKey, TEntry, TIndividual, TBehavior>
+    public class Archive<TKey, TEntry, TIndividual, TBehavior> 
+        : IArchive<TKey, TEntry, TIndividual, TBehavior>, IArchiveStatisticsProvider
         where TKey : BaseKey<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
@@ -14,7 +14,7 @@ namespace MapElites.Models
         public int Count => _archive.Count;
         public int BucketCapacity { get; }
 
-        public Archive(int bucketCapacity)
+        internal Archive(int bucketCapacity)
         {
             BucketCapacity = bucketCapacity;
         }
@@ -24,7 +24,7 @@ namespace MapElites.Models
             _archive = entries;
         }
 
-        internal bool TryAdd(TKey key, TEntry entry)
+        public bool TryAdd(TKey key, TEntry entry)
         {
             if (_archive.TryGetValue(key, out TEntry existingEntry))
             {
@@ -46,7 +46,7 @@ namespace MapElites.Models
             return _archive.TryGetValue(key, out entry);
         }
 
-        internal TIndividual SampleRandom()
+        public TIndividual SampleRandom()
         {
             if (_archive.Count == 0)
             {
@@ -56,17 +56,14 @@ namespace MapElites.Models
             return _archive.Values.GetRandomElement().Individual;
         }
 
-        internal float GetMaxFitness() => _archive.Values.Select(e => e.Fitness).Max();
+        public float GetMaxFitness() => _archive.Values.Select(e => e.Fitness).Max();
 
-        public TIndividual GetMaxFitnessIndividual()
-            => _archive.Values.MaxBy(entry => entry.Fitness).Individual;
+        public IEnumerable<TKey> GetKeys() => _archive.Keys;
 
-        public IEnumerable<TKey> Keys => _archive.Keys;
-
-        internal float GetAverageFitness()
+        public float GetAverageFitness()
             => _archive.Values.Average(x => x.Fitness);
 
-        internal Dictionary<TKey, TEntry> GetKeysAndEntries()
+        Dictionary<TKey, TEntry> IArchive<TKey, TEntry, TIndividual, TBehavior>.GetKeysAndEntries()
             => _archive.ToDictionary(x => x.Key, x => x.Value);
     }
 }

@@ -7,6 +7,7 @@ using CLI;
 using Domain.Models;
 using MapElites.Args;
 using MapElites.Models;
+using MapElites.Statistics;
 using Pokémon;
 using Pokémon.Args;
 using SixLabors.ImageSharp;
@@ -37,10 +38,10 @@ void RunMapElites()
     int tileTypeCount = tilemapAnalyzer.TileTypeCount;
     List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
-    int mapDimension = 20;
-    int evaluationIterations = 1;
-    int initializationIterations = 1;
-    int mutationIterations = 1;
+    int mapDimension = 5;
+    int evaluationIterations = 2;
+    int initializationIterations = 50;
+    int mutationIterations = 50;
     
     IndividualHandlerArgs individualHandlerArgs =
         IndividualHandlerArgs.Create(
@@ -50,11 +51,13 @@ void RunMapElites()
             adjacencyRules, 
             evaluationIterations);
 
-    MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, outputPath);
+    List<IStatisticsTracker> statisticsTrackers = [new FitnessTracker(), new CoverageTracker()];
+    
+    MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, outputPath, statisticsTrackers);
     IndividualHandler individualHandler = new(individualHandlerArgs);
 
     Stopwatch stopwatch = Stopwatch.StartNew();
-    Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
+    IArchive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites<Key, Entry, Individual, Behavior>.Run(individualHandler, mapElitesArgs);
     stopwatch.Stop();
 
     Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");

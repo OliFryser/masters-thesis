@@ -6,24 +6,35 @@ using MapElites.Statistics;
 
 namespace MapElites
 {
-    public static class MapElites
+    public static class MapElites<TKey, TEntry, TIndividual, TBehavior>
+        where TKey : BaseKey<TKey>
+        where TEntry : Entry<TIndividual, TBehavior>
     {
-        public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
+        public static IArchive<TKey, TEntry, TIndividual, TBehavior> Run(
             IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
             MapElitesArgs args)
-            where TKey : BaseKey<TKey>
-            where TEntry : Entry<TIndividual, TBehavior>
         {
-            List<IStatisticsTracker<TKey, TEntry, TIndividual, TBehavior>> statisticsTrackers =
-                new List<IStatisticsTracker<TKey, TEntry, TIndividual, TBehavior>>
-                {
-                    new FitnessTracker<TKey, TEntry, TIndividual, TBehavior>(),
-                    new CoverageTracker<TKey, TEntry, TIndividual, TBehavior>(),
-                };
-            
-            Archive<TKey, TEntry, TIndividual, TBehavior> archive = 
+            Archive<TKey, TEntry, TIndividual, TBehavior> archive =
                 new Archive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity);
-            
+
+            return RunMapElites(archive, args, individualHandler);
+        }
+
+        public static IArchive<TKey, TEntry, TIndividual, TBehavior>
+            RunConstrained(IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
+                MapElitesArgs args)
+        {
+            ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior> archive =
+                new ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity);
+
+            return RunMapElites(archive, args, individualHandler);
+        }
+
+        private static IArchive<TKey, TEntry, TIndividual, TBehavior> RunMapElites<TArchive>(
+            TArchive archive, MapElitesArgs args,
+            IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler)
+            where TArchive : IArchive<TKey, TEntry, TIndividual, TBehavior>, IArchiveStatisticsProvider
+        {
             Action<string> logger = args.Logger;
 
             for (int i = 0; i < args.InitializationIterations; i++)
@@ -31,10 +42,16 @@ namespace MapElites
                 TIndividual individual = individualHandler.CreateRandom();
 
                 EvaluateAndSave(individual);
+
+                if (i % 10 == 0)
+                {
+                    logger($"Completed {i} initialization iterations out of {args.InitializationIterations} " +
+                           $"({(i / (float)args.InitializationIterations) * 100:F0} %). " +
+                           $"Archive Size: {archive.Count}. " +
+                           $"Max fitness {archive.GetMaxFitness()}");
+                }
             }
-
-            logger($"Archive Initialized. Archive Size: {archive.Count}\n");
-
+            
             for (int i = 0; i < args.MutationIterations; i++)
             {
                 TIndividual individual = archive.SampleRandom();
@@ -42,9 +59,19 @@ namespace MapElites
                 TIndividual mutation = individualHandler.Mutate(individual);
 
                 EvaluateAndSave(mutation);
+                
+                if (i % 10 == 0)
+                {
+                    logger($"Completed {i} mutation iterations out of {args.MutationIterations} " +
+                           $"({(i / (float)args.MutationIterations) * 100:F0} %). " +
+                           $"Archive Size: {archive.Count}. " +
+                           $"Max fitness {archive.GetMaxFitness()}");
+                }
             }
+            
+            logger($"Map-Elites completed (100%). Archive Size: {archive.Count}. Max fitness {archive.GetMaxFitness()}\n");
 
-            statisticsTrackers.ForEach(s => s.SaveToFile(args.StatisticsOutputPath));
+            args.StatisticsTrackers.ForEach(s => s.SaveToFile(args.StatisticsOutputPath));
 
             return archive;
 
@@ -55,8 +82,8 @@ namespace MapElites
                 TKey key = individualHandler.GetKey(entry.Behavior);
 
                 archive.TryAdd(key, entry);
-                
-                statisticsTrackers.ForEach(s => s.AddPoint(archive));
+
+                args.StatisticsTrackers.ForEach(s => s.AddPoint(archive));
             }
         }
     }

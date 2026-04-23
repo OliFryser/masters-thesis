@@ -15,7 +15,7 @@ namespace Pokémon.Json
         
         public static void SaveToFile(
             string filePath,
-            Archive<Key, Entry, Individual, Behavior> archive, 
+            IArchive<Key, Entry, Individual, Behavior> archive, 
             int mapDimension)
         {
             string json = ConvertToJson(mapDimension, archive);
@@ -30,7 +30,7 @@ namespace Pokémon.Json
         
         private static string ConvertToJson(
             int mapDimension, 
-            Archive<Key, Entry, Individual, Behavior> archive)
+            IArchive<Key, Entry, Individual, Behavior> archive)
         {
             ArchiveSaveData<Key, Entry> archiveSaveData = ArchiveConverter.GetSaveDataFromArchive(archive);
             SaveData saveData = new SaveData

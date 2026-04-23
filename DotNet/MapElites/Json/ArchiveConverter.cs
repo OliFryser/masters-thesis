@@ -6,7 +6,7 @@ namespace MapElites.Json
     public static class ArchiveConverter
     {
         public static ArchiveSaveData<TKey, TEntry> GetSaveDataFromArchive<TKey, TEntry, TIndividual, TBehavior>(
-            Archive<TKey, TEntry, TIndividual, TBehavior> archive) 
+            IArchive<TKey, TEntry, TIndividual, TBehavior> archive) 
             where TKey : BaseKey<TKey> 
             where TEntry : Entry<TIndividual, TBehavior> 
             => new ArchiveSaveData<TKey, TEntry>

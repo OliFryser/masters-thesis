@@ -6,6 +6,7 @@ using Domain.Models;
 using MapElites.Args;
 using MapElites.Json;
 using MapElites.Models;
+using MapElites.Statistics;
 using NaughtyAttributes;
 using Pokémon;
 using Pokémon.Args;
@@ -35,7 +36,7 @@ public class ArchiveExplorer : MonoBehaviour
     [SerializeField] private TextAsset _archiveJsonFile;
     [SerializeField] private bool _hasArchive;
     
-    private Archive<Key, Entry, Individual, Behavior> _archive;
+    private IArchive<Key, Entry, Individual, Behavior> _archive;
 
     private void OnValidate()
     {
@@ -57,12 +58,12 @@ public class ArchiveExplorer : MonoBehaviour
         
         IndividualHandler individualHandler = new(individualHandlerArgs);
         
-        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}");
+        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
         
-        _archive = MapElites.MapElites.Run(individualHandler, args);
+        _archive = MapElites.MapElites<Key, Entry, Individual, Behavior>.Run(individualHandler, args);
 
         int c = 0;
-        foreach (Key archiveKey in _archive.Keys)
+        foreach (Key archiveKey in _archive.GetKeys())
         {
             print($"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
             c++;
@@ -72,9 +73,9 @@ public class ArchiveExplorer : MonoBehaviour
         
         // SaveToJson(_archive);
 
-        int maxDoorBucket = _archive.Keys.Max(k => k.DoorBucket);
-        int maxFlowerBucket = _archive.Keys.Max(k => k.FlowerBucket);
-        int maxTileTypesUsedKey = _archive.Keys.Max(k => k.TileTypesUsedBucket);
+        int maxDoorBucket = _archive.GetKeys().Max(k => k.DoorBucket);
+        int maxFlowerBucket = _archive.GetKeys().Max(k => k.FlowerBucket);
+        int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.TileTypesUsedBucket);
         
         _doorKey = maxDoorBucket;
         _flowerKey = maxFlowerBucket;
@@ -87,20 +88,6 @@ public class ArchiveExplorer : MonoBehaviour
         string path = AssetDatabase.GetAssetPath(_archiveJsonFile);
         SaveData saveData = JsonSerializer.ReadFromFile(path);
         _archive = ArchiveConverter.GetArchiveFromSaveData<Key, Entry, Individual, Behavior>(saveData.Archive);
-    }
-
-    [Button]
-    public void VisualizeMaxFitness()
-    {
-        if (!HasArchive())
-        {
-            Debug.LogWarning("Archive has not been generated.");
-            return;
-        }
-
-        Individual maxFitnessIndividual = _archive.GetMaxFitnessIndividual();
-        State state = GetState(maxFitnessIndividual);
-        _visualizer.Display(state);
     }
 
     [Button]

@@ -2,11 +2,9 @@
 
 namespace MapElites.Statistics
 {
-    public interface IStatisticsTracker<TKey, TEntry, TIndividual, TBehavior> 
-        where TKey : BaseKey<TKey> 
-        where TEntry : Entry<TIndividual, TBehavior>
+    public interface IStatisticsTracker
     {
-        void AddPoint(Archive<TKey, TEntry, TIndividual, TBehavior> archive);
+        void AddPoint(IArchiveStatisticsProvider archive);
 
         void SaveToFile(string outputPath);
     }
