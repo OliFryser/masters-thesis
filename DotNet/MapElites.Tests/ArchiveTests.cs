@@ -22,7 +22,7 @@ public class Tests
         archive.TryAdd(new TestKey(0), entry);
 
         // Act 
-        SampleIndividual sampledIndividual = archive.SampleRandom();
+        SampleIndividual sampledIndividual = archive.Sample();
 
         // Assert
         Assert.That(sampledIndividual, Is.EqualTo(individual));
@@ -35,7 +35,7 @@ public class Tests
         Archive<TestKey, SampleEntry, SampleIndividual, SampleBehavior> archive = new(1);
 
         // Act 
-        Func<SampleIndividual> sample = archive.SampleRandom;
+        Func<SampleIndividual> sample = archive.Sample;
 
         // Assert
         Assert.That(sample, Throws.TypeOf<InvalidOperationException>());

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MapElites.Models
 {
@@ -6,9 +7,9 @@ namespace MapElites.Models
         where TKey : BaseKey<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
-        public bool TryGet(TKey key, out TEntry entry);
+        public bool TryGet(TKey key, [MaybeNullWhen(false)] out TEntry entry);
         public bool TryAdd(TKey key, TEntry entry);
-        public TIndividual SampleRandom();
+        public TIndividual Sample();
         public IEnumerable<TKey> GetKeys();
         internal Dictionary<TKey, TEntry> GetKeysAndEntries();
         public int BucketCapacity { get; }

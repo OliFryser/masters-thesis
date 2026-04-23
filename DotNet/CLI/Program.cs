@@ -57,7 +57,7 @@ void RunMapElites()
     IndividualHandler individualHandler = new(individualHandlerArgs);
 
     Stopwatch stopwatch = Stopwatch.StartNew();
-    IArchive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites<Key, Entry, Individual, Behavior>.Run(individualHandler, mapElitesArgs);
+    IArchive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
     stopwatch.Stop();
 
     Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");

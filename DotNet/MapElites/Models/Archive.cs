@@ -46,7 +46,7 @@ namespace MapElites.Models
             return _archive.TryGetValue(key, out entry);
         }
 
-        public TIndividual SampleRandom()
+        public TIndividual Sample()
         {
             if (_archive.Count == 0)
             {
