@@ -57,5 +57,9 @@ public static class ConstrainedMapElitesRunner
             mapElitesArgs, 
             constrainedIndividualHandlerArgs, 
             FilePaths.TilemapName);
+        
+        // Get the archive like this:
+        // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Lab.log");
+        // saveData.Archive;
     }
 }
