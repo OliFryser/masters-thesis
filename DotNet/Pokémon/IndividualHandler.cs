@@ -12,12 +12,12 @@ namespace Pokémon
 {
     public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior> 
     {
-        protected int TileTypeCount { get; }
+        private int TileTypeCount { get; }
         protected List<TileType> TileTypes { get; }
         protected List<AdjacencyRule> AdjacencyRules { get; }
         protected List<Vector> Coordinates { get; }
-        protected HashSet<TileType> DoorTiles { get; }
-        protected HashSet<TileType> FlowerTiles { get; }
+        private HashSet<TileType> DoorTiles { get; }
+        private HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
 

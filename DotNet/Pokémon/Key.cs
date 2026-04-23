@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using MapElites.Models;
+using Pokémon.Json.Converters.Pokémon.Json;
 
 namespace Pokémon
 {
+    [TypeConverter(typeof(KeyTypeConverter))]
     public class Key : BaseKey<Key>
     {
         public Key(int flowerBucket, int doorBucket, int tileTypesUsedBucket)

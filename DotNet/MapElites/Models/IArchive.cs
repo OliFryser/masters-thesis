@@ -11,7 +11,6 @@ namespace MapElites.Models
         public bool TryAdd(TKey key, TEntry entry);
         public TIndividual Sample();
         public IEnumerable<TKey> GetKeys();
-        internal Dictionary<TKey, TEntry> GetKeysAndEntries();
         public int BucketCapacity { get; }
     }
 }

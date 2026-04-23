@@ -60,7 +60,7 @@ public class ArchiveExplorer : MonoBehaviour
         
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
         
-        _archive = MapElites.MapElites<Key, Entry, Individual, Behavior>.Run(individualHandler, args);
+        _archive = MapElites.MapElites.Run(individualHandler, args);
 
         int c = 0;
         foreach (Key archiveKey in _archive.GetKeys())
@@ -87,7 +87,7 @@ public class ArchiveExplorer : MonoBehaviour
     {
         string path = AssetDatabase.GetAssetPath(_archiveJsonFile);
         SaveData saveData = JsonSerializer.ReadFromFile(path);
-        _archive = ArchiveConverter.GetArchiveFromSaveData<Key, Entry, Individual, Behavior>(saveData.Archive);
+        _archive = saveData.Archive;
     }
 
     [Button]

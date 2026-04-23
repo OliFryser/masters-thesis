@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Domain.Extensions;
+using Newtonsoft.Json;
 
 namespace MapElites.Models
 {
@@ -11,11 +12,19 @@ namespace MapElites.Models
         where TKey : BaseKey<TKey>
         where TEntry : ConstrainedEntry<TIndividual, TBehavior>
     {
-        private class Entries
+        public class Entries
         {
+            [JsonProperty]
             public TEntry? Feasible { get; private set; }
+            [JsonProperty]
             public TEntry? Infeasible { get; private set; }
-
+            
+            [JsonConstructor]
+            [Obsolete("For serialization purposes only")]
+            public Entries()
+            {
+            }
+            
             public Entries(TEntry entry)
             {
                 if (entry.IsFeasible)
@@ -92,6 +101,12 @@ namespace MapElites.Models
             BucketCapacity = bucketCapacity;
         }
 
+        public ConstrainedArchive(int bucketCapacity, Dictionary<TKey, Entries> archive)
+        {
+            _archive = archive;
+            BucketCapacity = bucketCapacity;
+        }
+
         public bool TryGet(TKey key, [MaybeNullWhen(false)] out TEntry entry)
         {
             if (_archive.TryGetValue(key, out Entries entries))
@@ -141,9 +156,9 @@ namespace MapElites.Models
             return _archive.Keys;
         }
 
-        Dictionary<TKey, TEntry> IArchive<TKey, TEntry, TIndividual, TBehavior>.GetKeysAndEntries()
+        public Dictionary<TKey, Entries> GetArchiveAsDictionary()
         {
-            throw new System.NotImplementedException();
+            return _archive.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         public float GetMaxFitness()

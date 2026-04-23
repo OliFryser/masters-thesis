@@ -63,7 +63,7 @@ namespace MapElites.Models
         public float GetAverageFitness()
             => _archive.Values.Average(x => x.Fitness);
 
-        Dictionary<TKey, TEntry> IArchive<TKey, TEntry, TIndividual, TBehavior>.GetKeysAndEntries()
+        public Dictionary<TKey, TEntry> GetArchiveAsDictionary()
             => _archive.ToDictionary(x => x.Key, x => x.Value);
     }
 }
