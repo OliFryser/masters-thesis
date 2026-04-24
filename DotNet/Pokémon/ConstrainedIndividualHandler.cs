@@ -57,7 +57,15 @@ namespace Pokémon
         // meanDeviation = 0 => 1
         // meanDeviation = 1 => 0.3
         
-        // an alternative 
+        // an alternative approach would be to use -log(meanDeviation)
+        // meanDeviation = 0 => Infinity
+        // meanDeviation = 1 => 0
+        
+        // Maybe silly, but imagine:
+        // Min(e^-x, -log(x))
+        // meanDeviation = 0 => 1
+        // meanDeviation = 1 => 0
+
         private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor = 1f)
         {
             float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
