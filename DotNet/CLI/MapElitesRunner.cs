@@ -15,7 +15,7 @@ namespace CLI;
 
 public static class MapElitesRunner
 {
-    public static void RunMapElites()
+    public static void RunMapElites(bool shouldCreateStatistics)
     {
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
@@ -35,7 +35,8 @@ public static class MapElitesRunner
                 adjacencyRules, 
                 evaluationIterations);
 
-        List<IStatisticsTracker> statisticsTrackers = [new FitnessTracker(), new CoverageTracker()];
+        List<IStatisticsTracker> statisticsTrackers = 
+            shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker()] : [];
     
         MapElitesArgs mapElitesArgs = 
             new(initializationIterations, mutationIterations, Console.WriteLine, FilePaths.OutputPath, statisticsTrackers);

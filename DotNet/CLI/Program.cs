@@ -10,10 +10,23 @@ using TilemapAnalysis.Extensions;
 
 Directory.CreateDirectory(FilePaths.OutputPath);
 
-ConstrainedMapElitesRunner.Run();
-// MapElitesRunner.RunMapElites();
+bool shouldCreateStatistics = true;
 
-RunPythonStatistics();
+if (args.Length >= 1)
+{
+    if (args.Contains("--skip-stats") || args.Contains("-s"))
+    {
+        shouldCreateStatistics = false;
+    }
+}
+
+ConstrainedMapElitesRunner.Run(shouldCreateStatistics);
+MapElitesRunner.RunMapElites(shouldCreateStatistics);
+
+if (shouldCreateStatistics)
+{
+    RunPythonStatistics();
+}
 
 return;
 

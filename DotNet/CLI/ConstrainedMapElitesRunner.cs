@@ -15,7 +15,7 @@ namespace CLI;
 
 public static class ConstrainedMapElitesRunner
 {
-    public static void Run()
+    public static void Run(bool shouldCreateStatistics)
     {
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
@@ -35,8 +35,9 @@ public static class ConstrainedMapElitesRunner
                 adjacencyRules, 
                 evaluationIterations), 
                 0.8f);
-
-        List<IStatisticsTracker> statisticsTrackers = [new FitnessTracker(), new CoverageTracker()];
+        
+        List<IStatisticsTracker> statisticsTrackers = 
+            shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker()] : [];
     
         MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, FilePaths.OutputPath, statisticsTrackers);
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
