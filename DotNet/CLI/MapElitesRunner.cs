@@ -52,5 +52,7 @@ public static class MapElitesRunner
         Console.WriteLine("Saved archive to JSON.");
     
         LabLogSaver.SaveLog($"{FilePaths.OutputPath}/Lab.log", mapElitesArgs, individualHandlerArgs, FilePaths.TilemapName);
+        
+        // var saveData = JsonSerializer.ReadFromFile($"{FilePaths.OutputPath}/Archive.json");
     }
 }

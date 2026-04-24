@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using MapElites.Json;
 using MapElites.Models;
 
 namespace Pokémon.Json

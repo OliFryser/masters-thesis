@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Extensions;
+using Newtonsoft.Json;
 
 namespace MapElites.Models
 {
@@ -10,6 +11,7 @@ namespace MapElites.Models
         where TKey : BaseKey<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
+        [JsonProperty]
         private readonly Dictionary<TKey, TEntry> _archive = new Dictionary<TKey, TEntry>();
         public int Count => _archive.Count;
         public int BucketCapacity { get; }
@@ -18,7 +20,8 @@ namespace MapElites.Models
         {
             BucketCapacity = bucketCapacity;
         }
-
+        
+        [JsonConstructor]
         internal Archive(int bucketCapacity, Dictionary<TKey, TEntry> entries) : this(bucketCapacity)
         {
             _archive = entries;

@@ -59,7 +59,7 @@ public static class ConstrainedMapElitesRunner
             FilePaths.TilemapName);
         
         // Get the archive like this:
-        // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Lab.log");
+        // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
         // saveData.Archive;
     }
 }

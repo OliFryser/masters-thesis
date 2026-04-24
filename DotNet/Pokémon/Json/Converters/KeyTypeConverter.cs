@@ -13,19 +13,18 @@ namespace Pokémon.Json.Converters
                 return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
             }
 
-            public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object? value)
             {
-                if (value is string s)
+                if (!(value is string input)) 
+                    return base.ConvertFrom(context, culture, value);
+                if (Key.TryParse(input, out Key? key))
                 {
-                    if (Key.TryParse(s, out Key? key))
-                    {
-                        return key;
-                    }
+                    return key;
                 }
                 return base.ConvertFrom(context, culture, value);
             }
 
-            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+            public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object? value, Type destinationType)
             {
                 if (destinationType == typeof(string) && value is Key key)
                 {

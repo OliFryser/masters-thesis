@@ -10,8 +10,8 @@ using TilemapAnalysis.Extensions;
 
 Directory.CreateDirectory(FilePaths.OutputPath);
 
-// ConstrainedMapElitesRunner.Run();
-MapElitesRunner.RunMapElites();
+ConstrainedMapElitesRunner.Run();
+// MapElitesRunner.RunMapElites();
 
 RunPythonStatistics();
 

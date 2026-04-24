@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using MapElites.Json.Converters;
 using MapElites.Models;
 using Newtonsoft.Json;
 
@@ -8,15 +7,6 @@ namespace Pokémon.Json
 {
     public static class JsonSerializer
     {
-        private static JsonSerializerSettings Settings => new JsonSerializerSettings
-        {
-            Converters = new List<JsonConverter>
-            {
-                new ConstrainedArchiveConverter<Key, ConstrainedEntry<Individual,Behavior>, Individual, Behavior>(),
-                new ArchiveConverter<Key, Entry, Individual, Behavior>(),
-            },
-        };
-        
         public static void SaveToFile(
             string filePath,
             IArchive<Key, Entry, Individual, Behavior> archive, 
@@ -51,12 +41,12 @@ namespace Pokémon.Json
             int mapDimension,
             IArchive<Key, Entry, Individual, Behavior> archive)
         {
-            SaveData saveData = new SaveData()
+            SaveData saveData = new SaveData
             {
                 MapDimension = mapDimension,
                 Archive = (Archive<Key, Entry, Individual, Behavior>)archive,
             };
-            return JsonConvert.SerializeObject(saveData, Settings);
+            return JsonConvert.SerializeObject(saveData);
         }
         
         private static string ConvertToJson(
@@ -68,7 +58,7 @@ namespace Pokémon.Json
                 MapDimensions = mapDimension,
                 Archive = (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>)archive,
             };
-            return JsonConvert.SerializeObject(saveData, Settings);
+            return JsonConvert.SerializeObject(saveData);
         }
         
         private static void WriteToFile(string filePath, string json)
@@ -79,9 +69,9 @@ namespace Pokémon.Json
         }
 
         private static SaveData ReadFromJson(string json)
-            => JsonConvert.DeserializeObject<SaveData>(json, Settings);
+            => JsonConvert.DeserializeObject<SaveData>(json);
         
         private static ConstrainedSaveData ReadConstrainedSaveDataFromJson(string json)
-            => JsonConvert.DeserializeObject<ConstrainedSaveData>(json, Settings);
+            => JsonConvert.DeserializeObject<ConstrainedSaveData>(json);
     }
 }

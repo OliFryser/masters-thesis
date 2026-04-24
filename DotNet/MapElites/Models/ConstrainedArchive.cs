@@ -92,19 +92,22 @@ namespace MapElites.Models
         }
 
         public int Count => _archive.Count(kvp => kvp.Value.Feasible != null);
+        
+        [JsonProperty]
         public int BucketCapacity { get; }
 
+        [JsonProperty]
         private readonly Dictionary<TKey, Entries> _archive = new Dictionary<TKey, Entries>();
 
         public ConstrainedArchive(int bucketCapacity)
         {
             BucketCapacity = bucketCapacity;
         }
-
-        public ConstrainedArchive(int bucketCapacity, Dictionary<TKey, Entries> archive)
+        
+        [JsonConstructor]
+        public ConstrainedArchive(int bucketCapacity, Dictionary<TKey, Entries> archive) : this(bucketCapacity)
         {
             _archive = archive;
-            BucketCapacity = bucketCapacity;
         }
 
         public bool TryGet(TKey key, [MaybeNullWhen(false)] out TEntry entry)
