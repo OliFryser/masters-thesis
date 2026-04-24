@@ -11,7 +11,7 @@ using Pokémon.Args;
 using Pokémon.Json;
 using TilemapAnalysis;
 
-namespace CLI;
+namespace CLI.Runners;
 
 public static class ConstrainedMapElitesRunner
 {
@@ -22,43 +22,53 @@ public static class ConstrainedMapElitesRunner
         int tileTypeCount = tilemapAnalyzer.TileTypeCount;
         List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
-        int mapDimension = 5;
-        int evaluationIterations = 2;
-        int initializationIterations = 50;
-        int mutationIterations = 50;
-    
+        int mapDimension = 20;
+        int evaluationIterations = 100;
+        int initializationIterations = 100;
+        int mutationIterations = 1000;
+
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
             new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
-                mapDimension, 
-                tileTypeCount, 
-                tileTypes, 
-                adjacencyRules, 
-                evaluationIterations), 
-                0.8f);
-        
-        List<IStatisticsTracker> statisticsTrackers = 
+                    mapDimension,
+                    tileTypeCount,
+                    tileTypes,
+                    adjacencyRules,
+                    evaluationIterations),
+                0.5f);
+
+        List<IStatisticsTracker> statisticsTrackers =
             shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker()] : [];
-    
-        MapElitesArgs mapElitesArgs = new(initializationIterations, mutationIterations, Console.WriteLine, FilePaths.OutputPath, statisticsTrackers);
+        
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
+        MapElitesArgs mapElitesArgs = new(
+            initializationIterations,
+            mutationIterations,
+            Console.WriteLine,
+            FilePaths.OutputPath,
+            statisticsTrackers);
+        
         Stopwatch stopwatch = Stopwatch.StartNew();
-        IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = 
-            MapElites.MapElites.RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(constrainedIndividualHandler, mapElitesArgs);
+
+        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
+            MapElites.MapElites.RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
+                constrainedIndividualHandler,
+                mapElitesArgs);
+
         stopwatch.Stop();
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
-    
+
         JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive, mapDimension);
-    
+
         Console.WriteLine("Saved archive to JSON");
-    
+
         LabLogSaver.SaveLog(
-            $"{FilePaths.OutputPath}/Lab.log", 
-            mapElitesArgs, 
-            constrainedIndividualHandlerArgs, 
+            $"{FilePaths.OutputPath}/Lab.log",
+            mapElitesArgs,
+            constrainedIndividualHandlerArgs,
             FilePaths.TilemapName);
-        
+
         // Get the archive like this:
         // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
         // saveData.Archive;
