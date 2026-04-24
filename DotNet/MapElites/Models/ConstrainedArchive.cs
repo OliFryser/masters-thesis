@@ -112,7 +112,7 @@ namespace MapElites.Models
 
         public bool TryGet(TKey key, [MaybeNullWhen(false)] out TEntry entry)
         {
-            if (_archive.TryGetValue(key, out Entries entries))
+            if (_archive.TryGetValue(key, out Entries? entries))
             {
                 if (entries.Feasible != null)
                 {
