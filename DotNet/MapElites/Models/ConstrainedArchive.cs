@@ -147,7 +147,8 @@ namespace MapElites.Models
 
         public TIndividual Sample()
         {
-            if (Count == 0) throw new InvalidOperationException("Archive has no entries.");
+            if (_archive.Count == 0) 
+                throw new InvalidOperationException("Archive has no entries.");
 
             Entries? entries = _archive.GetRandomElement().Value;
 
