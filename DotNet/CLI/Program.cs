@@ -12,6 +12,7 @@ using TilemapAnalysis.Extensions;
 Directory.CreateDirectory(FilePaths.OutputPath);
 
 bool shouldCreateStatistics = true;
+bool constraintMode = true;
 
 if (args.Length >= 1)
 {
@@ -19,10 +20,21 @@ if (args.Length >= 1)
     {
         shouldCreateStatistics = false;
     }
+
+    if (args.Contains("--regular") || args.Contains("-r"))
+    {
+        constraintMode = false;
+    }
 }
 
-ConstrainedMapElitesRunner.Run(shouldCreateStatistics);
-MapElitesRunner.RunMapElites(shouldCreateStatistics);
+if (constraintMode)
+{
+    ConstrainedMapElitesRunner.Run(shouldCreateStatistics);
+}
+else
+{
+    MapElitesRunner.RunMapElites(shouldCreateStatistics);
+}
 
 if (shouldCreateStatistics)
 {
