@@ -11,7 +11,7 @@ using Pokémon.Args;
 using Pokémon.Json;
 using TilemapAnalysis;
 
-namespace CLI;
+namespace CLI.Runners;
 
 public static class MapElitesRunner
 {
@@ -43,7 +43,7 @@ public static class MapElitesRunner
         IndividualHandler individualHandler = new(individualHandlerArgs);
 
         Stopwatch stopwatch = Stopwatch.StartNew();
-        IArchive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
+        Archive<Key, Entry, Individual, Behavior> archive = MapElites.MapElites.Run(individualHandler, mapElitesArgs);
         stopwatch.Stop();
 
         Console.WriteLine($"Finished MAP-Elites in: {stopwatch.Elapsed.TotalSeconds} ms");

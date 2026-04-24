@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using MapElites.Args;
 using MapElites.Models;
-using MapElites.Statistics;
 
 namespace MapElites
 {
     public static class MapElites
     {
-        public static IArchive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
+        public static Archive<TKey, TEntry, TIndividual, TBehavior> Run<TKey, TEntry, TIndividual, TBehavior>(
             IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
             MapElitesArgs args)
             where TKey : BaseKey<TKey>
@@ -20,7 +18,7 @@ namespace MapElites
             return RunMapElites(archive, args, individualHandler);
         }
 
-        public static IArchive<TKey, TEntry, TIndividual, TBehavior>
+        public static ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior>
             RunConstrained<TKey, TEntry, TIndividual, TBehavior>(IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler,
                 MapElitesArgs args)
             where TKey : BaseKey<TKey>
@@ -32,7 +30,7 @@ namespace MapElites
             return RunMapElites(archive, args, individualHandler);
         }
 
-        private static IArchive<TKey, TEntry, TIndividual, TBehavior> RunMapElites<TArchive, TKey, TEntry, TIndividual, TBehavior>(
+        private static TArchive RunMapElites<TArchive, TKey, TEntry, TIndividual, TBehavior>(
             TArchive archive, MapElitesArgs args,
             IIndividualHandler<TKey, TEntry, TIndividual, TBehavior> individualHandler)
             where TArchive : IArchive<TKey, TEntry, TIndividual, TBehavior>, IArchiveStatisticsProvider

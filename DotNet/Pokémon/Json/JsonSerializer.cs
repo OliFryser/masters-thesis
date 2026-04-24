@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using MapElites.Models;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ namespace Pokémon.Json
     {
         public static void SaveToFile(
             string filePath,
-            IArchive<Key, Entry, Individual, Behavior> archive, 
+            Archive<Key, Entry, Individual, Behavior> archive, 
             int mapDimension)
         {
             string json = ConvertToJson(mapDimension, archive);
@@ -18,7 +19,7 @@ namespace Pokémon.Json
         
         public static void SaveToFile(
             string filePath,
-            IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive, 
+            ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive, 
             int mapDimension)
         {
             string json = ConvertToJson(mapDimension, archive);
@@ -39,24 +40,24 @@ namespace Pokémon.Json
         
         private static string ConvertToJson(
             int mapDimension,
-            IArchive<Key, Entry, Individual, Behavior> archive)
+            Archive<Key, Entry, Individual, Behavior> archive)
         {
             SaveData saveData = new SaveData
             {
                 MapDimension = mapDimension,
-                Archive = (Archive<Key, Entry, Individual, Behavior>)archive,
+                Archive = archive,
             };
             return JsonConvert.SerializeObject(saveData);
         }
         
         private static string ConvertToJson(
             int mapDimension,
-            IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
+            ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
         {
             ConstrainedSaveData saveData = new ConstrainedSaveData
             {
                 MapDimensions = mapDimension,
-                Archive = (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>)archive,
+                Archive = archive,
             };
             return JsonConvert.SerializeObject(saveData);
         }

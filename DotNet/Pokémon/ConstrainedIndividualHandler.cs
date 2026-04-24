@@ -13,7 +13,7 @@ namespace Pokémon
         : IndividualHandler, 
             IConstrainedIndividualHandler<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>
     {
-        private float FeasibilityThreshold { get; set; }
+        private float FeasibilityThreshold { get; }
 
         public ConstrainedIndividualHandler(ConstrainedIndividualHandlerArgs args) : base(args.IndividualHandlerArgs)
         {
@@ -53,10 +53,17 @@ namespace Pokémon
             return entry;
         }
 
-        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior)
+        // Returns the e^-(meanDeviation)
+        // meanDeviation = 0 => 1
+        // meanDeviation = 1 => 0.3
+        
+        // an alternative 
+        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor = 1f)
         {
             float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
-            return deviationSum / behaviors.Length;
+            float meanDeviation = -deviationSum / behaviors.Length;
+
+            return MathF.Exp(-meanDeviation * smoothingFactor);
         }
     }
 }
