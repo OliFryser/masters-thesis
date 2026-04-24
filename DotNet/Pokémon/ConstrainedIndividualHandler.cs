@@ -69,7 +69,7 @@ namespace Pokémon
         private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor = 1f)
         {
             float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
-            float meanDeviation = -deviationSum / behaviors.Length;
+            float meanDeviation = deviationSum / behaviors.Length;
 
             return MathF.Exp(-meanDeviation * smoothingFactor);
         }
