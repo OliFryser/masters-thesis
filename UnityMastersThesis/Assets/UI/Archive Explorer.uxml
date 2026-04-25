@@ -1,0 +1,20 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styling.uss?fileID=7433441132597879392&amp;guid=bd0b4bdc84cb74c3bb10a7d33157e981&amp;type=3#Styling"/>
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 33%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px;">
+            <ui:Label text="Behaviors" name="Label" class="text" style="-unity-text-align: middle-center; font-size: 105px;"/>
+            <ui:VisualElement style="flex-grow: 0.1;"/>
+            <ui:Label text="Flowers" class="text" style="font-size: 53px;"/>
+            <ui:SliderInt label="" value="42" high-value="100" name="FlowersSlider" class="unity-slider"/>
+            <ui:VisualElement style="flex-grow: 0.1;"/>
+            <ui:Label text="Doors" class="text" style="font-size: 53px;"/>
+            <ui:SliderInt label="" value="42" high-value="100" name="DoorsSlider" class="unity-slider"/>
+            <ui:VisualElement style="flex-grow: 0.1;"/>
+            <ui:Label text="Variation" name="Variation" class="text" style="font-size: 53px;"/>
+            <ui:SliderInt label="" value="42" high-value="100" name="TileTypesSlider" class="unity-slider"/>
+            <ui:VisualElement style="flex-grow: 0.1;"/>
+            <ui:Button text="RUN" class="text" style="font-size: 53px; border-top-left-radius: 24px; border-bottom-right-radius: 24px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 2;"/>
+    </ui:VisualElement>
+</ui:UXML>

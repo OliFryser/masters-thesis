@@ -12,7 +12,7 @@ using TilemapAnalysis.Extensions;
 Directory.CreateDirectory(FilePaths.OutputPath);
 
 bool shouldCreateStatistics = true;
-bool constraintMode = true;
+bool constraintMode = false;
 
 if (args.Length >= 1)
 {

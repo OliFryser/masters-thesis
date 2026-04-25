@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Domain.Models;
 using MapElites.Args;
-using MapElites.Json;
 using MapElites.Models;
 using MapElites.Statistics;
 using NaughtyAttributes;
@@ -61,15 +60,8 @@ public class ArchiveExplorer : MonoBehaviour
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
         
         _archive = MapElites.MapElites.Run(individualHandler, args);
-
-        int c = 0;
-        foreach (Key archiveKey in _archive.GetKeys())
-        {
-            print($"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
-            c++;
-        }
         
-        
+        PrintKeys();
         
         // SaveToJson(_archive);
 
@@ -88,6 +80,7 @@ public class ArchiveExplorer : MonoBehaviour
         string path = AssetDatabase.GetAssetPath(_archiveJsonFile);
         SaveData saveData = JsonSerializer.ReadFromFile(path);
         _archive = saveData.Archive;
+        Debug.Log($"Archive has been loaded.");
     }
 
     [Button]
@@ -102,8 +95,26 @@ public class ArchiveExplorer : MonoBehaviour
         Key key = new Key(_flowerKey, _doorKey, _tileTypesUsedKey);
         if (_archive.TryGet(key, out Entry entry))
         {
-            State state = GetState(entry.Individual);
+            WfcArgs args = entry.Individual.GetWfcArgs(_inputTilemap);
+            State state = WaveFunctionCollapse.Run(args);
             _visualizer.Display(state);
+        }
+    }
+
+    [Button]
+    public void PrintKeys()
+    {
+        if (!HasArchive())
+        {
+            Debug.LogWarning("Archive has not been generated.");
+            return;
+        }
+        
+        int c = 0;
+        foreach (Key archiveKey in _archive.GetKeys())
+        {
+            print($"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
+            c++;
         }
     }
 
@@ -111,28 +122,5 @@ public class ArchiveExplorer : MonoBehaviour
     {
         _hasArchive = _archive != null;
         return _hasArchive;
-    }
-
-    private State GetState(Individual individual)
-    {
-        WfcArgs args = GetWfcArgs(individual);
-        State state = WaveFunctionCollapse.Run(args);
-        return state;
-    }
-
-    private WfcArgs GetWfcArgs(Individual individual)
-    {
-        const int mapDimensions = 20;
-        List<Vector> coordinates = Pokémon.LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
-        
-        string tilemapPath = AssetDatabase.GetAssetPath(_inputTilemap);
-        using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
-        List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules()
-            .Concat(tilemapAnalyzer.GetSymmetryRules()).ToList();
-        
-        WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, individual.Weights, individual.Seed);
-
-        return args;
     }
 }

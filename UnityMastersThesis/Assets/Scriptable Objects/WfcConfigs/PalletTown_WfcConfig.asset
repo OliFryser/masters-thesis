@@ -5082,5 +5082,5 @@ MonoBehaviour:
     TileTypeId: bf6a3434e873281e73cd5248a8ec6ecb3ea250e1
   - Weight: 4
     TileTypeId: efb3b2cf1e2c0e9ec35834aebf2874e2293ef85e
-  Width: 15
-  Height: 15
+  Width: 20
+  Height: 20

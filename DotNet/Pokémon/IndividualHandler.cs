@@ -97,9 +97,9 @@ namespace Pokémon
 
         public Key GetKey(Behavior behavior)
         {
-            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * NumberOfBucketsPerAxis);
-            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * NumberOfBucketsPerAxis);
-            int tileTypesUsedBucket = (int)MathF.Floor(behavior.TileTypesUsedPercentage * NumberOfBucketsPerAxis);
+            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * 5 * NumberOfBucketsPerAxis);
+            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * 50 * NumberOfBucketsPerAxis);
+            int tileTypesUsedBucket = (int)MathF.Floor(behavior.TileTypesUsedPercentage * 3 * NumberOfBucketsPerAxis);
 
             return new Key(flowerBucket, doorBucket, tileTypesUsedBucket);
         }

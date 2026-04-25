@@ -29,5 +29,29 @@ namespace MapElites.Extensions
 
             return element;
         }
+        
+        public static T MinBy<T>(this ICollection<T> collection, Func<T, float> selector)
+        {
+            if (collection.Count == 0)
+            {
+                throw new ArgumentException("Collection is empty");
+            }
+            
+            T first = collection.First();
+            
+            float min = selector(first);
+            T element = first;
+            
+            foreach (T t in collection)
+            {
+                if (selector(t) <= min)
+                {
+                    min = selector(t);
+                    element = t;
+                }
+            }
+
+            return element;
+        }
     }
 }
