@@ -23,9 +23,9 @@ public static class ConstrainedMapElitesRunner
         List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
         int mapDimension = 20;
-        int evaluationIterations = 5;
-        int initializationIterations = 5;
-        int mutationIterations = 5;
+        int evaluationIterations = 10;
+        int initializationIterations = 60;
+        int mutationIterations = 60;
 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
             new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(

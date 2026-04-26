@@ -39,12 +39,14 @@ public class UIHandler : MonoBehaviour
        SetSlider(_flowerSlider, minFlowers, maxFlowers);
        SetSlider(_doorsSlider, minDoors, maxDoors);
        SetSlider(_tileTypesSlider, minTileTypes, maxTileTypes);
+
+       Run();
     }
 
     private void Run()
     {
         Key key = GetKey();
-        _archivePlaymodeExplorer.Run(key);
+        _archivePlaymodeExplorer.BrowseConstrainedArchive(key);
     }
 
     private Key GetKey()

@@ -11,8 +11,8 @@ using TilemapAnalysis.Extensions;
 
 Directory.CreateDirectory(FilePaths.OutputPath);
 
-bool shouldCreateStatistics = true;
-bool constraintMode = false;
+bool shouldCreateStatistics = false;
+bool constraintMode = true;
 
 if (args.Length >= 1)
 {

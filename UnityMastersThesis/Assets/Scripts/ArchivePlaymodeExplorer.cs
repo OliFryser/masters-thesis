@@ -18,10 +18,12 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
 {
     [SerializeField] private Visualizer[] _visualizers;
     [SerializeField] private TextAsset _archiveFile;
+    [SerializeField] private TextAsset _constrainedArchiveFile;
     [SerializeField] private Texture2D _tilemap;
     [SerializeField] private UIHandler _uiHandler;
     
     private IArchive<Key, Entry, Individual, Behavior> _archive;
+    private IArchive<Key, Entry, Individual, Behavior> _constrainedArchive;
     
     private List<TileType> _tileTypes;
     private List<Domain.Models.AdjacencyRule> _adjacencyRules;
@@ -35,15 +37,17 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         
         _adjacencyRules = adjacencyRules;
 
-        (IArchive<Key, Entry, Individual, Behavior> archive, int mapDimension) = ReadArchiveFile();
+        (IArchive<Key, Entry, Individual, Behavior> archive, int mapDimension) = ReadArchiveFile(_archiveFile);
 
         _archive = archive;
+        
+        (IArchive<Key, Entry, Individual, Behavior> constrainedArchive, int _) = ReadArchiveFile(_constrainedArchiveFile);
+
+        _constrainedArchive = constrainedArchive;
 
         _coordinates = GetRectangleCoordinates(mapDimension, mapDimension).ToList();
 
         _uiHandler.Initialize(_archive.GetKeys());
-        
-        Run();
     }
 
     private (List<TileType> tileTypes, List<Domain.Models.AdjacencyRule> adjacencyRules) AnalyzeTilemap()
@@ -60,7 +64,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         return (tileTypes, adjacencyRules);
     }
     
-    private (IArchive<Key, Entry, Individual, Behavior>, int MapDimension) ReadArchiveFile()
+    private (IArchive<Key, Entry, Individual, Behavior>, int MapDimension) ReadArchiveFile(TextAsset archiveFile)
     {
         string path = AssetDatabase.GetAssetPath(_archiveFile);
         
@@ -69,21 +73,25 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         return (saveData.Archive, saveData.MapDimension);
     }
 
-    public void Run(Key key = null)
-    {
-        print(key == null);
-        key ??= new Key(0, 0, 5);
+    public void BrowseArchive(Key key) => Browse(_archive, key);
+    
+    public void BrowseConstrainedArchive(Key key) => Browse(_constrainedArchive, key);
 
-        if (_archive.TryGet(key, out Entry entry))
+    private void Browse(IArchive<Key, Entry, Individual, Behavior> archive, Key key)
+    {
+        if (!archive.TryGet(key, out Entry entry))
         {
-            foreach (Visualizer visualizer in _visualizers)
-            {
-                WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
+            Debug.LogError($"Failed to retrieve key {key}");
+            return;
+        }
+        
+        foreach (Visualizer visualizer in _visualizers)
+        {
+            WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
                 
-                State state = WaveFunctionCollapse.Run(args);
+            State state = WaveFunctionCollapse.Run(args);
                 
-                visualizer.Display(state);
-            }
+            visualizer.Display(state);
         }
     }
 }
