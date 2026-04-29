@@ -23,8 +23,8 @@ public static class ConstrainedMapElitesRunner
         List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
         int mapDimension = 20;
-        int evaluationIterations = 10;
-        int initializationIterations = 10;
+        int evaluationIterations = 50;
+        int initializationIterations = 20;
         int mutationIterations = 50;
 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
@@ -35,7 +35,8 @@ public static class ConstrainedMapElitesRunner
                     adjacencyRules,
                     evaluationIterations, 
                     keyCeilings),
-                0.75f);
+                0.75f,
+                22f);
 
         List<IStatisticsTracker> statisticsTrackers =
             shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker(), new FeasibilityTracker()] : [];

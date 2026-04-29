@@ -14,10 +14,12 @@ namespace Pokémon
             IConstrainedIndividualHandler<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>
     {
         private float FeasibilityThreshold { get; }
+        private float SmoothingFactor { get; }
 
         public ConstrainedIndividualHandler(ConstrainedIndividualHandlerArgs args) : base(args.IndividualHandlerArgs)
         {
             FeasibilityThreshold = args.FeasibilityThreshold;
+            SmoothingFactor = args.SmoothingFactor;
         }
 
 
@@ -40,7 +42,7 @@ namespace Pokémon
             }
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            float fitness = GetFitness(behaviors, averageBehavior);
+            float fitness = GetFitness(behaviors, averageBehavior, SmoothingFactor);
             float feasibility = amountComplete / (float)EvaluationIterations;
 
             var entry = new ConstrainedEntry<Individual, Behavior>(
@@ -53,12 +55,12 @@ namespace Pokémon
             return entry;
         }
 
-        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior)
+        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor)
         {
             float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
             float meanDeviation = deviationSum / behaviors.Length;
 
-            return 1f - meanDeviation;
+            return MathF.Exp(-smoothingFactor * meanDeviation);
         }
     }
 }

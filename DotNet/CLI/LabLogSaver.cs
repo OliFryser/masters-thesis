@@ -64,6 +64,7 @@ namespace CLI
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(GetLogFromIndividualHandlerArgs(args.IndividualHandlerArgs));
             stringBuilder.AppendLine($"Feasibility Threshold: {args.FeasibilityThreshold}");
+            stringBuilder.AppendLine($"Smoothing Factor: {args.SmoothingFactor}");
             return stringBuilder.ToString();
         }
     }
