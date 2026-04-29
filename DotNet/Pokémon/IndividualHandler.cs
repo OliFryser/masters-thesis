@@ -68,7 +68,8 @@ namespace Pokémon
                 float standardDeviation = 25f;
                 double sampledWeight = normalSampler.Sample(tileWeight.Weight, standardDeviation, random);
                 int roundedWeight = (int)Math.Round(sampledWeight);
-                newWeights.Add(new TileWeight(tileWeight.TileType, roundedWeight));
+                int clampedWeight = Math.Max(0, roundedWeight);
+                newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
             }
 
             return new Individual(newWeights, 0);
