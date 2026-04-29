@@ -60,11 +60,13 @@ namespace Pokémon
         {
             List<TileWeight> newWeights = new List<TileWeight>();
             Random random = new Random();
+            NormalSampler normalSampler = new NormalSampler();
             foreach (TileWeight tileWeight in individual.Weights)
             {
-                int noise = (random.Next(0, 2) * 2 - 1) * 500;
-                int mutatedWeight = (int)MathF.Max(tileWeight.Weight + noise, 0);
-                newWeights.Add(new TileWeight(tileWeight.TileType, mutatedWeight));
+                float standardDeviation = 25f;
+                double sampledWeight = normalSampler.Sample(tileWeight.Weight, standardDeviation);
+                int roundedWeight = (int)Math.Round(sampledWeight);
+                newWeights.Add(new TileWeight(tileWeight.TileType, roundedWeight));
             }
 
             return new Individual(newWeights, 0);
