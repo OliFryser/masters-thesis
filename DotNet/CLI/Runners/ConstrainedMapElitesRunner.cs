@@ -15,7 +15,7 @@ namespace CLI.Runners;
 
 public static class ConstrainedMapElitesRunner
 {
-    public static void Run(bool shouldCreateStatistics)
+    public static void Run(bool shouldCreateStatistics, KeyCeilings keyCeilings)
     {
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
@@ -24,8 +24,8 @@ public static class ConstrainedMapElitesRunner
 
         int mapDimension = 20;
         int evaluationIterations = 10;
-        int initializationIterations = 60;
-        int mutationIterations = 60;
+        int initializationIterations = 100;
+        int mutationIterations = 0;
 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
             new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
@@ -33,7 +33,8 @@ public static class ConstrainedMapElitesRunner
                     tileTypeCount,
                     tileTypes,
                     adjacencyRules,
-                    evaluationIterations),
+                    evaluationIterations, 
+                    keyCeilings),
                 0.5f);
 
         List<IStatisticsTracker> statisticsTrackers =

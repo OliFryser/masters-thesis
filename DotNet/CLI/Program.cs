@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using CLI;
 using CLI.Runners;
+using Pokémon.Args;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using TilemapAnalysis;
@@ -11,7 +12,7 @@ using TilemapAnalysis.Extensions;
 
 Directory.CreateDirectory(FilePaths.OutputPath);
 
-bool shouldCreateStatistics = false;
+bool shouldCreateStatistics = true;
 bool constraintMode = true;
 
 if (args.Length >= 1)
@@ -27,13 +28,18 @@ if (args.Length >= 1)
     }
 }
 
+KeyCeilings keyCeilings = new KeyCeilings(
+    flowerPercentageCeiling: 0.2f,
+    doorPercentageCeiling: 0.05f,
+    variationPercentageCeiling: 1.0f);
+
 if (constraintMode)
 {
-    ConstrainedMapElitesRunner.Run(shouldCreateStatistics);
+    ConstrainedMapElitesRunner.Run(shouldCreateStatistics, keyCeilings);
 }
 else
 {
-    MapElitesRunner.RunMapElites(shouldCreateStatistics);
+    MapElitesRunner.RunMapElites(shouldCreateStatistics, keyCeilings);
 }
 
 if (shouldCreateStatistics)

@@ -19,22 +19,25 @@ using WFC.Models;
 
 public class ArchiveExplorer : MonoBehaviour
 {
-    [Header("Archive Settings")] 
-    [SerializeField] private int _flowerKey;
+    [Header("Archive Settings")] [SerializeField]
+    private int _flowerKey;
+
     [SerializeField] private int _doorKey;
     [SerializeField] private int _tileTypesUsedKey;
-    
-    [Header("Map Elites Configuration")]
-    [SerializeField, Range(1, 100)] private int _initialIterations = 1;
+
+    [Header("Map Elites Configuration")] [SerializeField, Range(1, 100)]
+    private int _initialIterations = 1;
+
     [SerializeField, Range(0, 100)] private int _mutationIterations;
     [SerializeField, Range(1, 100)] private int _evaluationIterations = 5;
     [SerializeField] private Texture2D _inputTilemap;
-    
-    [Header("Visualizer")]
-    [SerializeField] private Visualizer _visualizer;
+
+    [Header("Visualizer")] [SerializeField]
+    private Visualizer _visualizer;
+
     [SerializeField] private TextAsset _archiveJsonFile;
     [SerializeField] private bool _hasArchive;
-    
+
     private IArchive<Key, Entry, Individual, Behavior> _archive;
 
     private void OnValidate()
@@ -51,24 +54,30 @@ public class ArchiveExplorer : MonoBehaviour
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
         int tileTypeCount = tilemapAnalyzer.TileTypeCount;
         List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+        KeyCeilings keyCeilings = new KeyCeilings(
+            flowerPercentageCeiling: 0.2f,
+            doorPercentageCeiling: 0.05f,
+            variationPercentageCeiling: 1.0f);
 
         IndividualHandlerArgs individualHandlerArgs =
-            IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations);
-        
+            IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations,
+                keyCeilings);
+
         IndividualHandler individualHandler = new(individualHandlerArgs);
-        
-        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log, $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
-        
+
+        MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log,
+            $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
+
         _archive = MapElites.MapElites.Run(individualHandler, args);
-        
+
         PrintKeys();
-        
+
         // SaveToJson(_archive);
 
         int maxDoorBucket = _archive.GetKeys().Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.GetKeys().Max(k => k.FlowerBucket);
         int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.TileTypesUsedBucket);
-        
+
         _doorKey = maxDoorBucket;
         _flowerKey = maxFlowerBucket;
         _tileTypesUsedKey = maxTileTypesUsedKey;
@@ -91,7 +100,7 @@ public class ArchiveExplorer : MonoBehaviour
             Debug.LogWarning("Archive has not been generated.");
             return;
         }
-        
+
         Key key = new Key(_flowerKey, _doorKey, _tileTypesUsedKey);
         if (_archive.TryGet(key, out Entry entry))
         {
@@ -109,11 +118,12 @@ public class ArchiveExplorer : MonoBehaviour
             Debug.LogWarning("Archive has not been generated.");
             return;
         }
-        
+
         int c = 0;
         foreach (Key archiveKey in _archive.GetKeys())
         {
-            print($"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
+            print(
+                $"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
             c++;
         }
     }

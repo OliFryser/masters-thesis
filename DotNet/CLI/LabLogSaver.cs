@@ -54,6 +54,7 @@ namespace CLI
             stringBuilder.AppendLine("-- Individual Handler config --");
             stringBuilder.AppendLine($"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}");
             stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.EvaluationIterations}");
+            stringBuilder.AppendLine($"KeyCeilings: {individualHandlerArgs.KeyCeilings.ToString()}");
             
             return stringBuilder.ToString();
         }

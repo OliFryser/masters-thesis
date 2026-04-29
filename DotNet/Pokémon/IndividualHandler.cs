@@ -20,8 +20,9 @@ namespace Pokémon
         private HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
+        private KeyCeilings KeyCeilings { get; set; }
 
-        protected static int NumberOfBucketsPerAxis => 5;
+        private const int NumberOfBucketsPerAxis = 5;
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -30,6 +31,7 @@ namespace Pokémon
             AdjacencyRules = individualHandlerArgs.AdjacencyRules;
             Coordinates = individualHandlerArgs.Coordinates;
             EvaluationIterations = individualHandlerArgs.EvaluationIterations;
+            KeyCeilings = individualHandlerArgs.KeyCeilings;
             
             DoorTiles = new HashSet<TileType>()
             {
@@ -64,7 +66,7 @@ namespace Pokémon
             foreach (TileWeight tileWeight in individual.Weights)
             {
                 float standardDeviation = 25f;
-                double sampledWeight = normalSampler.Sample(tileWeight.Weight, standardDeviation);
+                double sampledWeight = normalSampler.Sample(tileWeight.Weight, standardDeviation, random);
                 int roundedWeight = (int)Math.Round(sampledWeight);
                 newWeights.Add(new TileWeight(tileWeight.TileType, roundedWeight));
             }
@@ -97,11 +99,18 @@ namespace Pokémon
 
         public Key GetKey(Behavior behavior)
         {
-            int flowerBucket = (int)MathF.Floor(behavior.FlowerPercentage * 5 * NumberOfBucketsPerAxis);
-            int doorBucket = (int)MathF.Floor(behavior.DoorPercentage * 50 * NumberOfBucketsPerAxis);
-            int tileTypesUsedBucket = (int)MathF.Floor(behavior.TileTypesUsedPercentage * 3 * NumberOfBucketsPerAxis);
+            int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
+
+            int doorBucket = GetBucket(behavior.DoorPercentage, KeyCeilings.DoorPercentageCeiling);
+            
+            int tileTypesUsedBucket = GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
 
             return new Key(flowerBucket, doorBucket, tileTypesUsedBucket);
+        }
+
+        private static int GetBucket(float percentage, float percentageCeiling)
+        {
+            return (int)MathF.Floor(percentage / percentageCeiling * NumberOfBucketsPerAxis);
         }
 
         protected Behavior GetBehavior(State state)

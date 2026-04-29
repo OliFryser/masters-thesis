@@ -9,8 +9,8 @@ using WFC.Models;
 
 namespace Pokémon
 {
-    public class ConstrainedIndividualHandler 
-        : IndividualHandler, 
+    public class ConstrainedIndividualHandler
+        : IndividualHandler,
             IConstrainedIndividualHandler<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>
     {
         private float FeasibilityThreshold { get; }
@@ -30,7 +30,7 @@ namespace Pokémon
             {
                 WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
                 State state = WaveFunctionCollapse.Run(args);
-                
+
                 if (state.IsCollapsed)
                 {
                     amountComplete++;
@@ -45,7 +45,7 @@ namespace Pokémon
 
             var entry = new ConstrainedEntry<Individual, Behavior>(
                 individual,
-                averageBehavior, 
+                averageBehavior,
                 fitness,
                 feasibility,
                 FeasibilityThreshold);
@@ -58,7 +58,7 @@ namespace Pokémon
             float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
             float meanDeviation = deviationSum / behaviors.Length;
 
-            return -meanDeviation;
+            return 1f - meanDeviation;
         }
     }
 }

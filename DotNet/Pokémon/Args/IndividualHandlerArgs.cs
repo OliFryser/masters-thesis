@@ -7,30 +7,34 @@ namespace Pokémon.Args
     public readonly struct IndividualHandlerArgs
     {
         public static IndividualHandlerArgs Create(
-            int mapDimensions, 
-            int tileTypeCount, 
+            int mapDimensions,
+            int tileTypeCount,
             List<TileType> tileTypes,
             List<AdjacencyRule> adjacencyRules,
-            int evaluationIterations)
+            int evaluationIterations,
+            KeyCeilings keyCeilings)
         {
-            List<Vector> coordinates = 
+            List<Vector> coordinates =
                 LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
-            
-            return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates, evaluationIterations);
+
+            return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates,
+                evaluationIterations, keyCeilings);
         }
 
-        public IndividualHandlerArgs(
-            int tileTypeCount, 
-            List<TileType> tileTypes, 
+        private IndividualHandlerArgs(
+            int tileTypeCount,
+            List<TileType> tileTypes,
             List<AdjacencyRule> adjacencyRules,
             List<Vector> coordinates,
-            int evaluationIterations)
+            int evaluationIterations,
+            KeyCeilings keyCeilings)
         {
             TileTypeCount = tileTypeCount;
             TileTypes = tileTypes;
             AdjacencyRules = adjacencyRules;
             Coordinates = coordinates;
             EvaluationIterations = evaluationIterations;
+            KeyCeilings = keyCeilings;
         }
 
         public int TileTypeCount { get; }
@@ -38,5 +42,6 @@ namespace Pokémon.Args
         public List<AdjacencyRule> AdjacencyRules { get; }
         public List<Vector> Coordinates { get; }
         public int EvaluationIterations { get; }
+        public KeyCeilings KeyCeilings { get; }
     }
 }
