@@ -6,9 +6,9 @@
             <ui:VisualElement style="flex-grow: 0.1;"/>
             <ui:Label text="Flowers" class="text" style="font-size: 53px;"/>
             <ui:SliderInt label="" value="42" high-value="100" name="FlowersSlider" class="unity-slider"/>
-            <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Label text="Doors" class="text" style="font-size: 53px;"/>
-            <ui:SliderInt label="" value="42" high-value="100" name="DoorsSlider" class="unity-slider"/>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 0.1; display: none;"/>
+            <ui:Label text="Doors" class="text" style="font-size: 53px; display: none;"/>
+            <ui:SliderInt label="" value="42" high-value="100" name="DoorsSlider" class="unity-slider" style="display: none;"/>
             <ui:VisualElement style="flex-grow: 0.1;"/>
             <ui:Label text="Variation" name="Variation" class="text" style="font-size: 53px;"/>
             <ui:SliderInt label="" value="42" high-value="100" name="TileTypesSlider" class="unity-slider"/>

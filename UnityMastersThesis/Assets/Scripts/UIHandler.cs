@@ -21,7 +21,7 @@ public class UIHandler : MonoBehaviour
     public void Initialize(IEnumerable<Key> keys)
     {
         _flowerSlider = _uiDocument.rootVisualElement.Q<SliderInt>("FlowersSlider");
-        _doorsSlider = _uiDocument.rootVisualElement.Q<SliderInt>("DoorsSlider");
+        // _doorsSlider = _uiDocument.rootVisualElement.Q<SliderInt>("DoorsSlider");
         _tileTypesSlider = _uiDocument.rootVisualElement.Q<SliderInt>("TileTypesSlider");
         _uiDocument.rootVisualElement.Q<Button>().clicked += Run;
         
@@ -30,14 +30,14 @@ public class UIHandler : MonoBehaviour
         int minFlowers = _keys.Select(k => k.FlowerBucket).Min();
         int maxFlowers = _keys.Select(k => k.FlowerBucket).Max();
 
-        int minDoors = _keys.Select(k => k.DoorBucket).Min();
-        int maxDoors = _keys.Select(k => k.DoorBucket).Max();
+        // int minDoors = _keys.Select(k => k.DoorBucket).Min();
+        // int maxDoors = _keys.Select(k => k.DoorBucket).Max();
 
         int minTileTypes = _keys.Select(k => k.TileTypesUsedBucket).Min();
         int maxTileTypes = _keys.Select(k => k.TileTypesUsedBucket).Max();
         
        SetSlider(_flowerSlider, minFlowers, maxFlowers);
-       SetSlider(_doorsSlider, minDoors, maxDoors);
+       // SetSlider(_doorsSlider, minDoors, maxDoors);
        SetSlider(_tileTypesSlider, minTileTypes, maxTileTypes);
 
        Run();
@@ -53,7 +53,7 @@ public class UIHandler : MonoBehaviour
     {
         return _keys.MinBy(k =>
             Mathf.Abs(k.FlowerBucket - _flowerSlider.value) + 
-            Mathf.Abs(k.DoorBucket - _doorsSlider.value) + 
+            // Mathf.Abs(k.DoorBucket - _doorsSlider.value) + 
             Mathf.Abs(k.TileTypesUsedBucket - _tileTypesSlider.value));
     }
 
