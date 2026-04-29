@@ -185,5 +185,10 @@ namespace MapElites.Models
                 .Select(e => e.Feasible!.Fitness)
                 .Average();
         }
+
+        public float GetFeasiblePopulationPercentage()
+        {
+            return _archive.Values.Count(e => e.Feasible != null) / (float)_archive.Count;
+        }
     }
 }
