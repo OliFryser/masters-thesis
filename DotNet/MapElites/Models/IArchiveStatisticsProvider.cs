@@ -6,6 +6,6 @@ namespace MapElites.Models
         int BucketCapacity { get; }
         float GetMaxFitness();
         float GetAverageFitness();
-        float GetFeasiblePercentage();
+        int GetFeasiblePopulationSize();
     }
 }

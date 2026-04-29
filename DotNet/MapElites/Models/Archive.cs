@@ -66,7 +66,7 @@ namespace MapElites.Models
         public float GetAverageFitness()
             => _archive.Values.Average(x => x.Fitness);
 
-        public float GetFeasiblePercentage() => 1f;
+        public int GetFeasiblePopulationSize() => Count;
 
         public Dictionary<TKey, TEntry> GetArchiveAsDictionary()
             => _archive.ToDictionary(x => x.Key, x => x.Value);

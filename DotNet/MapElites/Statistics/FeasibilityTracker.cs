@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
 using MapElites.Models;
 
 namespace MapElites.Statistics
 {
     public struct FeasibilityDataPoint
     {
-        public float FeasiblePercentage;
-        public int NumberOfEntries;
-        public override string ToString() => $"{FeasiblePercentage}\t{NumberOfEntries}";
+        public int FeasiblePopulationSize;
+        public int PopulationSize;
+        public override string ToString() => $"{FeasiblePopulationSize}\t{PopulationSize}";
     }
-    
+
     public class FeasibilityTracker : IStatisticsTracker
     {
         private List<FeasibilityDataPoint> FeasibilityValues { get; } = new List<FeasibilityDataPoint>();
@@ -18,8 +19,8 @@ namespace MapElites.Statistics
         {
             FeasibilityDataPoint feasibilityDataPoint = new FeasibilityDataPoint()
             {
-                FeasiblePercentage = archive.GetFeasiblePercentage(),
-                NumberOfEntries = archive.Count
+                FeasiblePopulationSize = archive.GetFeasiblePopulationSize(),
+                PopulationSize = archive.Count
             };
 
             FeasibilityValues.Add(feasibilityDataPoint);
@@ -27,7 +28,10 @@ namespace MapElites.Statistics
 
         public void SaveToFile(string outputPath)
         {
-            FileWriter.WriteStatisticEntriesToFile(outputPath, "Feasibility.txt", "Feasibility", FeasibilityValues);
+            FileWriter.WriteStatisticEntriesToFile(outputPath, "Feasibility.txt", "Population Size",
+                FeasibilityValues.Select(f => f.PopulationSize).ToList());
+            FileWriter.WriteStatisticEntriesToFile(outputPath, "Feasibility.txt", "Feasible Population Size",
+                FeasibilityValues.Select(f => f.FeasiblePopulationSize).ToList());
         }
     }
 }
