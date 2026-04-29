@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace CLI;
 
@@ -8,9 +9,12 @@ public static class PythonRunner
 {
     public static void RunPythonScript(string scriptPath, string outputPath)
     {
+        bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        string python = isWindows ? "python" : "python3";
+        
         ProcessStartInfo startInfo = new()
         {
-            FileName = "python",
+            FileName = python,
             Arguments = $"\"{scriptPath}\" {outputPath}",
             UseShellExecute = false,
             RedirectStandardOutput = true,
