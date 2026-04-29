@@ -9,6 +9,7 @@ using MapElites.Statistics;
 using Pokémon;
 using Pokémon.Args;
 using Pokémon.Json;
+using Pokémon.Statistics;
 using TilemapAnalysis;
 
 namespace CLI.Runners;
@@ -23,9 +24,9 @@ public static class ConstrainedMapElitesRunner
         List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
         int mapDimension = 20;
-        int evaluationIterations = 50;
+        int evaluationIterations = 10;
         int initializationIterations = 20;
-        int mutationIterations = 50;
+        int mutationIterations = 20;
 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
             new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
@@ -58,6 +59,8 @@ public static class ConstrainedMapElitesRunner
                 mapElitesArgs);
 
         stopwatch.Stop();
+        
+        BehaviorSpaceTracker.SaveToFile(archive, IndividualHandler.NumberOfBucketsPerAxis, FilePaths.OutputPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
 
@@ -70,6 +73,7 @@ public static class ConstrainedMapElitesRunner
             mapElitesArgs,
             constrainedIndividualHandlerArgs,
             FilePaths.TilemapName);
+        
 
         // Get the archive like this:
         // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");

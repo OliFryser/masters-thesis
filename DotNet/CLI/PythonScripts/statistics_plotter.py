@@ -1,41 +1,7 @@
-﻿import os
+﻿import matplotlib.pyplot as plt
+from plotting_utils import *
+from behavior_space_plotter import BehaviorSpacePlotter
 
-import matplotlib.pyplot as plt
-import sys
-
-
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-
-
-def parse_text_file(text_file_path: str) -> dict[str, list[float]]:
-    header_to_data: dict[str, list[float]] = {}
-    current_header = None
-
-    try:
-        with open(text_file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-
-                try:
-                    value = float(line)
-                    if current_header:
-                        header_to_data[current_header].append(value)
-                except ValueError:
-                    # It's a Header
-                    current_header = line
-                    if current_header not in header_to_data:
-                        header_to_data[current_header] = []
-
-    except Exception as e:
-        eprint(f"An error occured: {e}")
-
-    return header_to_data
-
-def get_figname(text_file_path) -> str:
-    return os.path.splitext(text_file_path)[0]
 
 def create_plot_from_text_file(text_file_path: str, output_folder_path):
     figname = get_figname(text_file_path)
@@ -111,5 +77,8 @@ if __name__ == "__main__":
     for text_file in text_files:
         if "Feasibility" in text_file:
             create_feasibility_plot(text_file, path)
-            continue
-        create_plot_from_text_file(text_file, path)
+        elif "BehaviorSpace" in text_file:
+            behavior_space_plotter = BehaviorSpacePlotter(text_file, path)
+            behavior_space_plotter.plot_archive_coverage()
+        else:
+            create_plot_from_text_file(text_file, path)

@@ -16,13 +16,12 @@ namespace Pokémon
         protected List<TileType> TileTypes { get; }
         protected List<AdjacencyRule> AdjacencyRules { get; }
         protected List<Vector> Coordinates { get; }
-        private HashSet<TileType> DoorTiles { get; }
         private HashSet<TileType> FlowerTiles { get; }
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
-        private KeyCeilings KeyCeilings { get; set; }
+        private KeyCeilings KeyCeilings { get; }
 
-        private const int NumberOfBucketsPerAxis = 5;
+        public const int NumberOfBucketsPerAxis = 5;
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -32,12 +31,6 @@ namespace Pokémon
             Coordinates = individualHandlerArgs.Coordinates;
             EvaluationIterations = individualHandlerArgs.EvaluationIterations;
             KeyCeilings = individualHandlerArgs.KeyCeilings;
-            
-            DoorTiles = new HashSet<TileType>()
-            {
-                new TileType("8003a2e1d3f57ad878dc5ae8443ba9a1b2012142"),
-                new TileType("f0e58e8686e7e54af622e5bfe3bb38953ed16430"),
-            };
             
             FlowerTiles = new HashSet<TileType>()
             {
@@ -101,12 +94,10 @@ namespace Pokémon
         public Key GetKey(Behavior behavior)
         {
             int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
-
-            int doorBucket = GetBucket(behavior.DoorPercentage, KeyCeilings.DoorPercentageCeiling);
             
             int tileTypesUsedBucket = GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
 
-            return new Key(flowerBucket, doorBucket, tileTypesUsedBucket);
+            return new Key(flowerBucket, tileTypesUsedBucket);
         }
 
         private static int GetBucket(float percentage, float percentageCeiling)
@@ -118,21 +109,18 @@ namespace Pokémon
         {
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
-            var numberOfDoors = tiles.Count(t => DoorTiles.Contains(t.Type));
             var numberOfTileTypes = tiles.Select(t => t.Type).Distinct().Count();
             return new Behavior(
                 numberOfFlowers / (float)Coordinates.Count,
-                numberOfDoors / (float)Coordinates.Count,
                 numberOfTileTypes / (float)TileTypeCount);
         }
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
-            float averageDoorPercentage = behaviors.Select(b => b.DoorPercentage).Average();
             float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.TileTypesUsedPercentage).Average();
 
-            return new Behavior(averageFlowerPercentage, averageDoorPercentage, averageNumberOfTileTypesUsedPercentage);
+            return new Behavior(averageFlowerPercentage, averageNumberOfTileTypesUsedPercentage);
         }
     }
 }
