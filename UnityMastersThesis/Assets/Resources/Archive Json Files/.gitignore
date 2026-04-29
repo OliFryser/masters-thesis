@@ -1,0 +1,8 @@
+# 1. Ignore all files
+*
+
+# 2. But don't ignore the directories themselves
+!*/
+
+# 3. Now that Git can see inside folders, protect your .gitkeep files
+!**/.gitkeep
