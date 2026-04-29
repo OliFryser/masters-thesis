@@ -9,7 +9,7 @@ namespace MapElites.Statistics
         
         public void AddPoint(IArchiveStatisticsProvider archive)
         {
-            CoverageValues.Add(archive.Count / (float)archive.BucketCapacity);
+            CoverageValues.Add(archive.GetFeasiblePopulationSize() / (float)archive.BucketCapacity);
         }
 
         public void SaveToFile(string outputPath)

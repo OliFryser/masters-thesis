@@ -24,8 +24,8 @@ public static class ConstrainedMapElitesRunner
 
         int mapDimension = 20;
         int evaluationIterations = 10;
-        int initializationIterations = 1;
-        int mutationIterations = 0;
+        int initializationIterations = 10;
+        int mutationIterations = 50;
 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
             new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
@@ -35,7 +35,7 @@ public static class ConstrainedMapElitesRunner
                     adjacencyRules,
                     evaluationIterations, 
                     keyCeilings),
-                0.5f);
+                0.75f);
 
         List<IStatisticsTracker> statisticsTrackers =
             shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker(), new FeasibilityTracker()] : [];

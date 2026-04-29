@@ -91,7 +91,7 @@ namespace MapElites.Models
                 first.Feasibility > second.Feasibility ? first : second;
         }
 
-        public int Count => _archive.Count(kvp => kvp.Value.Feasible != null);
+        public int Count => _archive.Count;
         
         [JsonProperty]
         public int BucketCapacity { get; }

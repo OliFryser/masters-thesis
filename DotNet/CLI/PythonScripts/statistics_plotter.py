@@ -44,7 +44,7 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
         os.path.join(output_folder_path, text_file_path)
     )
 
-    plt.figure(figsize=(10, 6))
+    # plt.figure(figsize=(10, 6))
 
     for header, values in header_to_data.items():
         if values:
@@ -53,6 +53,7 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
     plt.title(figname)
     plt.xlabel("Iteration")
     plt.ylabel(figname)
+    plt.grid(True, linestyle=':', alpha=0.6)
     plt.legend()
 
     plt.savefig(output_file_path)
@@ -76,15 +77,17 @@ def create_feasibility_plot(text_file_path: str, output_folder_path: str) -> Non
 
     plt.plot(iterations, pop_size_points, label=pop_size_header, color='black', linestyle='--')
     plt.plot(iterations, feasible_pop_points, label=feasible_pop_header, color='blue')
-    plt.fill_between(iterations, pop_size_points, color='blue', alpha=0.3)
+    plt.fill_between(iterations, feasible_pop_points, color='blue', alpha=0.3)
 
     plt.xlabel('Generations')
     plt.ylabel('Population Size')
-    plt.title('MAP-Elites: Population vs. Feasibility')
+    plt.title('Population vs. Feasibility')
     plt.legend()
     plt.grid(True, linestyle=':', alpha=0.6)
-
-    plt.savefig('population_growth_feasibility.png')
+    plt.savefig(output_file_path)
+    plt.close()
+    
+    print(f"Successfully saved plot to: {output_file_path}")
 
 
 def get_text_files(folder_path: str) -> list[str]:
@@ -107,5 +110,6 @@ if __name__ == "__main__":
     text_files = get_text_files(path)
     for text_file in text_files:
         if "Feasibility" in text_file:
-            create_feasbility_plot(text_file, path)
+            create_feasibility_plot(text_file, path)
+            continue
         create_plot_from_text_file(text_file, path)
