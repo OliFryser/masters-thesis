@@ -186,7 +186,7 @@ namespace MapElites.Models
                 .Average();
         }
 
-        public float GetFeasiblePopulationPercentage()
+        public float GetFeasiblePercentage()
         {
             return _archive.Values.Count(e => e.Feasible != null) / (float)_archive.Count;
         }
