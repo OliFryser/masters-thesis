@@ -3,8 +3,6 @@ using System.Linq;
 using MapElites;
 using MapElites.Models;
 using Pokémon.Args;
-using WFC;
-using WFC.Args;
 using WFC.Models;
 
 namespace Pokémon

@@ -1,9 +1,6 @@
 using BenchmarkDotNet.Attributes;
-using Domain.Models;
 using WFC;
-using WFC.Args;
 using WFC.Models;
-using WFC.Tests;
 using WFC.Tests.Helpers;
 
 namespace Benchmarks;
