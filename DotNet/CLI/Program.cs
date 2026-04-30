@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using CLI;
 using CLI.Runners;
+using Domain.Models;
+using MapElites.Args;
+using MapElites.Statistics;
 using Pokémon.Args;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -28,18 +31,60 @@ if (args.Length >= 1)
     }
 }
 
-KeyCeilings keyCeilings = new KeyCeilings(
+List<IStatisticsTracker> statisticsTrackers =
+    shouldCreateStatistics
+        ? constraintMode
+            ? [new FitnessTracker(), new CoverageTracker()]
+            : [new FitnessTracker(), new CoverageTracker(), new FeasibilityTracker()]
+        : [];
+
+KeyCeilings keyCeilings = new(
     flowerPercentageCeiling: 0.2f,
     doorPercentageCeiling: 0.05f,
     variationPercentageCeiling: 1.0f);
 
+int mapDimensions = 20;
+int evaluationIterations = 10;
+int initializationIterations = 60;
+int mutationIterations = 60;
+int numberOfBucketsPerAxis = 10;
+double standardDeviation = 25.0;
+
+float feasibilityThreshold = 0.75f;
+float smoothingFactor = 22f;
+
+MapElitesArgs mapElitesArgs = new(
+    initializationIterations,
+    mutationIterations,
+    Console.WriteLine,
+    FilePaths.OutputPath,
+    statisticsTrackers);
+
+using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
+List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
+int tileTypeCount = tilemapAnalyzer.TileTypeCount;
+List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+
+IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
+    mapDimensions,
+    tileTypeCount,
+    tileTypes,
+    adjacencyRules,
+    evaluationIterations,
+    keyCeilings,
+    numberOfBucketsPerAxis,
+    standardDeviation);
+
 if (constraintMode)
 {
-    ConstrainedMapElitesRunner.Run(shouldCreateStatistics, keyCeilings);
+    ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
+        new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
+
+    ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
 }
 else
 {
-    MapElitesRunner.RunMapElites(shouldCreateStatistics, keyCeilings);
+    MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
 }
 
 if (shouldCreateStatistics)
@@ -59,8 +104,8 @@ void RunPythonStatistics()
 
 void RunTilemapAnalysis()
 {
-    TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
-    HashSet<string> uniqueHashes = new HashSet<string>();
+    TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
+    HashSet<string> uniqueHashes = new();
 
     HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites
         .Where(image => uniqueHashes.Add(image.Hash())).ToHashSet();
