@@ -2,7 +2,7 @@ namespace Domain.Models
 {
     public struct EmptyTile
     {
-        public EmptyTile(int x, int y, int options, float entropy)
+        public EmptyTile(int x, int y, int options, double entropy)
         {
             Position = new Vector(x, y);
             Options = options;
@@ -11,6 +11,6 @@ namespace Domain.Models
 
         public Vector Position { get; set; }
         public int Options { get; set; }
-        public float Entropy { get; set; }
+        public double Entropy { get; set; }
     }
 }

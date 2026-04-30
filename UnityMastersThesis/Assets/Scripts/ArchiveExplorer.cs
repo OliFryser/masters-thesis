@@ -73,12 +73,9 @@ public class ArchiveExplorer : MonoBehaviour
         PrintKeys();
 
         // SaveToJson(_archive);
-
-        int maxDoorBucket = _archive.GetKeys().Max(k => k.DoorBucket);
         int maxFlowerBucket = _archive.GetKeys().Max(k => k.FlowerBucket);
         int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.TileTypesUsedBucket);
-
-        _doorKey = maxDoorBucket;
+        
         _flowerKey = maxFlowerBucket;
         _tileTypesUsedKey = maxTileTypesUsedKey;
     }
@@ -101,7 +98,7 @@ public class ArchiveExplorer : MonoBehaviour
             return;
         }
 
-        Key key = new Key(_flowerKey, _doorKey, _tileTypesUsedKey);
+        Key key = new Key(_flowerKey, _tileTypesUsedKey);
         if (_archive.TryGet(key, out Entry entry))
         {
             WfcArgs args = entry.Individual.GetWfcArgs(_inputTilemap);
@@ -123,7 +120,7 @@ public class ArchiveExplorer : MonoBehaviour
         foreach (Key archiveKey in _archive.GetKeys())
         {
             print(
-                $"Key {c}: Flower {archiveKey.FlowerBucket}, Door {archiveKey.DoorBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
+                $"Key {c}: Flower {archiveKey.FlowerBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
             c++;
         }
     }

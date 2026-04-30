@@ -37,11 +37,11 @@ public static class LevelFactory
     /// <returns></returns>
     internal static Level CreateDummyLevelWithUnitWeights(int cellCount, int tileTypeCount)
     {
-        int[] weights = Enumerable.Repeat(1, tileTypeCount).ToArray();
+        double[] weights = Enumerable.Repeat(1.0, tileTypeCount).ToArray();
         return CreateDummyLevel(cellCount, weights);
     }
 
-    internal static Level CreateDummyLevel(int cellCount, int[] weights)
+    internal static Level CreateDummyLevel(int cellCount, double[] weights)
     {
         var tileTypeCount = weights.Length;
        
@@ -79,14 +79,14 @@ public static class LevelFactory
             neighborIndices[i] = new Neighbors(new());
         }
         
-        float sumOfWeightsLogWeightsNumber = weights.Sum(w => MathF.Log2(w) * w);
-        int sumOfWeightsNumber = weights.Sum();
-        int[] sumOfWeights = Enumerable.Repeat(sumOfWeightsNumber, cellCount).ToArray();
-        float[] sumOfWeightsLogWeights = 
+        double sumOfWeightsLogWeightsNumber = weights.Sum(w => Math.Log2(w) * w);
+        double sumOfWeightsNumber = weights.Sum();
+        double[] sumOfWeights = Enumerable.Repeat(sumOfWeightsNumber, cellCount).ToArray();
+        double[] sumOfWeightsLogWeights = 
             Enumerable.Repeat(sumOfWeightsLogWeightsNumber, cellCount).ToArray();
 
-        float[] entropy = 
-            Enumerable.Repeat(MathF.Log2(sumOfWeightsNumber) - sumOfWeightsLogWeightsNumber / sumOfWeightsNumber, cellCount).ToArray();
+        double[] entropy = 
+            Enumerable.Repeat(Math.Log2(sumOfWeightsNumber) - sumOfWeightsLogWeightsNumber / sumOfWeightsNumber, cellCount).ToArray();
         
         return new Level(
             rules: rules,

@@ -23,10 +23,10 @@ public class UpdateSumOfWeightsTests
         Assert.That(level.SumOfWeightsLogWeights[0], Is.EqualTo(sumOfWeightsLogWeightsBefore));
     }
     
-    [TestCase(new int[] { 0 })]
-    [TestCase(new int[] { 1 })]
-    [TestCase(new int[] { 2 })]
-    public void GivenExcludedOptions_ChangesSumOfWeightsByWeightOfOption(int[] weights)
+    [TestCase(new double[] { 0.0 })]
+    [TestCase(new double[] { 1.0 })]
+    [TestCase(new double[] { 2.0 })]
+    public void GivenExcludedOptions_ChangesSumOfWeightsByWeightOfOption(double[] weights)
     {
         // Arrange
         var level = LevelFactory.CreateDummyLevel(1, weights);
@@ -38,7 +38,7 @@ public class UpdateSumOfWeightsTests
         
         // Assert
         var expectedSumOfWeights = sumOfWeightsBefore - level.Weights[0];
-        var expectedSumOfWeightsLogWeights = sumOfWeightsLogWeightsBefore - MathF.Log2(level.Weights[0]) * level.Weights[0];
+        var expectedSumOfWeightsLogWeights = sumOfWeightsLogWeightsBefore - Math.Log2(level.Weights[0]) * level.Weights[0];
         Assert.That(level.SumOfWeights[0], Is.EqualTo(expectedSumOfWeights));
         Assert.That(level.SumOfWeightsLogWeights[0], Is.EqualTo(expectedSumOfWeightsLogWeights));
     }

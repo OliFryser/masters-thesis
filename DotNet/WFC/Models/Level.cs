@@ -10,13 +10,13 @@ namespace WFC.Models
             TileType[] tileTypes, 
             Vector[] position, 
             BitArray[] options, 
-            float[] entropy,
+            double[] entropy,
             Neighbors[] neighborIndices, 
             bool[] collapsed, 
             int totalTileTypeCount, 
-            int[] weights, 
-            int[] sumOfWeights, 
-            float[] sumOfWeightsLogWeights)
+            double[] weights, 
+            double[] sumOfWeights, 
+            double[] sumOfWeightsLogWeights)
         {
             TotalTileTypeCount = totalTileTypeCount;
             TileTypes = tileTypes;
@@ -36,15 +36,15 @@ namespace WFC.Models
         // Index by tile
         public TileRules[] Rules { get; }
         public TileType[] TileTypes { get; }
-        public int[] Weights { get; }
+        public double[] Weights { get; }
 
         // Index by cell 
         public Vector[] Position { get; }
         public BitArray[] Options { get; }
-        public float[] Entropy { get; }
+        public double[] Entropy { get; }
         public Neighbors[] NeighborIndices { get; }
         public bool[] Collapsed { get; }
-        public int[] SumOfWeights { get; }
-        public float[] SumOfWeightsLogWeights { get; }
+        public double[] SumOfWeights { get; }
+        public double[] SumOfWeightsLogWeights { get; }
     }
 }

@@ -59,9 +59,11 @@ public class Visualizer : MonoBehaviour
             Vector3Int position = new Vector3Int(tile.Position.X, -tile.Position.Y);
             _tilemap.SetTile(position, _emptyTile);
 
+            float truncatedEntropy = (float)tile.Entropy;
+            
             Color color = tile.Options == 0
                 ? Color.magenta
-                : new Color(tile.Entropy, tile.Entropy, tile.Entropy, 1f);
+                : new Color(truncatedEntropy, truncatedEntropy, truncatedEntropy, 1f);
 
             _tilemap.SetColor(position, color);
         }
