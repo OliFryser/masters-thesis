@@ -47,6 +47,11 @@ int mapDimensions = 20;
 int evaluationIterations = 10;
 int initializationIterations = 60;
 int mutationIterations = 60;
+int numberOfBucketsPerAxis = 10;
+double standardDeviation = 25.0;
+
+float feasibilityThreshold = 0.75f;
+float smoothingFactor = 22f;
 
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
@@ -60,31 +65,25 @@ List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet()
 int tileTypeCount = tilemapAnalyzer.TileTypeCount;
 List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
 
+IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
+    mapDimensions,
+    tileTypeCount,
+    tileTypes,
+    adjacencyRules,
+    evaluationIterations,
+    keyCeilings,
+    numberOfBucketsPerAxis,
+    standardDeviation);
+
 if (constraintMode)
 {
-    ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
-        new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
-                mapDimensions,
-                tileTypeCount,
-                tileTypes,
-                adjacencyRules,
-                evaluationIterations,
-                keyCeilings),
-            0.75f,
-            22f);
+    ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
+        new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
 
     ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
 }
 else
 {
-    IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
-        mapDimensions,
-        tileTypeCount,
-        tileTypes,
-        adjacencyRules,
-        evaluationIterations,
-        keyCeilings);
-
     MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
 }
 

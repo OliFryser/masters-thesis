@@ -25,7 +25,7 @@ public static class ConstrainedMapElitesRunner
 
         stopwatch.Stop();
 
-        BehaviorSpaceTracker.SaveToFile(archive, IndividualHandler.NumberOfBucketsPerAxis, FilePaths.OutputPath);
+        BehaviorSpaceTracker.SaveToFile(archive, constrainedIndividualHandler.NumberOfBucketsPerAxis, FilePaths.OutputPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
 

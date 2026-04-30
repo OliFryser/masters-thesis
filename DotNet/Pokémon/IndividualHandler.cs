@@ -20,8 +20,8 @@ namespace Pokémon
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
         private KeyCeilings KeyCeilings { get; }
-
-        public const int NumberOfBucketsPerAxis = 5;
+        public int NumberOfBucketsPerAxis { get; }
+        public double StandardDeviation { get; }
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -31,12 +31,14 @@ namespace Pokémon
             Coordinates = individualHandlerArgs.Coordinates;
             EvaluationIterations = individualHandlerArgs.EvaluationIterations;
             KeyCeilings = individualHandlerArgs.KeyCeilings;
+            NumberOfBucketsPerAxis = individualHandlerArgs.NumberOfBucketsPerAxis;
+            StandardDeviation = individualHandlerArgs.StandardDeviation;
 
             FlowerTiles = new HashSet<TileType>()
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
-
+            
             BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
         }
 
@@ -58,8 +60,7 @@ namespace Pokémon
             NormalSampler normalSampler = new NormalSampler();
             foreach (TileWeight tileWeight in individual.Weights)
             {
-                float standardDeviation = 25f;
-                double sampledWeight = normalSampler.Sample(tileWeight.Weight, standardDeviation, random);
+                double sampledWeight = normalSampler.Sample(tileWeight.Weight, StandardDeviation, random);
                 int roundedWeight = (int)Math.Round(sampledWeight);
                 int clampedWeight = Math.Max(0, roundedWeight);
                 newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
@@ -104,7 +105,7 @@ namespace Pokémon
             return new Key(flowerBucket, tileTypesUsedBucket);
         }
 
-        private static int GetBucket(float percentage, float percentageCeiling)
+        private int GetBucket(float percentage, float percentageCeiling)
         {
             return (int)MathF.Floor(percentage / percentageCeiling * NumberOfBucketsPerAxis);
         }
