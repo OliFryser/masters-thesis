@@ -54,6 +54,8 @@ namespace CLI
             stringBuilder.AppendLine($"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}");
             stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.EvaluationIterations}");
             stringBuilder.AppendLine($"KeyCeilings: {individualHandlerArgs.KeyCeilings.ToString()}");
+            stringBuilder.AppendLine($"NumberOfBucketsPerAxis: {individualHandlerArgs.NumberOfBucketsPerAxis}");
+            stringBuilder.AppendLine($"StandardDeviation: {individualHandlerArgs.StandardDeviation}");
             
             return stringBuilder.ToString();
         }
