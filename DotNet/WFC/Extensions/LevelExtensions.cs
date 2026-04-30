@@ -195,7 +195,7 @@ namespace WFC.Extensions
                     continue;
 
                 int options = level.Options[i].PopCount();
-                float entropy = level.Entropy[i];
+                double entropy = level.Entropy[i];
                 tiles.Add(new EmptyTile(level.Position[i].X, level.Position[i].Y, options, entropy));
             }
 

@@ -21,16 +21,16 @@ public class CalculateEntropyTests
     public static void CalculateEntropy_ReturnsCorrectShannonEntropy()
     {
         // Arrange
-        int[] weights = [1, 1, 1];
+        double[] weights = [1.0, 1.0, 1.0];
 
         var sumOfWeights = weights.Sum();
-        var sumOfWeightsLogWeight =  weights.Sum(w => w * MathF.Log2(x: sumOfWeights));
+        var sumOfWeightsLogWeight =  weights.Sum(w => w * Math.Log2(x: sumOfWeights));
             
         // Act
         var actual = EntropyCalculation.CalculateEntropy(sumOfWeights: sumOfWeights, sumOfWeightsLogWeight: sumOfWeightsLogWeight);
 
         // Assert
-        var expected = MathF.Log2(x: weights.Sum()) - sumOfWeightsLogWeight / sumOfWeights;
-        Assert.That(actual: actual, expression: Is.EqualTo(expected));
+        var expected = Math.Log2(x: weights.Sum()) - sumOfWeightsLogWeight / sumOfWeights;
+        Assert.That(actual, Is.EqualTo(expected).Within(0.000000000000001));
     }
 }

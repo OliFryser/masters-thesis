@@ -4,19 +4,19 @@ namespace WFC
 {
     internal static class EntropyCalculation
     {
-        internal static float CalculateEntropy(int sumOfWeights, float sumOfWeightsLogWeight)
+        internal static double CalculateEntropy(double sumOfWeights, double sumOfWeightsLogWeight)
         {
             if (sumOfWeights <= 0)
                 return 0;
 
-            return MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
+            return Math.Log(sumOfWeights, 2f) - sumOfWeightsLogWeight / sumOfWeights;
         }
 
-        internal static float WeightLogWeight(int weight)
+        internal static double WeightLogWeight(double weight)
         {
             return weight <= 0
                 ? 0f
-                : weight * MathF.Log(weight, 2f);
+                : weight * Math.Log(weight, 2f);
         }
     }
 }
