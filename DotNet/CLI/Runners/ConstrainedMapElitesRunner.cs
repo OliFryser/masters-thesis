@@ -1,56 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using Domain.Models;
 using MapElites.Args;
 using MapElites.Models;
-using MapElites.Statistics;
 using Pokémon;
 using Pokémon.Args;
 using Pokémon.Json;
 using Pokémon.Statistics;
-using TilemapAnalysis;
 
 namespace CLI.Runners;
 
 public static class ConstrainedMapElitesRunner
 {
-    public static void Run(bool shouldCreateStatistics, KeyCeilings keyCeilings)
+    public static void Run(MapElitesArgs mapElitesArgs,
+        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs)
     {
-        using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(FilePaths.TilemapPath);
-        List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-        int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-        List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
-
-        int mapDimension = 20;
-        int evaluationIterations = 10;
-        int initializationIterations = 20;
-        int mutationIterations = 20;
-
-        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs =
-            new ConstrainedIndividualHandlerArgs(IndividualHandlerArgs.Create(
-                    mapDimension,
-                    tileTypeCount,
-                    tileTypes,
-                    adjacencyRules,
-                    evaluationIterations, 
-                    keyCeilings),
-                0.75f,
-                22f);
-
-        List<IStatisticsTracker> statisticsTrackers =
-            shouldCreateStatistics ? [new FitnessTracker(), new CoverageTracker(), new FeasibilityTracker()] : [];
-        
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
-        MapElitesArgs mapElitesArgs = new(
-            initializationIterations,
-            mutationIterations,
-            Console.WriteLine,
-            FilePaths.OutputPath,
-            statisticsTrackers);
-        
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
@@ -59,12 +24,13 @@ public static class ConstrainedMapElitesRunner
                 mapElitesArgs);
 
         stopwatch.Stop();
-        
+
         BehaviorSpaceTracker.SaveToFile(archive, IndividualHandler.NumberOfBucketsPerAxis, FilePaths.OutputPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
 
-        JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive, mapDimension);
+        JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
+            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions);
 
         Console.WriteLine("Saved archive to JSON");
 
@@ -73,7 +39,7 @@ public static class ConstrainedMapElitesRunner
             mapElitesArgs,
             constrainedIndividualHandlerArgs,
             FilePaths.TilemapName);
-        
+
 
         // Get the archive like this:
         // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");

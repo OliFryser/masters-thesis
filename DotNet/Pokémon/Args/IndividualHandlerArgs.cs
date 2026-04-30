@@ -18,7 +18,7 @@ namespace Pokémon.Args
                 LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
 
             return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates,
-                evaluationIterations, keyCeilings);
+                mapDimensions, evaluationIterations, keyCeilings);
         }
 
         private IndividualHandlerArgs(
@@ -26,6 +26,7 @@ namespace Pokémon.Args
             List<TileType> tileTypes,
             List<AdjacencyRule> adjacencyRules,
             List<Vector> coordinates,
+            int mapDimensions,
             int evaluationIterations,
             KeyCeilings keyCeilings)
         {
@@ -33,6 +34,7 @@ namespace Pokémon.Args
             TileTypes = tileTypes;
             AdjacencyRules = adjacencyRules;
             Coordinates = coordinates;
+            MapDimensions = mapDimensions;
             EvaluationIterations = evaluationIterations;
             KeyCeilings = keyCeilings;
         }
@@ -41,6 +43,7 @@ namespace Pokémon.Args
         public List<TileType> TileTypes { get; }
         public List<AdjacencyRule> AdjacencyRules { get; }
         public List<Vector> Coordinates { get; }
+        public int MapDimensions { get; }
         public int EvaluationIterations { get; }
         public KeyCeilings KeyCeilings { get; }
     }
