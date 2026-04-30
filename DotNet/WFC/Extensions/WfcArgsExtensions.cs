@@ -28,14 +28,6 @@ namespace WFC.Extensions
 
             Vector[] positions = args.Coordinates.ToArray();
 
-            BitArray[] options = new BitArray[numberOfCells];
-            for (int i = 0; i < numberOfCells; i++)
-            {
-                options[i] = new BitArray(numberOfTiles);
-                options[i].SetAll(true);
-            }
-
-
             Neighbors[] neighborIndices = CreateNeighborsArray(positions);
 
             bool[] collapsed = new bool[numberOfCells];
@@ -45,6 +37,16 @@ namespace WFC.Extensions
             {
                 int tileTypeIndex = tileTypeToIndex[tileWeight.TileType];
                 weights[tileTypeIndex] = tileWeight.Weight;
+            }
+            
+            BitArray[] options = new BitArray[numberOfCells];
+            for (int i = 0; i < numberOfCells; i++)
+            {
+                options[i] = new BitArray(numberOfTiles);
+                for (int j = 0; j < options[i].Length; j++)
+                {
+                    options[i][j] = weights[j] > 0.000001;
+                }
             }
 
             double sumOfWeights = weights.Sum();

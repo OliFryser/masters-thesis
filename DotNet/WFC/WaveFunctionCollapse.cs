@@ -109,7 +109,7 @@ namespace WFC
             level.Collapsed[cellToCollapseIndex] = true;
             
             // Everything is known about the cell
-            level.Entropy[cellToCollapseIndex] = 0f;
+            level.Entropy[cellToCollapseIndex] = 0.0;
             
             BitArray excludedOptions = oldOptions.Xor(level.Options[cellToCollapseIndex]);
             if (excludedOptions.HasAnySetBits())
