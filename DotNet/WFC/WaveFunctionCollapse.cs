@@ -64,7 +64,7 @@ namespace WFC
         /// <returns>Index of chosen cell.</returns>
         internal static int PickCell(Level level, Random random)
         {
-            float lowestEntropy = float.PositiveInfinity;
+            double lowestEntropy = float.PositiveInfinity;
             List<int> lowestEntropyIndices = new List<int>();
             for (int i = 0; i < level.Entropy.Length; i++)
             {
@@ -73,7 +73,7 @@ namespace WFC
                     continue;
                 }
 
-                float entropy = level.Entropy[i];
+                double entropy = level.Entropy[i];
                 const float threshold = 0.1f;
                 bool amongLowestEntropies = Math.Abs(entropy - lowestEntropy) < threshold;
                 if (amongLowestEntropies)

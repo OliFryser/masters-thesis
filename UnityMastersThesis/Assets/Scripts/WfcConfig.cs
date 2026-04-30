@@ -72,6 +72,6 @@ public struct SerializedTileWeight
     public TileWeight ToTileWeight()
         => new TileWeight(new TileType(TileTypeId), Weight);
 
-    public int Weight;
+    public double Weight;
     public string TileTypeId;
 }

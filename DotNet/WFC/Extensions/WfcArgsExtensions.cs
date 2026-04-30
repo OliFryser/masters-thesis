@@ -40,22 +40,22 @@ namespace WFC.Extensions
 
             bool[] collapsed = new bool[numberOfCells];
 
-            int[] weights = new int[numberOfTiles];
+            double[] weights = new double[numberOfTiles];
             foreach (TileWeight tileWeight in args.Weights)
             {
                 int tileTypeIndex = tileTypeToIndex[tileWeight.TileType];
                 weights[tileTypeIndex] = tileWeight.Weight;
             }
 
-            int sumOfWeights = weights.Sum();
-            int[] sumOfWeightsArray = Enumerable.Repeat(sumOfWeights, numberOfCells).ToArray();
+            double sumOfWeights = weights.Sum();
+            double[] sumOfWeightsArray = Enumerable.Repeat(sumOfWeights, numberOfCells).ToArray();
 
-            float sumOfWeightsLogWeights = weights.Sum(EntropyCalculation.WeightLogWeight);
-            float[] sumOfWeightsLogWeightsArray = Enumerable.Repeat(sumOfWeightsLogWeights, numberOfCells).ToArray();
+            double sumOfWeightsLogWeights = weights.Sum(EntropyCalculation.WeightLogWeight);
+            double[] sumOfWeightsLogWeightsArray = Enumerable.Repeat(sumOfWeightsLogWeights, numberOfCells).ToArray();
 
-            float[] entropy =
+            double[] entropy =
                 Enumerable.Repeat(
-                    MathF.Log(sumOfWeights, 2f) - sumOfWeightsLogWeights / sumOfWeights, numberOfCells).ToArray();
+                    Math.Log(sumOfWeights, 2f) - sumOfWeightsLogWeights / sumOfWeights, numberOfCells).ToArray();
 
             Level level = new Level(
                 rules,

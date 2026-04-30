@@ -87,13 +87,13 @@ namespace WFC.Extensions
         
         public static int GetRandomWeightedSetIndex(
             this BitArray bitArray,
-            int[] weights, 
-            int sumOfWeights, 
+            double[] weights, 
+            double sumOfWeights, 
             Random random)
         {
-            int roll = random.Next(sumOfWeights);
+            double roll = random.NextDouble() * sumOfWeights;
 
-            int sum = 0;
+            double sum = 0;
             for (int i = 0; i < bitArray.Count; i++)
             {
                 if (!bitArray[i]) 
