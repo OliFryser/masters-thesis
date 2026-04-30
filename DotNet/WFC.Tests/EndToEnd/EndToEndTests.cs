@@ -2,7 +2,6 @@ using Domain.Models;
 using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
-using WFC.Output;
 using WFC.Tests.Helpers;
 
 namespace WFC.Tests.EndToEnd;
