@@ -3,4 +3,4 @@
 using BenchmarkDotNet.Running;
 using Benchmarks;
 
-BenchmarkRunner.Run<OptionsBenchmarker>();
+BenchmarkRunner.Run<ParallelQueryBenchmarker>();

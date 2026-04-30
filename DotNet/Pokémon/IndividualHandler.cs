@@ -10,7 +10,7 @@ using WFC.Models;
 
 namespace Pokémon
 {
-    public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior> 
+    public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior>
     {
         private int TileTypeCount { get; }
         protected List<TileType> TileTypes { get; }
@@ -31,7 +31,7 @@ namespace Pokémon
             Coordinates = individualHandlerArgs.Coordinates;
             EvaluationIterations = individualHandlerArgs.EvaluationIterations;
             KeyCeilings = individualHandlerArgs.KeyCeilings;
-            
+
             FlowerTiles = new HashSet<TileType>()
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
@@ -70,32 +70,36 @@ namespace Pokémon
 
         public virtual Entry Evaluate(Individual individual)
         {
-            int amountComplete = 0;
-            Behavior[] behaviors = new Behavior[EvaluationIterations];
-
-            for (int i = 0; i < EvaluationIterations; i++)
-            {
-                WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
-                State state = WaveFunctionCollapse.Run(args);
-                
-                if (state.IsCollapsed)
-                {
-                    amountComplete++;
-                }
-
-                behaviors[i] = GetBehavior(state);
-            }
+            State[] results = SampleStates(individual);
+            
+            float fitness = results.Count(state => state.IsCollapsed);
+            
+            Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            return new Entry(individual, averageBehavior, amountComplete);
+            
+            return new Entry(individual, averageBehavior, fitness);
+        }
+
+        protected State[] SampleStates(Individual individual)
+        {
+            return Enumerable.Range(0, EvaluationIterations)
+                .AsParallel()
+                .Select(i =>
+                {
+                    WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
+                    return WaveFunctionCollapse.Run(args);
+                })
+                .ToArray();
         }
 
 
         public Key GetKey(Behavior behavior)
         {
             int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
-            
-            int tileTypesUsedBucket = GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
+
+            int tileTypesUsedBucket =
+                GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
 
             return new Key(flowerBucket, tileTypesUsedBucket);
         }

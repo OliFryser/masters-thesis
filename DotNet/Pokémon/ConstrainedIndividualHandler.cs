@@ -25,27 +25,19 @@ namespace Pokémon
 
         public new ConstrainedEntry<Individual, Behavior> Evaluate(Individual individual)
         {
-            int amountComplete = 0;
-            Behavior[] behaviors = new Behavior[EvaluationIterations];
-
-            for (int i = 0; i < EvaluationIterations; i++)
-            {
-                WfcArgs args = new WfcArgs(Coordinates, TileTypes, AdjacencyRules, individual.Weights, i);
-                State state = WaveFunctionCollapse.Run(args);
-
-                if (state.IsCollapsed)
-                {
-                    amountComplete++;
-                }
-
-                behaviors[i] = GetBehavior(state);
-            }
+            State[] results = SampleStates(individual);
+            
+            Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
+            
             float fitness = GetFitness(behaviors, averageBehavior, SmoothingFactor);
+            
+            int amountComplete = results.Count(state => state.IsCollapsed);
+            
             float feasibility = amountComplete / (float)EvaluationIterations;
 
-            var entry = new ConstrainedEntry<Individual, Behavior>(
+            ConstrainedEntry<Individual, Behavior> entry = new ConstrainedEntry<Individual, Behavior>(
                 individual,
                 averageBehavior,
                 fitness,
