@@ -190,5 +190,17 @@ namespace MapElites.Models
         {
             return _archive.Values.Count(e => e.Feasible != null);
         }
+
+        public float GetReliability()
+        {
+            if (Count == 0 || BucketCapacity == 0)
+            {
+                return 0f;
+            }
+            
+            float sumOfFitness = _archive.Values.Sum(e => e.Feasible?.Fitness ?? 0f);
+            float averageFitnessAcrossAllBuckets = sumOfFitness / BucketCapacity;
+            return averageFitnessAcrossAllBuckets / GetMaxFitness();
+        }
     }
 }
