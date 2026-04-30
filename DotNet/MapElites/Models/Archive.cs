@@ -67,6 +67,18 @@ namespace MapElites.Models
             => _archive.Values.Average(x => x.Fitness);
 
         public int GetFeasiblePopulationSize() => Count;
+        
+        public float GetReliability()
+        {
+            if (Count == 0 || BucketCapacity == 0)
+            {
+                return 0f;
+            }
+            
+            float sumOfFitness = _archive.Values.Sum(e => e.Fitness);
+            float averageFitnessAcrossAllBuckets = sumOfFitness / BucketCapacity;
+            return averageFitnessAcrossAllBuckets / GetMaxFitness();
+        }
 
         public Dictionary<TKey, TEntry> GetArchiveAsDictionary()
             => _archive.ToDictionary(x => x.Key, x => x.Value);

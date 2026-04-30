@@ -37,12 +37,18 @@ if (args.Length >= 1)
     }
 }
 
-List<IStatisticsTracker> statisticsTrackers =
-    shouldCreateStatistics
-        ? constraintMode
-            ? [new FitnessTracker(), new CoverageTracker()]
-            : [new FitnessTracker(), new CoverageTracker(), new FeasibilityTracker()]
-        : [];
+List<IStatisticsTracker> statisticsTrackers;
+if (shouldCreateStatistics)
+{
+    statisticsTrackers = [new FitnessTracker(), new CoverageTracker(), new ReliabilityTracker()];
+    if (constraintMode) statisticsTrackers.Add(new FeasibilityTracker());
+}
+else
+{
+    statisticsTrackers = [];
+}
+
+
 
 KeyCeilings keyCeilings = new(
     flowerPercentageCeiling: 0.2f,
@@ -53,7 +59,7 @@ int mapDimensions = 20;
 int evaluationIterations = 10;
 int initializationIterations = 60;
 int mutationIterations = 60;
-int numberOfBucketsPerAxis = 10;
+int numberOfBucketsPerAxis = 21;
 double standardDeviation = 25.0;
 
 float feasibilityThreshold = 0.75f;

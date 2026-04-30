@@ -7,5 +7,6 @@ namespace MapElites.Models
         float GetMaxFitness();
         float GetAverageFitness();
         int GetFeasiblePopulationSize();
+        float GetReliability();
     }
 }
