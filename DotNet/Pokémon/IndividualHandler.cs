@@ -49,7 +49,7 @@ namespace Pokémon
             // Technically, it would be more correct to use the total tile count from the
             // input image, but does it matter, since the weights are relative?
             List<TileWeight> weights = 
-                TileTypes.Select(t => new TileWeight(t, random.NextDouble() * TileTypeCount)).ToList();
+                TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
             return new Individual(weights, 0);
         }
@@ -62,7 +62,7 @@ namespace Pokémon
             foreach (TileWeight tileWeight in individual.Weights)
             {
                 double sampledWeight = normalSampler.Sample(tileWeight.Weight, StandardDeviation, random);
-                double clampedWeight = Math.Max(0.0, sampledWeight);
+                double clampedWeight = Math.Clamp(sampledWeight, 0.0, 1.0);
                 newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
             }
 

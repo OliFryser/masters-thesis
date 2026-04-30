@@ -17,6 +17,7 @@ Directory.CreateDirectory(FilePaths.OutputPath);
 
 bool shouldCreateStatistics = true;
 bool constraintMode = true;
+bool hyperTunerMode = false;
 
 if (args.Length >= 1)
 {
@@ -28,6 +29,11 @@ if (args.Length >= 1)
     if (args.Contains("--regular") || args.Contains("-r"))
     {
         constraintMode = false;
+    }
+    
+    if (args.Contains("--hyper") || args.Contains("-h"))
+    {
+        hyperTunerMode = true;
     }
 }
 
@@ -75,11 +81,24 @@ IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     numberOfBucketsPerAxis,
     standardDeviation);
 
+ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
+    new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
+
+if (hyperTunerMode)
+{
+    // Disable logging when hyper tuning
+    mapElitesArgs = new MapElitesArgs(
+        initializationIterations,
+        mutationIterations,
+        _ => {},
+        FilePaths.OutputPath,
+        statisticsTrackers);
+    RunHyperParameterTuning();
+    return;
+}
+
 if (constraintMode)
 {
-    ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
-        new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
-
     ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
 }
 else
@@ -117,4 +136,10 @@ void RunTilemapAnalysis()
     Console.WriteLine($"Adjacency rule count: {ruleCount}");
 
     int symmetryCount = tilemapAnalyzer.GetSymmetryRules().Count;
+}
+
+void RunHyperParameterTuning()
+{
+    var tunedSigma = HyperParameterTuner.FindBestSigma(mapElitesArgs, constrainedIndividualHandlerArgs);
+    Console.WriteLine($"Best sigma found: {tunedSigma}");
 }

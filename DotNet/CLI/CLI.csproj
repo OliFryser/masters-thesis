@@ -20,5 +20,9 @@
     <ItemGroup>
       <Folder Include="Output\MapElites\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="GeneticSharp" Version="3.1.4" />
+    </ItemGroup>
     
 </Project>
