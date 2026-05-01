@@ -88,9 +88,20 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         foreach (Visualizer visualizer in _visualizers)
         {
             WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
-                
+
             State state = WaveFunctionCollapse.Run(args);
-                
+
+            const int limit = 100;
+            int c = 0;
+            while (!state.IsCollapsed)
+            {
+                state = WaveFunctionCollapse.Run(args);
+                if (c++ >= limit)
+                {
+                    break;
+                }
+            }
+
             visualizer.Display(state);
         }
     }
