@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 
 
 def eprint(*args, **kwargs):
@@ -36,10 +37,5 @@ def get_figname(text_file_path) -> str:
     return os.path.splitext(text_file_path)[0]
 
 
-def generate_ticks(start, end, step):
-    ticks = []
-    current = start
-    while current <= end:
-        ticks.append(round(current, 4))
-        current += step
-    return ticks
+def generate_ticks(start, end, num_ticks):
+    return np.linspace(start, end, num_ticks)

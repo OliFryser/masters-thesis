@@ -22,11 +22,14 @@ namespace Pokémon.Statistics
                 
                 if (!entry.IsFeasible)
                 {
+                    entryStatistics.Add(
+                        $"{key.FlowerBucket} {key.TileTypesUsedBucket} {-1} {entry.Feasibility}"
+                            .Replace(',', '.'));
                     continue;
                 }
                 
                 entryStatistics.Add(
-                    $"{key.FlowerBucket} {key.TileTypesUsedBucket} {entry.Fitness}"
+                    $"{key.FlowerBucket} {key.TileTypesUsedBucket} {entry.Fitness} {-1}"
                         .Replace(',', '.'));
             }
 
