@@ -59,9 +59,12 @@ public class ArchiveExplorer : MonoBehaviour
             doorPercentageCeiling: 0.05f,
             variationPercentageCeiling: 1.0f);
 
+        int numberOfBuckets = 5;
+        float standardDeviation = 1f;
+        
         IndividualHandlerArgs individualHandlerArgs =
             IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations,
-                keyCeilings);
+                keyCeilings, numberOfBuckets, standardDeviation);
 
         IndividualHandler individualHandler = new(individualHandlerArgs);
 

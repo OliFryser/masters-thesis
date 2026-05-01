@@ -38,7 +38,7 @@ namespace Pokémon
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
-            
+
             BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
         }
 
@@ -100,7 +100,7 @@ namespace Pokémon
             int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
 
             int tileTypesUsedBucket =
-                GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
+                GetBucket(behavior.Variation, KeyCeilings.VariationPercentageCeiling);
 
             return new Key(flowerBucket, tileTypesUsedBucket);
         }
@@ -114,10 +114,23 @@ namespace Pokémon
         {
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
-            var numberOfTileTypes = tiles.Select(t => t.Type).Distinct().Count();
-            return new Behavior(
-                numberOfFlowers / (float)Coordinates.Count,
-                numberOfTileTypes / (float)TileTypeCount);
+
+            float shannonEntropy = tiles
+                .GroupBy(tile => tile.Type.Id)
+                .Select(grouping =>
+                {
+                    float count = grouping.Count();
+                    float p = count / TileTypeCount;
+
+                    return -p * MathF.Log(p, 2);
+                })
+                .Sum();
+
+            float maxEntropy = MathF.Log(TileTypeCount, 2);
+
+            float variation = shannonEntropy / maxEntropy;
+
+            return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
