@@ -35,7 +35,6 @@ namespace Pokémon.Json.Converters
                 {
                     throw new ArgumentNullException(nameof(culture));
                 }
-                return base.ConvertFrom(context, culture, value);
 #endif
                 return base.ConvertFrom(context, culture, value);
             }

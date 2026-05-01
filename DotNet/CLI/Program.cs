@@ -57,9 +57,9 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 20;
-int initializationIterations = 50;
+int initializationIterations = 100;
 int mutationIterations = 100;
-int numberOfBucketsPerAxis = 10;
+int numberOfBucketsPerAxis = 5;
 double standardDeviation = 0.5f;
 
 float feasibilityThreshold = 0.75f;

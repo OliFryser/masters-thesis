@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using MapElites.Args;
 using MapElites.Models;
 using Pokémon;
@@ -28,9 +29,21 @@ public static class ConstrainedMapElitesRunner
         BehaviorSpaceTracker.SaveToFile(archive, constrainedIndividualHandler.NumberOfBucketsPerAxis, FilePaths.OutputPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
+        
+        foreach (Key key in archive.GetKeys())
+        {
+            if (archive.TryGet(key, out ConstrainedEntry<Individual, Behavior>? entry))
+            {
+                float variation = entry.Behavior.Variation;
+                Console.WriteLine($"{key}: {variation}");
+            }
+        }
 
         JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
             constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions);
+
+        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
+        Console.WriteLine($"Read archive from JSON, key count: {saveData.Archive.GetKeys().Count()}");
 
         Console.WriteLine("Saved archive to JSON");
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Domain.Models;
 using MapElites;
@@ -46,7 +47,7 @@ namespace Pokémon
         {
             Random random = new Random();
 
-            List<TileWeight> weights = 
+            List<TileWeight> weights =
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
             return new Individual(weights, 0);
@@ -70,13 +71,13 @@ namespace Pokémon
         public virtual Entry Evaluate(Individual individual)
         {
             State[] results = SampleStates(individual);
-            
+
             float fitness = results.Count(state => state.IsCollapsed);
-            
+
             Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            
+
             return new Entry(individual, averageBehavior, fitness);
         }
 
@@ -118,7 +119,7 @@ namespace Pokémon
                 .Select(grouping =>
                 {
                     float count = grouping.Count();
-                    float p = count / TileTypeCount;
+                    float p = count / tiles.Count;
 
                     return -p * MathF.Log(p, 2);
                 })
@@ -134,9 +135,9 @@ namespace Pokémon
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
-            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.Variation ).Average();
+            float averageVariation = behaviors.Select(b => b.Variation).Average();
 
-            return new Behavior(averageFlowerPercentage, averageNumberOfTileTypesUsedPercentage);
+            return new Behavior(averageFlowerPercentage, averageVariation);
         }
     }
 }
