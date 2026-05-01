@@ -60,7 +60,7 @@ int evaluationIterations = 20;
 int initializationIterations = 50;
 int mutationIterations = 100;
 int numberOfBucketsPerAxis = 10;
-double standardDeviation = 0.5f;
+double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 22f;

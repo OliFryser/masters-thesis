@@ -155,6 +155,16 @@ namespace MapElites.Models
             return entries.Sample().Individual;
         }
 
+        public TEntry SampleEntry()
+        {
+            if (_archive.Count == 0) 
+                throw new InvalidOperationException("Archive has no entries.");
+
+            Entries? entries = _archive.GetRandomElement().Value;
+
+            return entries.Sample();
+        }
+
         public IEnumerable<TKey> GetKeys()
         {
             return _archive.Keys;

@@ -49,7 +49,7 @@ namespace Pokémon
             List<TileWeight> weights = 
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
-            return new Individual(weights, 0);
+            return new Individual(weights);
         }
 
         public Individual Mutate(Individual individual)
@@ -64,7 +64,7 @@ namespace Pokémon
                 newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
             }
 
-            return new Individual(newWeights, 0);
+            return new Individual(newWeights);
         }
 
         public virtual Entry Evaluate(Individual individual)
