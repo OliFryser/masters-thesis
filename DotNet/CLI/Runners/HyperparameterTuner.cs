@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GeneticSharp;
 using MapElites.Args;
 using MapElites.Models;
@@ -26,19 +27,24 @@ public static class HyperParameterTuner
             double sigma = floatingPointChromosome.ToFloatingPoints()[0];
 
             ConstrainedIndividualHandlerArgs newIndividualHandlerArgs = GetNewArgsWithSigma(constrainedIndividualHandlerArgs, sigma);
-            return RunMapElitesTrial(sigma, mapElitesArgs, newIndividualHandlerArgs);
+            return RunMapElitesTrial(mapElitesArgs, newIndividualHandlerArgs);
         });
 
-        Population population = new Population(10, 20, chromosome);
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(
-            population, 
-            fitness, 
-            new EliteSelection(), 
-            new UniformCrossover(), 
-            new UniformMutation())
-        {
-            Termination = new GenerationNumberTermination(50),
-        };
+        int populationMin = 10;
+        int populationMax = 20;
+        int numberOfGenerations = 30;
+
+        var population = new Population(populationMin, populationMax, chromosome); 
+        var geneticAlgorithm = new GeneticAlgorithm(
+                population, 
+                fitness, 
+                new TournamentSelection(), // Less aggressive than Elite, maintains diversity
+                new UniformCrossover(0.5f), 
+                new UniformMutation())
+            {
+                Termination = new GenerationNumberTermination(numberOfGenerations),
+                TaskExecutor = new ParallelTaskExecutor() 
+            };
         
         geneticAlgorithm.GenerationRan += (sender, e) =>
         {
@@ -48,27 +54,34 @@ public static class HyperParameterTuner
 
             Console.WriteLine($"--- Generation {geneticAlgorithm.GenerationsNumber} ---");
             Console.WriteLine($"Current Best Sigma: {bestSigma:F6}");
-            Console.WriteLine($"QD-Score: {fitness:F2}");
+            Console.WriteLine($"Reliability from MAP-Elites: {fitness:F2}");
         };
         
+        Console.WriteLine("-- Running hyper parameter tuner -- ");
+        Console.WriteLine($"Population Minimum: {populationMin}");
+        Console.WriteLine($"Population Maximum: {populationMax}");
+        Console.WriteLine($"Number of Generations: {numberOfGenerations}");
+        
         geneticAlgorithm.Start();
-
+        
         double bestSigma = (geneticAlgorithm.BestChromosome as FloatingPointChromosome).ToFloatingPoints()[0];
         return bestSigma;
     }
 
     private static double RunMapElitesTrial(
-        double sigma, 
         MapElitesArgs mapElitesArgs, 
         ConstrainedIndividualHandlerArgs individualHandlerArgs)
     {
         ConstrainedIndividualHandler individualHandler =
             new ConstrainedIndividualHandler(individualHandlerArgs);
-        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = MapElites.MapElites
-            .RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(individualHandler,
-                mapElitesArgs);
 
-        return archive.GetAverageFitness();
+        return Enumerable
+            .Range(0, 3)
+            .AsParallel()
+            .Select(_ => MapElites.MapElites
+                .RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(individualHandler,
+                    mapElitesArgs))
+            .Average(a => a.GetReliability());
     }
 
     private static ConstrainedIndividualHandlerArgs GetNewArgsWithSigma(

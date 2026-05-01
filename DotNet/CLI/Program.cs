@@ -56,11 +56,11 @@ KeyCeilings keyCeilings = new(
     variationPercentageCeiling: 1.0f);
 
 int mapDimensions = 20;
-int evaluationIterations = 10;
-int initializationIterations = 60;
-int mutationIterations = 60;
-int numberOfBucketsPerAxis = 21;
-double standardDeviation = 25.0;
+int evaluationIterations = 20;
+int initializationIterations = 50;
+int mutationIterations = 100;
+int numberOfBucketsPerAxis = 10;
+double standardDeviation = 0.5f;
 
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 22f;
@@ -98,7 +98,7 @@ if (hyperTunerMode)
         mutationIterations,
         _ => {},
         FilePaths.OutputPath,
-        statisticsTrackers);
+        []);
     RunHyperParameterTuning();
     return;
 }
