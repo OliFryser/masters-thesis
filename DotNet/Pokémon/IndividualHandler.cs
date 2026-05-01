@@ -38,7 +38,7 @@ namespace Pokémon
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
-            
+
             BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
         }
 
@@ -48,7 +48,7 @@ namespace Pokémon
 
             // Technically, it would be more correct to use the total tile count from the
             // input image, but does it matter, since the weights are relative?
-            List<TileWeight> weights = 
+            List<TileWeight> weights =
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble() * TileTypeCount)).ToList();
 
             return new Individual(weights, 0);
@@ -72,13 +72,13 @@ namespace Pokémon
         public virtual Entry Evaluate(Individual individual)
         {
             State[] results = SampleStates(individual);
-            
+
             float fitness = results.Count(state => state.IsCollapsed);
-            
+
             Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            
+
             return new Entry(individual, averageBehavior, fitness);
         }
 
@@ -100,7 +100,7 @@ namespace Pokémon
             int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
 
             int tileTypesUsedBucket =
-                GetBucket(behavior.TileTypesUsedPercentage, KeyCeilings.VariationPercentageCeiling);
+                GetBucket(behavior.Variation, KeyCeilings.VariationPercentageCeiling);
 
             return new Key(flowerBucket, tileTypesUsedBucket);
         }
@@ -114,16 +114,29 @@ namespace Pokémon
         {
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
-            var numberOfTileTypes = tiles.Select(t => t.Type).Distinct().Count();
-            return new Behavior(
-                numberOfFlowers / (float)Coordinates.Count,
-                numberOfTileTypes / (float)TileTypeCount);
+
+            float shannonEntropy = tiles
+                .GroupBy(tile => tile.Type.Id)
+                .Select(grouping =>
+                {
+                    float count = grouping.Count();
+                    float p = count / TileTypeCount;
+
+                    return -p * MathF.Log(p, 2);
+                })
+                .Sum();
+
+            float maxEntropy = MathF.Log(TileTypeCount, 2);
+
+            float variation = shannonEntropy / maxEntropy;
+
+            return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
-            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.TileTypesUsedPercentage).Average();
+            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.Variation).Average();
 
             return new Behavior(averageFlowerPercentage, averageNumberOfTileTypesUsedPercentage);
         }
