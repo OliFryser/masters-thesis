@@ -46,8 +46,6 @@ namespace Pokémon
         {
             Random random = new Random();
 
-            // Technically, it would be more correct to use the total tile count from the
-            // input image, but does it matter, since the weights are relative?
             List<TileWeight> weights = 
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
@@ -136,7 +134,7 @@ namespace Pokémon
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
-            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.TileTypesUsedPercentage).Average();
+            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.Variation ).Average();
 
             return new Behavior(averageFlowerPercentage, averageNumberOfTileTypesUsedPercentage);
         }
