@@ -32,9 +32,14 @@ namespace Pokémon.Emitters
         
         private ConstrainedEntry<Individual, Behavior> _meanEntry;
         private CMA _cma;
-        
+
+        private int _stepsSinceLastAddedSolutions;
         public int GeneratedSolutions { get; private set; }
-        public bool IsConverged => _cma.IsConverged(); 
+
+        // TODO: Should this be a hyperParameter?
+        private const int _stagnationThreshold = 20;
+
+        public bool ShouldReset() => _cma.IsConverged() || _stepsSinceLastAddedSolutions > _stagnationThreshold;
         
         public Emitter(ConstrainedEntry<Individual, Behavior> meanEntry, double startingStepSize, IScorer scorer)
         {
@@ -54,6 +59,7 @@ namespace Pokémon.Emitters
 
         public void Reset(ConstrainedEntry<Individual, Behavior> meanEntry)
         {
+            _stepsSinceLastAddedSolutions = 0;
             _meanEntry = meanEntry;
             List<double> meanWeights = meanEntry.Individual.Weights.Select(w => w.Weight).ToList();
             _cma = new CMA(meanWeights, _startingStepSize, bounds: _bounds);
@@ -70,10 +76,13 @@ namespace Pokémon.Emitters
             return new Individual(newTileWeights);
         }
 
-        public void Tell(ConstrainedEntry<Individual, Behavior> entry)
+        public void Tell(ConstrainedEntry<Individual, Behavior> entry, bool wasSaved)
         {
             GeneratedSolutions++;
-            
+            if (wasSaved)
+            {
+                _stepsSinceLastAddedSolutions = 0;
+            }
             double score = _scorer.GetScore(entry, _meanEntry);
 
             EmitterBufferEntry bufferEntry = new EmitterBufferEntry(entry.Individual, score);

@@ -75,9 +75,9 @@ double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generation
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 22f;
 
-int optimizationEmitters = 5;
-int feasibilityEmitters = 5;
-int randomDirectionEmitters = 5;
+int optimizationEmitters = 1;
+int feasibilityEmitters = 1;
+int randomDirectionEmitters = 1;
 double startingStepSize = 0.3;
 
 MapElitesArgs mapElitesArgs = new(

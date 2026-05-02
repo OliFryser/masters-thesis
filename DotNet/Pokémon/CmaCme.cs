@@ -70,7 +70,7 @@ namespace Pokémon
 
                 Emitter? currentEmitter = emitters.MinBy(e => e.GeneratedSolutions);
 
-                if (currentEmitter.IsConverged)
+                if (currentEmitter.ShouldReset())
                 {
                     logger("Resetting emitter");
                     currentEmitter.Reset(archive.SampleEntry());
@@ -79,8 +79,8 @@ namespace Pokémon
                 Individual individual = currentEmitter.Ask();
                 ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
                 Key key = individualHandler.GetKey(entry.Behavior);
-                archive.TryAdd(key, entry);
-                currentEmitter.Tell(entry);
+                bool wasSaved = archive.TryAdd(key, entry);
+                currentEmitter.Tell(entry, wasSaved);
             }
 
             mapElitesArgs.StatisticsTrackers.ForEach(s => s.SaveToFile(mapElitesArgs.StatisticsOutputPath));
