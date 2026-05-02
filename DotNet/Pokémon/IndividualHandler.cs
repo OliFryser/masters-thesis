@@ -127,7 +127,12 @@ namespace Pokémon
             float maxEntropy = MathF.Log(TileTypeCount, 2);
 
             float variation = shannonEntropy / maxEntropy;
-
+            
+            // Something is wrong in the entropy calculation, so we can get values above 1 and below 0.
+            // As a hack I clamp it
+            // TODO: Figure out what is wrong with the entropy calculation
+            variation = Math.Clamp(variation, 0.0f, 1.0f);
+            
             return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
 

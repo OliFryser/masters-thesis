@@ -7,9 +7,8 @@ namespace Pokémon.Emitters.Scorers
     public class RandomDirectionScorer : IScorer
     {
         private Vector<double> _randomDirection;
-        private Vector<double> _meanBehavior;
         
-        public void Initialize(ConstrainedEntry<Individual, Behavior> meanEntry)
+        public void Reset()
         {
             Random random = new Random();
          
@@ -19,13 +18,15 @@ namespace Pokémon.Emitters.Scorers
             double y = Math.Sin(theta);
 
             _randomDirection = Vector<double>.Build.Dense(new[] { x, y });
-            _meanBehavior = GetVectorFromBehavior(meanEntry.Behavior);
         }
 
-        public double GetScore(ConstrainedEntry<Individual, Behavior> entry)
+        public double GetScore(
+            ConstrainedEntry<Individual, Behavior> entry, 
+            ConstrainedEntry<Individual, Behavior> meanEntry)
         {
+            Vector<double> meanBehavior = GetVectorFromBehavior(meanEntry.Behavior);
             Vector<double> newBehavior = GetVectorFromBehavior(entry.Behavior);
-            Vector<double> behaviorDirection = newBehavior - _meanBehavior;
+            Vector<double> behaviorDirection = newBehavior - meanBehavior;
             return _randomDirection.DotProduct(behaviorDirection);
         }
 

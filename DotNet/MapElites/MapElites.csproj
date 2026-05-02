@@ -18,8 +18,4 @@
     <ItemGroup>
       <PackageReference Include="CMAES.NET" Version="1.0.1" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Emitters\" />
-    </ItemGroup>
 </Project>

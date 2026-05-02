@@ -25,32 +25,46 @@ namespace Pokémon.Emitters
     {
         private readonly List<TileType> _tileTypes; 
         private readonly List<EmitterBufferEntry> _buffer = new List<EmitterBufferEntry>();
+        private readonly IScorer _scorer;
+        private readonly Matrix<double>? _bounds;
+        private readonly Func<IScorer> _createScorer;
+        private readonly double _startingStepSize;
+        
+        private ConstrainedEntry<Individual, Behavior> _meanEntry;
         private CMA _cma;
-        private IScorer _scorer;
-
+        
+        public int GeneratedSolutions { get; private set; }
+        public bool IsConverged => _cma.IsConverged(); 
+        
         public Emitter(ConstrainedEntry<Individual, Behavior> meanEntry, double startingStepSize, IScorer scorer)
         {
-            var bounds = Matrix<double>.Build.Dense(meanEntry.Individual.Weights.Count, 2);
+            _startingStepSize = startingStepSize;
+            _scorer = scorer;
+            _bounds = Matrix<double>.Build.Dense(meanEntry.Individual.Weights.Count, 2);
             for (int i = 0; i < meanEntry.Individual.Weights.Count; i++)
             {
-                bounds[i, 0] = 0.0; // Lower
-                bounds[i, 1] = 1.0; // Upper
+                _bounds[i, 0] = 0.0; // Lower
+                _bounds[i, 1] = 1.0; // Upper
             }
 
             _tileTypes = meanEntry.Individual.Weights.Select(tw => tw.TileType).ToList();
             
+            Reset(meanEntry);
+        }
+
+        public void Reset(ConstrainedEntry<Individual, Behavior> meanEntry)
+        {
+            _meanEntry = meanEntry;
             List<double> meanWeights = meanEntry.Individual.Weights.Select(w => w.Weight).ToList();
-            _cma = new CMA(meanWeights, startingStepSize, bounds: bounds);
-            
-            _scorer = scorer;
-            _scorer.Initialize(meanEntry);
+            _cma = new CMA(meanWeights, _startingStepSize, bounds: _bounds);
+            _scorer.Reset();
         }
 
         public Individual Ask()
         {
-            var newWeights = _cma.Ask();
+            Vector<double>? newWeights = _cma.Ask();
 
-            var newTileWeights = 
+            List<TileWeight> newTileWeights = 
                 newWeights.Zip(_tileTypes, (w, t) => new TileWeight(t, w)).ToList();
 
             return new Individual(newTileWeights);
@@ -58,13 +72,20 @@ namespace Pokémon.Emitters
 
         public void Tell(ConstrainedEntry<Individual, Behavior> entry)
         {
-            var bufferEntry = new EmitterBufferEntry(entry.Individual, _scorer.GetScore(entry));
+            GeneratedSolutions++;
+            
+            double score = _scorer.GetScore(entry, _meanEntry);
+
+            EmitterBufferEntry bufferEntry = new EmitterBufferEntry(entry.Individual, score);
             _buffer.Add(bufferEntry);
             if (_buffer.Count >= _cma.PopulationSize)
             {
-                var solutions = 
-                    _buffer.Select(e => new Tuple<Vector<double>, double>(e.Weights, e.Score)).ToList();
+                // The CMA.net code uses OrderBy, 
+                // which assumes SMALLER values are BETTER (Minimization).
+                List<Tuple<Vector<double>, double>> solutions = 
+                    _buffer.Select(e => new Tuple<Vector<double>, double>(e.Weights, -e.Score)).ToList();
                 _cma.Tell(solutions);
+                _buffer.Clear();
             }
         }
     }

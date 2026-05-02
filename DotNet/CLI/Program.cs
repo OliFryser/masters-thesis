@@ -14,10 +14,12 @@ using TilemapAnalysis;
 using TilemapAnalysis.Extensions;
 
 Directory.CreateDirectory(FilePaths.OutputPath);
+Directory.CreateDirectory(FilePaths.DataPath);
 
 bool shouldCreateStatistics = true;
-bool constraintMode = true;
-bool hyperTunerMode = false;
+
+// No args (default) = CmaCme
+RunMode runMode = RunMode.CmaCme;
 
 if (args.Length >= 1)
 {
@@ -28,12 +30,19 @@ if (args.Length >= 1)
 
     if (args.Contains("--regular") || args.Contains("-r"))
     {
-        constraintMode = false;
+        runMode = RunMode.MapElites;
     }
-    
-    if (args.Contains("--hyper") || args.Contains("-h"))
+    else if (args.Contains("--hyper") || args.Contains("-h"))
     {
-        hyperTunerMode = true;
+        runMode = RunMode.HyperParameterTuning;
+    }
+    else if (args.Contains("--constrained") || args.Contains("-c"))
+    {
+        runMode = RunMode.ConstrainedMapElites;
+    }
+    else if (args.Contains("--tilemap") || args.Contains("-t"))
+    {
+        runMode = RunMode.TileMapAnalysis;
     }
 }
 
@@ -41,14 +50,15 @@ List<IStatisticsTracker> statisticsTrackers;
 if (shouldCreateStatistics)
 {
     statisticsTrackers = [new FitnessTracker(), new CoverageTracker(), new ReliabilityTracker()];
-    if (constraintMode) statisticsTrackers.Add(new FeasibilityTracker());
+    if (runMode is RunMode.ConstrainedMapElites or RunMode.CmaCme)
+    {
+        statisticsTrackers.Add(new FeasibilityTracker());
+    }
 }
 else
 {
     statisticsTrackers = [];
 }
-
-
 
 KeyCeilings keyCeilings = new(
     flowerPercentageCeiling: 0.2f,
@@ -57,19 +67,24 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 20;
-int initializationIterations = 50;
-int mutationIterations = 100;
+int initializationIterations = 100;
+int mutationIterations = 1000;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 22f;
 
+int optimizationEmitters = 5;
+int feasibilityEmitters = 5;
+int randomDirectionEmitters = 5;
+double startingStepSize = 0.3;
+
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
     mutationIterations,
     Console.WriteLine,
-    FilePaths.OutputPath,
+    FilePaths.DataPath,
     statisticsTrackers);
 
 using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
@@ -90,28 +105,34 @@ IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
 ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
     new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
 
-if (hyperTunerMode)
+switch (runMode)
 {
-    // Disable logging when hyper tuning
-    mapElitesArgs = new MapElitesArgs(
-        initializationIterations,
-        mutationIterations,
-        _ => {},
-        FilePaths.OutputPath,
-        []);
-    RunHyperParameterTuning();
-    return;
+    case RunMode.MapElites:
+        MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
+        break;
+    case RunMode.ConstrainedMapElites:
+        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
+        break;
+    case RunMode.CmaCme:
+        var emitterConfiguration =
+            new EmitterConfiguration(optimizationEmitters, feasibilityEmitters, randomDirectionEmitters);
+        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize);
+        break;
+    case RunMode.TileMapAnalysis:
+        RunTilemapAnalysis();
+        break;
+    case RunMode.HyperParameterTuning:
+        mapElitesArgs = new MapElitesArgs(
+            mapElitesArgs.InitializationIterations,
+            mapElitesArgs.InitializationIterations,
+            _ => {},
+            mapElitesArgs.StatisticsOutputPath,
+            []);
+        RunHyperParameterTuning();
+        return;
+    default:
+        throw new ArgumentOutOfRangeException();
 }
-
-if (constraintMode)
-{
-    ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
-}
-else
-{
-    MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
-}
-
 if (shouldCreateStatistics)
 {
     RunPythonStatistics();

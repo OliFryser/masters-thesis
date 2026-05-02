@@ -14,9 +14,10 @@ class Entry:
 
 class BehaviorSpacePlotter:
 
-    def __init__(self, text_file: str, output_path: str):
+    def __init__(self, text_file: str, output_path: str, data_folder_path: str):
         self.text_file = text_file
         self.output_path = output_path
+        self.data_folder_path = data_folder_path
         
         self.entries: list[Entry] = []
 
@@ -27,7 +28,7 @@ class BehaviorSpacePlotter:
         self.__parse_text_file()
 
     def __parse_text_file(self):
-        text_file_path = os.path.join(self.output_path, self.text_file)
+        text_file_path = os.path.join(self.data_folder_path, self.text_file)
         try:
             with open(text_file_path, "r", encoding="utf-8") as f:
                 f.readline() # skip header

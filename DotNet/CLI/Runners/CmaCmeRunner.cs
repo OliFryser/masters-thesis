@@ -9,19 +9,23 @@ using Pokémon.Statistics;
 
 namespace CLI.Runners;
 
-public static class ConstrainedMapElitesRunner
+public static class CmaCmeRunner
 {
-    public static void Run(MapElitesArgs mapElitesArgs,
-        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs)
+    public static void Run(
+        MapElitesArgs mapElitesArgs, 
+        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs,
+        EmitterConfiguration emitterConfiguration,
+        double startingStepSize)
     {
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
+        CmaCmeArgs cmaCmeArgs = 
+            new(mapElitesArgs, constrainedIndividualHandler, emitterConfiguration, startingStepSize);
+        
         ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
-            MapElites.MapElites.RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
-                constrainedIndividualHandler,
-                mapElitesArgs);
+            CmaCme.Run(cmaCmeArgs);
 
         stopwatch.Stop();
 
@@ -36,13 +40,8 @@ public static class ConstrainedMapElitesRunner
 
         LabLogSaver.SaveLog(
             $"{FilePaths.OutputPath}/Lab.log",
-            mapElitesArgs,
+            cmaCmeArgs,
             constrainedIndividualHandlerArgs,
             FilePaths.TilemapName);
-
-
-        // Get the archive like this:
-        // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
-        // saveData.Archive;
     }
 }
