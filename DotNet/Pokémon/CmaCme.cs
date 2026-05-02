@@ -80,6 +80,7 @@ namespace Pokémon
                 ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
                 Key key = individualHandler.GetKey(entry.Behavior);
                 bool wasSaved = archive.TryAdd(key, entry);
+                mapElitesArgs.StatisticsTrackers.ForEach(s => s.AddPoint(archive));
                 currentEmitter.Tell(entry, wasSaved);
             }
 
