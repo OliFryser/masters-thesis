@@ -72,7 +72,7 @@ namespace Pokémon
                            $"Max fitness {archive.GetMaxFitness()}");
                 }
 
-                Emitter? currentEmitter = emitters.MinBy(e => e.GeneratedSolutions);
+                Emitter currentEmitter = emitters.MinBy(e => e.GeneratedSolutions);
 
                 if (currentEmitter.ShouldReset())
                 {
