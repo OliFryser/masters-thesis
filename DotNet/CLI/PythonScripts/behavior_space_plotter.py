@@ -96,7 +96,7 @@ class BehaviorSpacePlotter:
             extent=extent,
             aspect='auto',
             vmin=0.0,
-            vmax=1.0,
+            vmax=0.75,
             alpha=0.5,
             zorder=2)
         
