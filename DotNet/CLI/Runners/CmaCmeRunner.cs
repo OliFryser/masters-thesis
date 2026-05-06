@@ -15,14 +15,15 @@ public static class CmaCmeRunner
         MapElitesArgs mapElitesArgs, 
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs,
         EmitterConfiguration emitterConfiguration,
-        double startingStepSize)
+        double startingStepSize,
+        int stagnationThreshold)
     {
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         CmaCmeArgs cmaCmeArgs = 
-            new(mapElitesArgs, constrainedIndividualHandler, emitterConfiguration, startingStepSize);
+            new(mapElitesArgs, constrainedIndividualHandler, emitterConfiguration, startingStepSize, stagnationThreshold);
         
         ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
             CmaCme.Run(cmaCmeArgs);

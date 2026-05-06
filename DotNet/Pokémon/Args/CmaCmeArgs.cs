@@ -29,16 +29,20 @@ namespace Pokémon.Args
         public ConstrainedIndividualHandler ConstrainedIndividualHandler { get; }
         public EmitterConfiguration EmitterConfiguration { get; }
         public double StartingStepSize { get; }
+        public int StagnationThreshold { get; }
         
         public CmaCmeArgs(
             MapElitesArgs mapElitesArgs, 
             ConstrainedIndividualHandler constrainedIndividualHandler, 
-            EmitterConfiguration emitterConfiguration, double startingStepSize)
+            EmitterConfiguration emitterConfiguration, 
+            double startingStepSize,
+            int stagnationThreshold)
         {
             MapElitesArgs = mapElitesArgs;
             ConstrainedIndividualHandler = constrainedIndividualHandler;
             EmitterConfiguration = emitterConfiguration;
             StartingStepSize = startingStepSize;
+            StagnationThreshold = stagnationThreshold;
         }
     }
 }

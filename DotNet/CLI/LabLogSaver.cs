@@ -58,6 +58,7 @@ namespace CLI
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"Starting Step Size: {cmaCmeArgs.StartingStepSize}");
+            stringBuilder.AppendLine($"Stagnation Threshold: {cmaCmeArgs.StagnationThreshold}");
             stringBuilder.AppendLine(cmaCmeArgs.EmitterConfiguration.ToString());
             return stringBuilder.ToString();
         }

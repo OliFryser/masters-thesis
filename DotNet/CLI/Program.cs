@@ -67,7 +67,7 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 50;
-int initializationIterations = 500;
+int initializationIterations = 250;
 int mutationIterations = 2500;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
@@ -75,10 +75,11 @@ double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generation
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 5f;
 
-int optimizationEmitters = 1;
-int feasibilityEmitters = 1;
-int randomDirectionEmitters = 1;
+int optimizationEmitters = 2;
+int feasibilityEmitters = 10;
+int randomDirectionEmitters = 3;
 double startingStepSize = 0.3;
+int stagnationThreshold = 30;
 
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
@@ -116,7 +117,7 @@ switch (runMode)
     case RunMode.CmaCme:
         var emitterConfiguration =
             new EmitterConfiguration(optimizationEmitters, feasibilityEmitters, randomDirectionEmitters);
-        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize);
+        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold);
         break;
     case RunMode.TileMapAnalysis:
         RunTilemapAnalysis();
