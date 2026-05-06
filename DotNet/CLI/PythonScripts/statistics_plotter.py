@@ -7,7 +7,7 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
     figname = get_figname(text_file_path)
     output_file_path = os.path.join(output_folder_path, f"{figname}.png")
     header_to_data: dict[str, list[float]] = parse_text_file(
-        os.path.join(output_folder_path, text_file_path)
+        os.path.join(data_folder_path, text_file_path)
     )
 
     # plt.figure(figsize=(10, 6))
@@ -28,11 +28,11 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
     print(f"Successfully saved plot to: {output_file_path}")
 
 
-def create_feasibility_plot(text_file_path: str, output_folder_path: str) -> None:
-    figname = get_figname(text_file_path)
+def create_feasibility_plot(text_file_name: str, output_folder_path: str) -> None:
+    figname = get_figname(text_file_name)
     output_file_path = os.path.join(output_folder_path, f"{figname}.png")
     header_to_data: dict[str, list[float]] = parse_text_file(
-        os.path.join(output_folder_path, text_file_path)
+        os.path.join(data_folder_path, text_file_name)
     )
     
     pop_size_header = "Population Size"
@@ -72,13 +72,14 @@ def get_text_files(folder_path: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    path = sys.argv[1]
-    text_files = get_text_files(path)
-    for text_file in text_files:
-        if "Feasibility" in text_file:
-            create_feasibility_plot(text_file, path)
-        elif "BehaviorSpace" in text_file:
-            behavior_space_plotter = BehaviorSpacePlotter(text_file, path)
+    output_path = sys.argv[1]
+    data_folder_path = os.path.join(output_path, "Data")
+    text_files_names = get_text_files(data_folder_path)
+    for text_file_name in text_files_names:
+        if "Feasibility" in text_file_name:
+            create_feasibility_plot(text_file_name, output_path)
+        elif "BehaviorSpace" in text_file_name:
+            behavior_space_plotter = BehaviorSpacePlotter(text_file_name, output_path, data_folder_path)
             behavior_space_plotter.plot_archive_coverage()
         else:
-            create_plot_from_text_file(text_file, path)
+            create_plot_from_text_file(text_file_name, output_path)

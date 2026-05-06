@@ -51,7 +51,7 @@ namespace Pokémon
             List<TileWeight> weights =
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
-            return new Individual(weights, 0);
+            return new Individual(weights);
         }
 
         public Individual Mutate(Individual individual)
@@ -66,7 +66,7 @@ namespace Pokémon
                 newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
             }
 
-            return new Individual(newWeights, 0);
+            return new Individual(newWeights);
         }
 
         public virtual Entry Evaluate(Individual individual)
@@ -107,7 +107,8 @@ namespace Pokémon
 
         private int GetBucket(float percentage, float percentageCeiling)
         {
-            return (int)MathF.Floor(percentage / percentageCeiling * NumberOfBucketsPerAxis);
+            int bucket = (int)MathF.Floor(percentage / percentageCeiling * NumberOfBucketsPerAxis);
+            return Math.Clamp(bucket, 0, NumberOfBucketsPerAxis - 1);
         }
 
         protected Behavior GetBehavior(State state)

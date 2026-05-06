@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using MapElites.Args;
@@ -7,6 +8,21 @@ namespace CLI
 {
     public static class LabLogSaver
     {
+        public static void SaveLog(
+            string filepath,
+            MapElitesArgs mapElitesArgs, 
+            ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs, 
+            string tilemapName)
+        {
+            using StreamWriter streamWriter = new StreamWriter(filepath);
+            streamWriter.WriteLine("--- Log for Constrained MAP-Elites run ---");
+            streamWriter.WriteLine($"TileMap: {tilemapName}");
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromConstrainedIndividualHandlerArgs(constrainedIndividualHandlerArgs));
+            streamWriter.WriteLine();
+            streamWriter.WriteLine(GetLogFromMapElitesArgs(mapElitesArgs));
+        }
+        
         public static void SaveLog(
             string filepath,
             MapElitesArgs mapElitesArgs, 
@@ -24,17 +40,26 @@ namespace CLI
         
         public static void SaveLog(
             string filepath,
-            MapElitesArgs mapElitesArgs, 
+            CmaCmeArgs cmaCmeArgs,
             ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs, 
             string tilemapName)
         {
             using StreamWriter streamWriter = new StreamWriter(filepath);
-            streamWriter.WriteLine("--- Log for Constrained MAP-Elites run ---");
+            streamWriter.WriteLine("--- Log for CMA Constrained MAP-Elites run ---");
             streamWriter.WriteLine($"TileMap: {tilemapName}");
+            streamWriter.WriteLine(GetLogFromCmaCmeArgs(cmaCmeArgs));
             streamWriter.WriteLine();
             streamWriter.WriteLine(GetLogFromConstrainedIndividualHandlerArgs(constrainedIndividualHandlerArgs));
             streamWriter.WriteLine();
-            streamWriter.WriteLine(GetLogFromMapElitesArgs(mapElitesArgs));
+            streamWriter.WriteLine(GetLogFromMapElitesArgs(cmaCmeArgs.MapElitesArgs));
+        }
+
+        private static string GetLogFromCmaCmeArgs(CmaCmeArgs cmaCmeArgs)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Starting Step Size: {cmaCmeArgs.StartingStepSize}");
+            stringBuilder.AppendLine(cmaCmeArgs.EmitterConfiguration.ToString());
+            return stringBuilder.ToString();
         }
 
         private static string GetLogFromMapElitesArgs(MapElitesArgs mapElitesArgs)
