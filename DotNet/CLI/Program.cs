@@ -66,9 +66,9 @@ KeyCeilings keyCeilings = new(
     variationPercentageCeiling: 1.0f);
 
 int mapDimensions = 20;
-int evaluationIterations = 20;
-int initializationIterations = 100;
-int mutationIterations = 1000;
+int evaluationIterations = 50;
+int initializationIterations = 500;
+int mutationIterations = 2500;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
