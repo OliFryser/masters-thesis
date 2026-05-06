@@ -39,7 +39,11 @@ namespace Pokémon.Emitters
         // TODO: Should this be a hyperParameter?
         private const int _stagnationThreshold = 20;
 
-        public bool ShouldReset() => _cma.IsConverged() || _stepsSinceLastAddedSolutions > _stagnationThreshold;
+        public bool ShouldReset()
+        {
+            bool shouldReset = _cma.IsConverged() || _stepsSinceLastAddedSolutions >= _stagnationThreshold;
+            return shouldReset;
+        }
         
         public Emitter(
             ConstrainedEntry<Individual, Behavior> meanEntry, 
@@ -86,6 +90,10 @@ namespace Pokémon.Emitters
             if (wasSaved)
             {
                 _stepsSinceLastAddedSolutions = 0;
+            }
+            else
+            {
+                _stepsSinceLastAddedSolutions++;
             }
             double score = _scorer.GetScore(entry, _meanEntry);
 
