@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapElites.Tests", "MapElites.Tests\MapElites.Tests.csproj", "{4581BBEB-840A-4627-BC5F-892E6718B825}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokémon.Tests", "Pokémon.Tests\Pokémon.Tests.csproj", "{9806C2BE-FF78-49BE-A42D-F694E9FE1810}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{4581BBEB-840A-4627-BC5F-892E6718B825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4581BBEB-840A-4627-BC5F-892E6718B825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4581BBEB-840A-4627-BC5F-892E6718B825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9806C2BE-FF78-49BE-A42D-F694E9FE1810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9806C2BE-FF78-49BE-A42D-F694E9FE1810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9806C2BE-FF78-49BE-A42D-F694E9FE1810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9806C2BE-FF78-49BE-A42D-F694E9FE1810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

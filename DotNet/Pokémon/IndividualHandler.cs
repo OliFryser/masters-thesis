@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Domain.Models;
 using MapElites;
 using Pokémon.Args;
+using Pokémon.Calculations;
 using WFC;
 using WFC.Args;
 using WFC.Models;
@@ -46,7 +48,7 @@ namespace Pokémon
         {
             Random random = new Random();
 
-            List<TileWeight> weights = 
+            List<TileWeight> weights =
                 TileTypes.Select(t => new TileWeight(t, random.NextDouble())).ToList();
 
             return new Individual(weights);
@@ -70,13 +72,13 @@ namespace Pokémon
         public virtual Entry Evaluate(Individual individual)
         {
             State[] results = SampleStates(individual);
-            
+
             float fitness = results.Count(state => state.IsCollapsed);
-            
+
             Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            
+
             return new Entry(individual, averageBehavior, fitness);
         }
 
@@ -114,30 +116,17 @@ namespace Pokémon
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
 
-            float shannonEntropy = tiles
-                .GroupBy(tile => tile.Type.Id)
-                .Select(grouping =>
-                {
-                    float count = grouping.Count();
-                    float p = count / TileTypeCount;
+            float variation = Calculate.Variation(tiles, TileTypeCount);
 
-                    return -p * MathF.Log(p, 2);
-                })
-                .Sum();
-
-            float maxEntropy = MathF.Log(TileTypeCount, 2);
-
-            float variation = shannonEntropy / maxEntropy;
-            
             return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
             float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
-            float averageNumberOfTileTypesUsedPercentage = behaviors.Select(b => b.Variation ).Average();
+            float averageVariation = behaviors.Select(b => b.Variation).Average();
 
-            return new Behavior(averageFlowerPercentage, averageNumberOfTileTypesUsedPercentage);
+            return new Behavior(averageFlowerPercentage, averageVariation);
         }
     }
 }

@@ -8,19 +8,19 @@ namespace Pokémon
     [TypeConverter(typeof(KeyTypeConverter))]
     public class Key : BaseKey<Key>
     {
-        public Key(int flowerBucket, int tileTypesUsedBucket)
+        public Key(int flowerBucket, int variationBucket)
         {
             FlowerBucket = flowerBucket;
-            TileTypesUsedBucket = tileTypesUsedBucket;
+            VariationBucket = variationBucket;
         }
 
         public override bool Equals(Key? other) => 
             FlowerBucket == other?.FlowerBucket
-            && TileTypesUsedBucket == other.TileTypesUsedBucket;
-        public override int GetHashCode() => HashCode.Combine(FlowerBucket, TileTypesUsedBucket);
+            && VariationBucket == other.VariationBucket;
+        public override int GetHashCode() => HashCode.Combine(FlowerBucket, VariationBucket);
 
         public override string ToString()
-            => $"{FlowerBucket},{TileTypesUsedBucket}";
+            => $"{FlowerBucket},{VariationBucket}";
 
         public static bool TryParse(string input, out Key? key)
         {
@@ -38,6 +38,6 @@ namespace Pokémon
         }
 
         public int FlowerBucket { get; set; }
-        public int TileTypesUsedBucket { get; set; }
+        public int VariationBucket { get; set; }
     }
 }

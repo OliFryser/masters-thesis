@@ -33,8 +33,8 @@ public class UIHandler : MonoBehaviour
         // int minDoors = _keys.Select(k => k.DoorBucket).Min();
         // int maxDoors = _keys.Select(k => k.DoorBucket).Max();
 
-        int minTileTypes = _keys.Select(k => k.TileTypesUsedBucket).Min();
-        int maxTileTypes = _keys.Select(k => k.TileTypesUsedBucket).Max();
+        int minTileTypes = _keys.Select(k => k.VariationBucket).Min();
+        int maxTileTypes = _keys.Select(k => k.VariationBucket).Max();
         
        SetSlider(_flowerSlider, minFlowers, maxFlowers);
        // SetSlider(_doorsSlider, minDoors, maxDoors);
@@ -54,7 +54,7 @@ public class UIHandler : MonoBehaviour
         return _keys.MinBy(k =>
             Mathf.Abs(k.FlowerBucket - _flowerSlider.value) + 
             // Mathf.Abs(k.DoorBucket - _doorsSlider.value) + 
-            Mathf.Abs(k.TileTypesUsedBucket - _tileTypesSlider.value));
+            Mathf.Abs(k.VariationBucket - _tileTypesSlider.value));
     }
 
     private static void SetSlider(SliderInt slider, int min, int max)

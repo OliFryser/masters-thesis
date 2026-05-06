@@ -24,15 +24,15 @@ namespace Pokémon
         public new ConstrainedEntry<Individual, Behavior> Evaluate(Individual individual)
         {
             State[] results = SampleStates(individual);
-            
+
             Behavior[] behaviors = results.Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
-            
+
             float fitness = GetFitness(behaviors, averageBehavior, SmoothingFactor);
-            
+
             int amountComplete = results.Count(state => state.IsCollapsed);
-            
+
             float feasibility = amountComplete / (float)EvaluationIterations;
 
             ConstrainedEntry<Individual, Behavior> entry = new ConstrainedEntry<Individual, Behavior>(

@@ -77,7 +77,7 @@ public class ArchiveExplorer : MonoBehaviour
 
         // SaveToJson(_archive);
         int maxFlowerBucket = _archive.GetKeys().Max(k => k.FlowerBucket);
-        int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.TileTypesUsedBucket);
+        int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.VariationBucket);
         
         _flowerKey = maxFlowerBucket;
         _tileTypesUsedKey = maxTileTypesUsedKey;
@@ -123,7 +123,7 @@ public class ArchiveExplorer : MonoBehaviour
         foreach (Key archiveKey in _archive.GetKeys())
         {
             print(
-                $"Key {c}: Flower {archiveKey.FlowerBucket}, Tiles {archiveKey.TileTypesUsedBucket}");
+                $"Key {c}: Flower {archiveKey.FlowerBucket}, Tiles {archiveKey.VariationBucket}");
             c++;
         }
     }
