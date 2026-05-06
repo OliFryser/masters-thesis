@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
 
-namespace Pokémon
+namespace Pokémon.Calculations
 {
-    public static class EntropyCalculations
+    public static class Calculate
     {
-        public static float CalculateVariation(List<Tile> tiles, int tileTypeCount)
+        public static float Variation(List<Tile> tiles, int tileTypeCount)
         {
             float shannonEntropy = tiles
                 .GroupBy(tile => tile.Type.Id)

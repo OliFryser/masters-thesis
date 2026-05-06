@@ -1,6 +1,6 @@
 using System;
 
-namespace Pokémon
+namespace Pokémon.Calculations
 {
     // Inspired by https://stackoverflow.com/questions/218060/random-gaussian-variables
     public class NormalSampler

@@ -5,6 +5,7 @@ using System.Linq;
 using Domain.Models;
 using MapElites;
 using Pokémon.Args;
+using Pokémon.Calculations;
 using WFC;
 using WFC.Args;
 using WFC.Models;
@@ -114,20 +115,7 @@ namespace Pokémon
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
 
-            float shannonEntropy = tiles
-                .GroupBy(tile => tile.Type.Id)
-                .Select(grouping =>
-                {
-                    float count = grouping.Count();
-                    float p = count / tiles.Count;
-
-                    return -p * MathF.Log(p, 2);
-                })
-                .Sum();
-
-            float maxEntropy = MathF.Log(TileTypeCount, 2);
-
-            float variation = shannonEntropy / maxEntropy;
+            float variation = Calculate.Variation(tiles, TileTypeCount);
 
             return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
