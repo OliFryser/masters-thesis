@@ -145,25 +145,31 @@ namespace MapElites.Models
             return true;
         }
 
-        public TIndividual Sample()
-        {
-            if (_archive.Count == 0) 
-                throw new InvalidOperationException("Archive has no entries.");
-
-            Entries? entries = _archive.GetRandomElement().Value;
-
-            return entries.Sample().Individual;
-        }
+        public TIndividual Sample() => SampleEntry().Individual;
 
         public TEntry SampleEntry()
         {
             if (_archive.Count == 0) 
                 throw new InvalidOperationException("Archive has no entries.");
 
-            Entries? entries = _archive.GetRandomElement().Value;
+            Entries entries = _archive.GetRandomElement().Value;
 
             return entries.Sample();
         }
+
+        public TEntry SampleInfeasibleIndividual()
+            => _archive.Values
+                .Where(e => e.Infeasible != null)
+                .Select(e => e.Infeasible)
+                .ToList()
+                .GetRandomElement()!;
+        
+        public TEntry SampleFeasibleIndividual()
+            => _archive.Values
+                .Where(e => e.Feasible != null)
+                .Select(e => e.Feasible)
+                .ToList()
+                .GetRandomElement()!;
 
         public IEnumerable<TKey> GetKeys()
         {

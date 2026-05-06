@@ -17,11 +17,12 @@ namespace Pokémon
             MapElitesArgs mapElitesArgs = args.MapElitesArgs;
             ConstrainedIndividualHandler individualHandler = args.ConstrainedIndividualHandler;
             EmitterConfiguration emitterConfiguration = args.EmitterConfiguration;
-            
+
             Action<string> logger = mapElitesArgs.Logger;
-            
-            ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = new ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
-                individualHandler.BucketCapacity);
+
+            ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
+                new ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
+                    individualHandler.BucketCapacity);
 
             for (int i = 0; i < mapElitesArgs.InitializationIterations; i++)
             {
@@ -43,20 +44,20 @@ namespace Pokémon
                 emitterConfiguration.OptimizationEmitters,
                 archive,
                 args.StartingStepSize,
-                () => new OptimizationScorer()));
+                ScorerType.Optimization));
 
             emitters.AddRange(CreateEmitters(
                 emitterConfiguration.FeasibilityEmitters,
                 archive,
                 args.StartingStepSize,
-                () => new FeasibilityScorer()));
+                ScorerType.Feasibility));
 
             emitters.AddRange(CreateEmitters(
                 emitterConfiguration.RandomDirectionEmitters,
                 archive,
                 args.StartingStepSize,
-                () => new RandomDirectionScorer()));
-            
+                ScorerType.RandomDirection));
+
             // Sample N individuals with emitters
             for (int i = 0; i < mapElitesArgs.MutationIterations; i++)
             {
@@ -73,9 +74,10 @@ namespace Pokémon
                 if (currentEmitter.ShouldReset())
                 {
                     logger("Resetting emitter");
-                    currentEmitter.Reset(archive.SampleEntry());
+                    var newMeanEntry = SampleEntryForEmitterType(currentEmitter.ScorerType, archive);
+                    currentEmitter.Reset(newMeanEntry);
                 }
-                
+
                 Individual individual = currentEmitter.Ask();
                 ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
                 Key key = individualHandler.GetKey(entry.Behavior);
@@ -97,16 +99,28 @@ namespace Pokémon
             }
         }
 
+        private static ConstrainedEntry<Individual, Behavior> SampleEntryForEmitterType(
+            ScorerType scorerType,
+            ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
+            => scorerType switch
+            {
+                ScorerType.Feasibility => archive.SampleInfeasibleIndividual(),
+                ScorerType.Optimization => archive.SampleFeasibleIndividual(),
+                ScorerType.RandomDirection => archive.SampleEntry(),
+                _ => throw new ArgumentOutOfRangeException(nameof(scorerType), scorerType,
+                    "Entry sampling not implemented for scorer type")
+            };
+
         private static IEnumerable<Emitter> CreateEmitters(
             int amountToCreate,
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive,
             double startingStepSize,
-            Func<IScorer> createScorer)
+            ScorerType scorerType)
         {
             for (int i = 0; i < amountToCreate; i++)
             {
-                ConstrainedEntry<Individual, Behavior> meanEntry = archive.SampleEntry();
-                yield return new Emitter(meanEntry, startingStepSize, createScorer());
+                ConstrainedEntry<Individual, Behavior> meanEntry = SampleEntryForEmitterType(scorerType, archive);
+                yield return new Emitter(meanEntry, startingStepSize, scorerType);
             }
         }
     }

@@ -27,7 +27,6 @@ namespace Pokémon.Emitters
         private readonly List<EmitterBufferEntry> _buffer = new List<EmitterBufferEntry>();
         private readonly IScorer _scorer;
         private readonly Matrix<double>? _bounds;
-        private readonly Func<IScorer> _createScorer;
         private readonly double _startingStepSize;
         
         private ConstrainedEntry<Individual, Behavior> _meanEntry;
@@ -35,16 +34,21 @@ namespace Pokémon.Emitters
 
         private int _stepsSinceLastAddedSolutions;
         public int GeneratedSolutions { get; private set; }
+        public ScorerType ScorerType { get; private set; }
 
         // TODO: Should this be a hyperParameter?
         private const int _stagnationThreshold = 20;
 
         public bool ShouldReset() => _cma.IsConverged() || _stepsSinceLastAddedSolutions > _stagnationThreshold;
         
-        public Emitter(ConstrainedEntry<Individual, Behavior> meanEntry, double startingStepSize, IScorer scorer)
+        public Emitter(
+            ConstrainedEntry<Individual, Behavior> meanEntry, 
+            double startingStepSize, 
+            ScorerType scorerType)
         {
             _startingStepSize = startingStepSize;
-            _scorer = scorer;
+            ScorerType = scorerType;
+            _scorer = ScorerFactory.CreateScorer(scorerType);
             _bounds = Matrix<double>.Build.Dense(meanEntry.Individual.Weights.Count, 2);
             for (int i = 0; i < meanEntry.Individual.Weights.Count; i++)
             {
