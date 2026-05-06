@@ -106,7 +106,7 @@ namespace Pokémon
         private int GetBucket(float percentage, float percentageCeiling)
         {
             int bucket = (int)MathF.Floor(percentage / percentageCeiling * NumberOfBucketsPerAxis);
-            return Math.Clamp(bucket, 0, 1);
+            return Math.Clamp(bucket, 0, NumberOfBucketsPerAxis - 1);
         }
 
         protected Behavior GetBehavior(State state)
