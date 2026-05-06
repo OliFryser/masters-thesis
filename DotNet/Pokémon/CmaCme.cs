@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MapElites.Args;
 using MapElites.Extensions;
 using MapElites.Models;
+using MapElites.Statistics;
 using Pokémon.Args;
 using Pokémon.Emitters;
 using Pokémon.Emitters.Scorers;
@@ -18,6 +19,8 @@ namespace Pokémon
             ConstrainedIndividualHandler individualHandler = args.ConstrainedIndividualHandler;
             EmitterConfiguration emitterConfiguration = args.EmitterConfiguration;
 
+            List<IStatisticsTracker> statisticsTrackers = args.MapElitesArgs.StatisticsTrackers;
+            
             Action<string> logger = mapElitesArgs.Logger;
 
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
@@ -82,11 +85,11 @@ namespace Pokémon
                 ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
                 Key key = individualHandler.GetKey(entry.Behavior);
                 bool wasSaved = archive.TryAdd(key, entry);
-                mapElitesArgs.StatisticsTrackers.ForEach(s => s.AddPoint(archive));
+                statisticsTrackers.ForEach(s => s.AddPoint(archive));
                 currentEmitter.Tell(entry, wasSaved);
             }
 
-            mapElitesArgs.StatisticsTrackers.ForEach(s => s.SaveToFile(mapElitesArgs.StatisticsOutputPath));
+            statisticsTrackers.ForEach(s => s.SaveToFile(mapElitesArgs.StatisticsOutputPath));
 
             return archive;
 
@@ -95,7 +98,7 @@ namespace Pokémon
                 ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
                 Key key = individualHandler.GetKey(entry.Behavior);
                 archive.TryAdd(key, entry);
-                mapElitesArgs.StatisticsTrackers.ForEach(s => s.AddPoint(archive));
+                statisticsTrackers.ForEach(s => s.AddPoint(archive));
             }
         }
 
