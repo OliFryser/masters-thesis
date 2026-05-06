@@ -48,7 +48,7 @@ namespace MapElites.Models
                     }
 
                     Feasible = MostFit(entry, Feasible);
-                    return true;
+                    return Feasible == entry;
                 }
 
                 if (Infeasible == null)
@@ -58,7 +58,7 @@ namespace MapElites.Models
                 }
 
                 Infeasible = MostFeasible(entry, Infeasible);
-                return true;
+                return Infeasible == entry;
             }
 
             /// <param name="percentageForFeasible">Value between 0 and 1.</param>
