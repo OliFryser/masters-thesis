@@ -7,6 +7,20 @@ namespace Pokémon.Calculations
 {
     public static class Calculate
     {
+        // Inspired by https://stackoverflow.com/questions/383587/how-do-you-do-integer-exponentiation-in-c
+        public static int IntPow(this int x, uint pow)
+        {
+            int ret = 1;
+            while ( pow != 0 )
+            {
+                if ( (pow & 1) == 1 )
+                    ret *= x;
+                x *= x;
+                pow >>= 1;
+            }
+            return ret;
+        }
+        
         public static float Entropy(List<Tile> tiles, int tileTypeCount)
         {
             float shannonEntropy = tiles

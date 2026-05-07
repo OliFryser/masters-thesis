@@ -10,7 +10,7 @@ namespace Pokémon
             Variation = variation;
         }
 
-        public static int BehaviorCount => 2;
+        public static uint BehaviorCount => 2;
         public float FlowerPercentage { get; }
         public float Variation { get; }
 

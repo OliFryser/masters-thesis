@@ -43,7 +43,7 @@ namespace Pokémon
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
             };
 
-            BucketCapacity = Behavior.BehaviorCount * NumberOfBucketsPerAxis;
+            BucketCapacity = NumberOfBucketsPerAxis.IntPow(Behavior.BehaviorCount);
         }
 
         public Individual CreateRandom()
