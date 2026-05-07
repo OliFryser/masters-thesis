@@ -7,7 +7,7 @@ namespace Pokémon.Calculations
 {
     public static class Calculate
     {
-        public static float Variation(List<Tile> tiles, int tileTypeCount)
+        public static float Entropy(List<Tile> tiles, int tileTypeCount)
         {
             float shannonEntropy = tiles
                 .GroupBy(tile => tile.Type.Id)
@@ -25,6 +25,11 @@ namespace Pokémon.Calculations
             float variation = shannonEntropy / maxEntropy;
             
             return variation;
+        }
+
+        public static float UniqueCount(List<Tile> tiles, int tileTypeCount)
+        {
+            return tiles.GroupBy(tile => tile.Type.Id).Count() / (float)tileTypeCount;
         }
     }
 }

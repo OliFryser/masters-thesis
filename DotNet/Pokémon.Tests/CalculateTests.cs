@@ -10,7 +10,7 @@ public class CalculateTests
     {
         var tiles = CreateTiles(("grass", 20));
 
-        var variation = Calculate.Variation(tiles, tileTypeCount: 4);
+        var variation = Calculate.Entropy(tiles, tileTypeCount: 4);
 
         Assert.That(variation, Is.EqualTo(0f).Within(1e-6f));
     }
@@ -20,7 +20,7 @@ public class CalculateTests
     {
         var tiles = CreateTiles(("grass", 10), ("water", 10), ("rock", 10), ("sand", 10));
 
-        var variation = Calculate.Variation(tiles, tileTypeCount: 4);
+        var variation = Calculate.Entropy(tiles, tileTypeCount: 4);
 
         Assert.That(variation, Is.EqualTo(1f).Within(1e-6f));
     }
@@ -30,7 +30,7 @@ public class CalculateTests
     {
         var tiles = CreateTiles(("grass", 14), ("water", 4), ("rock", 2));
 
-        var variation = Calculate.Variation(tiles, tileTypeCount: 3);
+        var variation = Calculate.Entropy(tiles, tileTypeCount: 3);
 
         Assert.That(variation, Is.GreaterThanOrEqualTo(0f));
         Assert.That(variation, Is.LessThanOrEqualTo(1f));
@@ -54,7 +54,7 @@ public class CalculateTests
                 .Select((count, idx) => ($"type-{idx}", count))
                 .ToArray());
 
-            var variation = Calculate.Variation(tiles, tileTypeCount);
+            var variation = Calculate.Entropy(tiles, tileTypeCount);
 
             Assert.That(variation, Is.GreaterThanOrEqualTo(0f), $"Iteration {i} produced {variation}");
             Assert.That(variation, Is.LessThanOrEqualTo(1f), $"Iteration {i} produced {variation}");
