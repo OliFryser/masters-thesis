@@ -27,7 +27,7 @@ namespace Pokémon.Calculations
             return variation;
         }
 
-        public static float UniqueCount(List<Tile> tiles, int tileTypeCount)
+        public static float UniquePercentage(List<Tile> tiles, int tileTypeCount)
         {
             return tiles.GroupBy(tile => tile.Type.Id).Count() / (float)tileTypeCount;
         }

@@ -118,7 +118,10 @@ namespace Pokémon
             List<Tile> tiles = state.GetMap().Tiles;
             var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
 
-            float variation = Calculate.Entropy(tiles, TileTypeCount);
+            float variation =
+                VariationBehavior == VariationBehavior.Entropy
+                    ? Calculate.Entropy(tiles, TileTypeCount)
+                    : Calculate.UniquePercentage(tiles, TileTypeCount);
 
             return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
         }
