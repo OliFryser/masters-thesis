@@ -82,6 +82,7 @@ namespace CLI
             stringBuilder.AppendLine($"KeyCeilings: {individualHandlerArgs.KeyCeilings.ToString()}");
             stringBuilder.AppendLine($"NumberOfBucketsPerAxis: {individualHandlerArgs.NumberOfBucketsPerAxis}");
             stringBuilder.AppendLine($"StandardDeviation: {individualHandlerArgs.StandardDeviation}");
+            stringBuilder.AppendLine($"VariationBehavior: {individualHandlerArgs.VariationBehavior}");
             
             return stringBuilder.ToString();
         }

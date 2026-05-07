@@ -77,16 +77,16 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 50;
-int initializationIterations = 250;
-int mutationIterations = 2500;
+int initializationIterations = 20;
+int mutationIterations = 100;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
-float feasibilityThreshold = 0.75f;
+float feasibilityThreshold = 0.60f;
 float smoothingFactor = 5f;
 
 int optimizationEmitters = 2;
-int feasibilityEmitters = 10;
+int feasibilityEmitters = 5;
 int randomDirectionEmitters = 3;
 double startingStepSize = 0.3;
 int stagnationThreshold = 30;

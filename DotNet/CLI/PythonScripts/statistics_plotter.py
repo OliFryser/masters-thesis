@@ -16,6 +16,8 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
         if values:
             plt.plot([i for i in range(len(values))], values, label=header)
 
+    plt.ylim((0, 1))
+
     plt.title(figname)
     plt.xlabel("Iteration")
     plt.ylabel(figname)

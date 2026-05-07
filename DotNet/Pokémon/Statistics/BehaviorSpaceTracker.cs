@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using MapElites.Models;
 
@@ -9,6 +10,7 @@ namespace Pokémon.Statistics
         public static void SaveToFile(
             IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive,
             int numberOfBucketsPerAxis,
+            float feasibilityThreshold,
             string statisticsOutputPath)
         {
             IEnumerable<Key> keys = archive.GetKeys();
@@ -38,8 +40,10 @@ namespace Pokémon.Statistics
             streamWriter.WriteLine("Number of Buckets Per Axis");
             streamWriter.WriteLine(numberOfBucketsPerAxis);
             streamWriter.WriteLine("Behavior Names");
-            streamWriter.WriteLine("Flower Percentage");
-            streamWriter.WriteLine("Different Tiles Used Percentage");
+            streamWriter.WriteLine("Flower %");
+            streamWriter.WriteLine("Variation %");
+            streamWriter.WriteLine("Feasibility Threshold");
+            streamWriter.WriteLine(feasibilityThreshold.ToString(CultureInfo.InvariantCulture));
             streamWriter.WriteLine("Entries");
             foreach (string entry in entryStatistics)
             {

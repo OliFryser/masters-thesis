@@ -6,13 +6,7 @@ namespace Pokémon.Emitters.Scorers
     {
         public double GetScore(
             ConstrainedEntry<Individual, Behavior> entry,
-            ConstrainedEntry<Individual, Behavior> meanEntry)
-        {
-            if (!entry.IsFeasible)
-            {
-                return -10;
-            }
-            return entry.Fitness - meanEntry.Fitness;
-        }
+            ConstrainedEntry<Individual, Behavior> meanEntry) =>
+            entry.IsFeasible ? entry.Fitness - meanEntry.Fitness : -10;
     }
 }

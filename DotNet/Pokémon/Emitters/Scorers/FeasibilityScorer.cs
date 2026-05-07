@@ -8,11 +8,7 @@ namespace Pokémon.Emitters.Scorers
             ConstrainedEntry<Individual, Behavior> meanEntry)
         {
             // We crossed the threshold! Big reward!
-            if (entry.IsFeasible)
-            {
-                return 10;
-            }
-            return entry.Feasibility - meanEntry.Feasibility;
+            return entry.IsFeasible ? 10 : entry.Feasibility - meanEntry.Feasibility;
         }
     }
 }

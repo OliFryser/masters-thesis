@@ -157,20 +157,38 @@ namespace MapElites.Models
             return entries.Sample();
         }
 
-        public TEntry SampleInfeasibleIndividual()
-            => _archive.Values
+        public bool TrySampleInfeasibleIndividual([MaybeNullWhen(false)] out TEntry entry)
+        {
+            var infeasibleEntries = _archive.Values
                 .Where(e => e.Infeasible != null)
-                .Select(e => e.Infeasible)
-                .ToList()
-                .GetRandomElement()!;
+                .Select(e => e.Infeasible!)
+                .ToList();
+            if (infeasibleEntries.Count == 0)
+            {
+                entry = null;
+                return false;
+            }
+                
+            entry = infeasibleEntries.GetRandomElement();
+            return true;
+        }
         
-        public TEntry SampleFeasibleIndividual()
-            => _archive.Values
+        public bool TrySampleFeasibleIndividual([MaybeNullWhen(false)]out TEntry entry)
+        {
+            var feasibleEntries = _archive.Values
                 .Where(e => e.Feasible != null)
-                .Select(e => e.Feasible)
-                .ToList()
-                .GetRandomElement()!;
-
+                .Select(e => e.Feasible!)
+                .ToList();
+            if (feasibleEntries.Count == 0)
+            {
+                entry = null;
+                return false;
+            }
+                
+            entry = feasibleEntries.GetRandomElement();
+            return true;
+        }
+        
         public IEnumerable<TKey> GetKeys()
         {
             return _archive.Keys;
@@ -209,7 +227,7 @@ namespace MapElites.Models
 
         public float GetReliability()
         {
-            if (Count == 0 || BucketCapacity == 0)
+            if (GetFeasiblePopulationSize() == 0 || BucketCapacity == 0)
             {
                 return 0f;
             }

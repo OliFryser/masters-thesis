@@ -24,6 +24,7 @@ class BehaviorSpacePlotter:
         self.buckets_per_axis: int = 0
         self.behavior_x_label: str = ""
         self.behavior_y_label: str = ""
+        self.feasibility_threshold : float = 0.0
         
         self.__parse_text_file()
 
@@ -36,6 +37,8 @@ class BehaviorSpacePlotter:
                 f.readline() # skip header
                 self.behavior_x_label = f.readline().strip()
                 self.behavior_y_label = f.readline().strip()
+                f.readline() # skip header
+                self.feasibility_threshold = float(f.readline().strip())
                 f.readline() # skip header
                 
                 for line in f:
@@ -96,7 +99,7 @@ class BehaviorSpacePlotter:
             extent=extent,
             aspect='auto',
             vmin=0.0,
-            vmax=0.75,
+            vmax=self.feasibility_threshold,
             alpha=0.5,
             zorder=2)
         

@@ -105,14 +105,30 @@ namespace Pokémon
         private static ConstrainedEntry<Individual, Behavior> SampleEntryForEmitterType(
             ScorerType scorerType,
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
-            => scorerType switch
+        {
+            switch (scorerType)
             {
-                ScorerType.Feasibility => archive.SampleInfeasibleIndividual(),
-                ScorerType.Optimization => archive.SampleFeasibleIndividual(),
-                ScorerType.RandomDirection => archive.SampleEntry(),
-                _ => throw new ArgumentOutOfRangeException(nameof(scorerType), scorerType,
-                    "Entry sampling not implemented for scorer type")
-            };
+                case ScorerType.Feasibility:
+                {
+                    if (archive.TrySampleInfeasibleIndividual(out var entry))
+                        return entry;
+                    return archive.SampleEntry();
+                }
+                case ScorerType.Optimization:
+                {
+                    if (archive.TrySampleFeasibleIndividual(out var entry))
+                    {
+                        return entry;
+                    }
+                    return archive.SampleEntry();
+                }
+                case ScorerType.RandomDirection:
+                    return archive.SampleEntry();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scorerType), scorerType,
+                        "Entry sampling not implemented for scorer type");
+            }
+        }
 
         private static IEnumerable<Emitter> CreateEmitters(
             int amountToCreate,

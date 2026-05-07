@@ -30,7 +30,11 @@ public static class CmaCmeRunner
 
         stopwatch.Stop();
 
-        BehaviorSpaceTracker.SaveToFile(archive, constrainedIndividualHandler.NumberOfBucketsPerAxis, FilePaths.DataPath);
+        BehaviorSpaceTracker.SaveToFile(
+            archive, 
+            constrainedIndividualHandler.NumberOfBucketsPerAxis, 
+            constrainedIndividualHandlerArgs.FeasibilityThreshold, 
+            FilePaths.DataPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
 
