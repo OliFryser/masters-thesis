@@ -21,7 +21,7 @@ bool shouldCreateStatistics = true;
 
 // No args (default) = CmaCme
 RunMode runMode = RunMode.CmaCme;
-VariationBehavior variationBehavior = VariationBehavior.Entropy;
+VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
 
 if (args.Length >= 1)
 {
@@ -50,9 +50,9 @@ if (args.Length >= 1)
     }
     
     // Parse behavior flags
-    if (args.Contains("--unique") || args.Contains("-u"))
+    if (args.Contains("--entropy") || args.Contains("-e"))
     {
-        variationBehavior = VariationBehavior.UniqueCount;
+        variationBehavior = VariationBehavior.Entropy;
     }
 }
 
@@ -77,8 +77,8 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 50;
-int initializationIterations = 20;
-int mutationIterations = 100;
+int initializationIterations = 500;
+int mutationIterations = 10000;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
@@ -88,7 +88,7 @@ float smoothingFactor = 5f;
 int optimizationEmitters = 2;
 int feasibilityEmitters = 5;
 int randomDirectionEmitters = 3;
-double startingStepSize = 0.3;
+double startingStepSize = 0.1411;
 int stagnationThreshold = 30;
 
 MapElitesArgs mapElitesArgs = new(
