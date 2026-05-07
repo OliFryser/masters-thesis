@@ -7,6 +7,7 @@ using CLI.Runners;
 using Domain.Models;
 using MapElites.Args;
 using MapElites.Statistics;
+using Pokémon;
 using Pokémon.Args;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -20,14 +21,17 @@ bool shouldCreateStatistics = true;
 
 // No args (default) = CmaCme
 RunMode runMode = RunMode.CmaCme;
+VariationBehavior variationBehavior = VariationBehavior.Entropy;
 
 if (args.Length >= 1)
 {
+    // Parse statistics flags
     if (args.Contains("--skip-stats") || args.Contains("-s"))
     {
         shouldCreateStatistics = false;
     }
-
+    
+    // Parse run flags
     if (args.Contains("--regular") || args.Contains("-r"))
     {
         runMode = RunMode.MapElites;
@@ -43,6 +47,12 @@ if (args.Length >= 1)
     else if (args.Contains("--tilemap") || args.Contains("-t"))
     {
         runMode = RunMode.TileMapAnalysis;
+    }
+    
+    // Parse behavior flags
+    if (args.Contains("--unique") || args.Contains("-u"))
+    {
+        variationBehavior = VariationBehavior.UniqueCount;
     }
 }
 
@@ -101,7 +111,8 @@ IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     evaluationIterations,
     keyCeilings,
     numberOfBucketsPerAxis,
-    standardDeviation);
+    standardDeviation, 
+    variationBehavior);
 
 ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
     new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);

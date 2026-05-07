@@ -24,6 +24,7 @@ namespace Pokémon
         private KeyCeilings KeyCeilings { get; }
         public int NumberOfBucketsPerAxis { get; }
         public double StandardDeviation { get; }
+        public VariationBehavior VariationBehavior { get; }
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -35,7 +36,8 @@ namespace Pokémon
             KeyCeilings = individualHandlerArgs.KeyCeilings;
             NumberOfBucketsPerAxis = individualHandlerArgs.NumberOfBucketsPerAxis;
             StandardDeviation = individualHandlerArgs.StandardDeviation;
-
+            VariationBehavior = individualHandlerArgs.VariationBehavior;
+            
             FlowerTiles = new HashSet<TileType>()
             {
                 new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),

@@ -14,13 +14,15 @@ namespace Pokémon.Args
             int evaluationIterations,
             KeyCeilings keyCeilings,
             int numberOfBucketsPerAxis,
-            double standardDeviation)
+            double standardDeviation,
+            VariationBehavior variationBehavior)
         {
             List<Vector> coordinates =
                 LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
 
             return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates,
-                mapDimensions, evaluationIterations, keyCeilings, numberOfBucketsPerAxis, standardDeviation);
+                mapDimensions, evaluationIterations, keyCeilings, numberOfBucketsPerAxis, standardDeviation,
+                variationBehavior);
         }
 
         private IndividualHandlerArgs(
@@ -30,7 +32,10 @@ namespace Pokémon.Args
             List<Vector> coordinates,
             int mapDimensions,
             int evaluationIterations,
-            KeyCeilings keyCeilings, int numberOfBucketsPerAxis, double standardDeviation)
+            KeyCeilings keyCeilings, 
+            int numberOfBucketsPerAxis, 
+            double standardDeviation,
+            VariationBehavior variationBehavior)
         {
             TileTypeCount = tileTypeCount;
             TileTypes = tileTypes;
@@ -41,8 +46,11 @@ namespace Pokémon.Args
             KeyCeilings = keyCeilings;
             NumberOfBucketsPerAxis = numberOfBucketsPerAxis;
             StandardDeviation = standardDeviation;
+            VariationBehavior = variationBehavior;
         }
 
+
+        public VariationBehavior VariationBehavior { get; }
         public int TileTypeCount { get; }
         public List<TileType> TileTypes { get; }
         public List<AdjacencyRule> AdjacencyRules { get; }
