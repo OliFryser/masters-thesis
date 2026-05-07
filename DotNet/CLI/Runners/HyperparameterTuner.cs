@@ -26,8 +26,9 @@ public static class HyperParameterTuner
             .Select(RunExperimentWithSigma)
             .MaxBy(t => t.fitness).sigma;
         
-        (double sigma, double fitness) RunExperimentWithSigma(double sigma)
+        (double sigma, double fitness) RunExperimentWithSigma(double sigma, int iteration)
         {
+            Console.WriteLine($"Running iteration {iteration} out of {steps} ({iteration / (double)steps} %) with sigma: {sigma}");
             ConstrainedIndividualHandlerArgs newArgs = GetNewArgsWithSigma(constrainedIndividualHandlerArgs, sigma);
             double fitness = RunMapElitesTrial(mapElitesArgs, newArgs);
             return (sigma, fitness);
