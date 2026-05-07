@@ -101,7 +101,8 @@ MapElitesArgs mapElitesArgs = new(
 using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
 List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
 int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-List<AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+List<AdjacencyRule> adjacencyRules = tilemapAnalyzer
+    .GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList();
 
 IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     mapDimensions,
