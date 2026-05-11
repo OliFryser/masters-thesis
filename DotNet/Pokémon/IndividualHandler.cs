@@ -40,7 +40,9 @@ namespace Pokémon
             
             FlowerTiles = new HashSet<TileType>()
             {
-                new TileType("99907823a2961b44c2245d44f84bed3452b86f02"),
+                // new TileType("99907823a2961b44c2245d44f84bed3452b86f02"), // flower
+                // new TileType("8b3b310ba314c94bb2e371d05b7c3f0df8bd53d1") // the letter A
+                new TileType("4e2313df0660b9d874c387e8450498e015529e0f") // [x]
             };
 
             BucketCapacity = NumberOfBucketsPerAxis.IntPow(Behavior.BehaviorCount);

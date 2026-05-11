@@ -53,7 +53,9 @@ public class ArchiveExplorer : MonoBehaviour
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
         int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules();
+        List<Domain.Models.AdjacencyRule> adjacencyRules = 
+            tilemapAnalyzer.GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList();
+        
         KeyCeilings keyCeilings = new KeyCeilings(
             flowerPercentageCeiling: 0.2f,
             doorPercentageCeiling: 0.05f,
@@ -64,7 +66,7 @@ public class ArchiveExplorer : MonoBehaviour
         
         IndividualHandlerArgs individualHandlerArgs =
             IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations,
-                keyCeilings, numberOfBuckets, standardDeviation);
+                keyCeilings, numberOfBuckets, standardDeviation, VariationBehavior.UniqueCount);
 
         IndividualHandler individualHandler = new(individualHandlerArgs);
 

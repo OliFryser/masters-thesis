@@ -51,7 +51,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         {
             if (_constrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
             {
-                print($"Key {key} with variation {entry.Behavior.Variation}");
+                // print($"Key {key} with variation {entry.Behavior.Variation}");
             }
         }
         
