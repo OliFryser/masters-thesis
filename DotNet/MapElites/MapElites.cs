@@ -27,7 +27,7 @@ namespace MapElites
         {
             ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior> archive =
                 new ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity);
-
+            
             return RunMapElites(archive, args, individualHandler);
         }
 
@@ -54,14 +54,30 @@ namespace MapElites
                            $"Max fitness {archive.GetMaxFitness()}");
                 }
             }
+
+            int iterationsSinceLastSave = 0;
             
             for (int i = 0; i < args.MutationIterations; i++)
             {
+                if (iterationsSinceLastSave >= args.ConvergeThreshold)
+                {
+                    logger($"MAP-Elites converged at iteration {i}. " +
+                           $"Archive Size: {{archive.Count}}. "+
+                           $"Max fitness {{archive.GetMaxFitness()}}");
+                }
+                
                 TIndividual individual = archive.Sample();
 
                 TIndividual mutation = individualHandler.Mutate(individual);
 
-                EvaluateAndSave(mutation);
+                if (EvaluateAndSave(mutation))
+                {
+                    iterationsSinceLastSave = 0;
+                }
+                else
+                {
+                    iterationsSinceLastSave++;
+                }
                 
                 if (i % 10 == 0)
                 {
@@ -78,15 +94,17 @@ namespace MapElites
 
             return archive;
 
-            void EvaluateAndSave(TIndividual individual)
+            bool EvaluateAndSave(TIndividual individual)
             {
                 TEntry entry = individualHandler.Evaluate(individual);
 
                 TKey key = individualHandler.GetKey(entry.Behavior);
 
-                archive.TryAdd(key, entry);
+                bool didSave = archive.TryAdd(key, entry);
 
                 args.StatisticsTrackers.ForEach(s => s.AddPoint(archive));
+
+                return didSave;
             }
         }
     }

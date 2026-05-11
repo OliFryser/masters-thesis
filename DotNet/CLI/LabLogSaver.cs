@@ -69,6 +69,7 @@ namespace CLI
             stringBuilder.AppendLine("-- MAP-Elites config --");
             stringBuilder.AppendLine($"InitializationIteration: {mapElitesArgs.InitializationIterations}");
             stringBuilder.AppendLine($"MutationIterations: {mapElitesArgs.MutationIterations}");
+            stringBuilder.AppendLine($"ConvergeThreshold: {mapElitesArgs.ConvergeThreshold}");
 
             return stringBuilder.ToString();
         }

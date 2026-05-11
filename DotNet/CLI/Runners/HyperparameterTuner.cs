@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using GeneticSharp;
+using System.Runtime.InteropServices.ComTypes;
 using MapElites.Args;
 using MapElites.Models;
+using MapElites.Statistics;
 using Pokémon;
 using Pokémon.Args;
 
@@ -17,20 +21,33 @@ public static class HyperParameterTuner
         double minSigma = 0.0;
         double maxSigma = 1.0;
 
-        uint steps = 100;
+        uint steps = 20;
         double stepSize = (maxSigma - minSigma) / steps;
 
-        return Enumerable
+        List<(double, double)> loggerEntries = new List<(double, double)>();
+        
+        double bestSigma = Enumerable
             .Sequence(minSigma, maxSigma, stepSize)
             .AsParallel()
             .Select(RunExperimentWithSigma)
             .MaxBy(t => t.fitness).sigma;
         
+        
+        using StreamWriter streamWriter = new StreamWriter(Path.Combine(FilePaths.OutputPath, "HyperParam.Log"));
+        
+        loggerEntries.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+        loggerEntries.ForEach(e => streamWriter.WriteLine($"Sigma: {e.Item1:F3}, Fitness: {e.Item2:F3}"));
+        return bestSigma;
+        
         (double sigma, double fitness) RunExperimentWithSigma(double sigma, int iteration)
         {
-            Console.WriteLine($"Running iteration {iteration} out of {steps} ({iteration / (double)steps} %) with sigma: {sigma}");
+            Console.WriteLine($"Running iteration {iteration} out of {steps} ({iteration / (double)steps * 100:F0} %) with sigma: {sigma.ToString("F2", CultureInfo.InvariantCulture)}");
             ConstrainedIndividualHandlerArgs newArgs = GetNewArgsWithSigma(constrainedIndividualHandlerArgs, sigma);
             double fitness = RunMapElitesTrial(mapElitesArgs, newArgs);
+            lock (loggerEntries)
+            {
+                loggerEntries.Add((sigma, fitness));
+            }
             return (sigma, fitness);
         }
     }

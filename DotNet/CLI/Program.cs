@@ -19,8 +19,7 @@ Directory.CreateDirectory(FilePaths.DataPath);
 
 bool shouldCreateStatistics = true;
 
-// No args (default) = CmaCme
-RunMode runMode = RunMode.CmaCme;
+RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
 
 if (args.Length >= 1)
@@ -40,9 +39,9 @@ if (args.Length >= 1)
     {
         runMode = RunMode.HyperParameterTuning;
     }
-    else if (args.Contains("--constrained") || args.Contains("-c"))
+    else if (args.Contains("--cma") || args.Contains("-c"))
     {
-        runMode = RunMode.ConstrainedMapElites;
+        runMode = RunMode.CmaCme;
     }
     else if (args.Contains("--tilemap") || args.Contains("-t"))
     {
@@ -72,13 +71,13 @@ else
 
 KeyCeilings keyCeilings = new(
     flowerPercentageCeiling: 0.2f,
-    doorPercentageCeiling: 0.05f,
     variationPercentageCeiling: 1.0f);
 
 int mapDimensions = 20;
 int evaluationIterations = 50;
 int initializationIterations = 500;
 int mutationIterations = 10000;
+int convergeThreshold = 1000;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
@@ -96,7 +95,8 @@ MapElitesArgs mapElitesArgs = new(
     mutationIterations,
     Console.WriteLine,
     FilePaths.DataPath,
-    statisticsTrackers);
+    statisticsTrackers,
+    convergeThreshold);
 
 using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
 List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
@@ -137,10 +137,11 @@ switch (runMode)
     case RunMode.HyperParameterTuning:
         mapElitesArgs = new MapElitesArgs(
             mapElitesArgs.InitializationIterations,
-            mapElitesArgs.InitializationIterations,
+            mapElitesArgs.MutationIterations,
             _ => {},
             mapElitesArgs.StatisticsOutputPath,
-            []);
+            [],
+            mapElitesArgs.ConvergeThreshold);
         RunHyperParameterTuning();
         return;
     default:
@@ -182,4 +183,5 @@ void RunHyperParameterTuning()
 {
     var tunedSigma = HyperParameterTuner.FindBestSigma(mapElitesArgs, constrainedIndividualHandlerArgs);
     Console.WriteLine($"Best sigma found: {tunedSigma}");
+    LabLogSaver.SaveLog(Path.Combine(FilePaths.OutputPath, "Lab.log"), mapElitesArgs, constrainedIndividualHandlerArgs, FilePaths.TilemapName);
 }
