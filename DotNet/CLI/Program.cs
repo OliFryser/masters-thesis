@@ -47,6 +47,13 @@ if (args.Length >= 1)
     {
         runMode = RunMode.TileMapAnalysis;
     }
+
+    string? tilemapArg = args.FirstOrDefault(s => s.StartsWith("-p") || s.StartsWith("--path"));
+    if (args.FirstOrDefault(s => s.StartsWith("-p") || s.StartsWith("--path")) != null)
+    {
+        string tilemapName = tilemapArg!.Split("=")[1];
+        FilePaths.TilemapName = tilemapName;
+    }
     
     // Parse behavior flags
     if (args.Contains("--entropy") || args.Contains("-e"))
@@ -75,8 +82,8 @@ KeyCeilings keyCeilings = new(
 
 int mapDimensions = 20;
 int evaluationIterations = 50;
-int initializationIterations = 500;
-int mutationIterations = 10000;
+int initializationIterations = 10;
+int mutationIterations = 10;
 int convergeThreshold = 1000;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
