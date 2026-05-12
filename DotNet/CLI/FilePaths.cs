@@ -4,7 +4,7 @@ namespace CLI;
 
 public static class FilePaths
 {
-    private static string BaseDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}/../../..";
+    private static string BaseDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}";
     private static string ResourceDirectory => $"{BaseDirectory}/Resources";
     public static string TilemapName = "ToyDomain.png";
     public static string TilemapPath => $"{ResourceDirectory}/Tilemaps/{TilemapName}";
