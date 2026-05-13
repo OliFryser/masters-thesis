@@ -200,7 +200,7 @@ void RunPythonStatistics()
 
 void RunTilemapAnalysis()
 {
-    TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
+    using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
     HashSet<string> uniqueHashes = new();
 
     HashSet<Image<Rgba32>> uniqueImages = tilemapAnalyzer.TileSprites

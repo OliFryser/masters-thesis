@@ -37,12 +37,14 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         
         _adjacencyRules = adjacencyRules;
 
-        (IArchive<Key, Entry, Individual, Behavior> archive, int mapDimension) = ReadArchiveFile(_archiveFile);
+        (IArchive<Key, Entry, Individual, Behavior> archive, int _) = ReadArchiveFile(_archiveFile);
 
         _archive = archive;
         
-        (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> constrainedArchive, int _) = ReadConstrainedArchiveFile(_constrainedArchiveFile);
+        (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> constrainedArchive, int mapDimension) = ReadConstrainedArchiveFile(_constrainedArchiveFile);
 
+        mapDimension = 20;
+        
         _constrainedArchive = constrainedArchive;
 
         Debug.Log($"Key count: {_constrainedArchive.GetKeys().Count()}");

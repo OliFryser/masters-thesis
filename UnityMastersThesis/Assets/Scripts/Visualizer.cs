@@ -104,6 +104,13 @@ public class Visualizer : MonoBehaviour
         StopAnimationInEditor();
     }
 
+    [Button("Reset And Complete")]
+    public void ResetAndComplete()
+    {
+        Reset();
+        Complete();
+    }
+
 #if UNITY_EDITOR
     private float _lastStepTime;
 

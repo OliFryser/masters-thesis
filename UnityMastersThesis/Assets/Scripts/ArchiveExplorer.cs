@@ -57,7 +57,7 @@ public class ArchiveExplorer : MonoBehaviour
             tilemapAnalyzer.GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList();
 
         KeyCeilings keyCeilings = new KeyCeilings(
-            flowerPercentageCeiling: 0.2f,
+            specialTileCeiling: 0.2f,
             variationPercentageCeiling: 1.0f);
 
         int numberOfBuckets = 5;
@@ -65,7 +65,7 @@ public class ArchiveExplorer : MonoBehaviour
 
         IndividualHandlerArgs individualHandlerArgs =
             IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations,
-                keyCeilings, numberOfBuckets, standardDeviation, VariationBehavior.UniqueCount);
+                keyCeilings, numberOfBuckets, standardDeviation, VariationBehavior.UniqueCount, ProblemDomain.Arrows);
 
         IndividualHandler individualHandler = new(individualHandlerArgs);
 
