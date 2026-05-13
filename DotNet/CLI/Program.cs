@@ -49,10 +49,10 @@ if (args.Length >= 1)
         runMode = RunMode.TileMapAnalysis;
     }
 
-    string? tilemapArg = args.FirstOrDefault(s => s.StartsWith("-p") || s.StartsWith("--path"));
-    if (args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain")) != null)
+    string? tilemapArg = args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain"));
+    if (tilemapArg != null)
     {
-        int domainNumber = int.Parse(tilemapArg!.Split("=")[1]);
+        int domainNumber = int.Parse(tilemapArg.Split("=")[1]);
         problemDomain = (ProblemDomain)domainNumber;
     }
     
@@ -93,8 +93,8 @@ KeyCeilings keyCeilings = problemDomain switch
 
 int mapDimensions = 10;
 int evaluationIterations = 50;
-int initializationIterations = 250;
-int mutationIterations = 5000;
+int initializationIterations = 10;
+int mutationIterations = 10;
 int convergeThreshold = 500;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
@@ -118,10 +118,10 @@ MapElitesArgs mapElitesArgs = new(
 
 FilePaths.TilemapName = problemDomain switch
 {
-    ProblemDomain.Letters => "ToyDomain.png",
-    ProblemDomain.Arrows => "Letters.png",
+    ProblemDomain.Letters => "Letters.png",
+    ProblemDomain.Arrows => "Arrows.png",
     ProblemDomain.Pokemon => "PalletTown.png",
-    _ => FilePaths.TilemapName
+    _ => throw new ArgumentOutOfRangeException()
 };
 
 using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
