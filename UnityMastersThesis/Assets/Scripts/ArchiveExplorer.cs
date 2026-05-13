@@ -53,17 +53,16 @@ public class ArchiveExplorer : MonoBehaviour
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
         int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-        List<Domain.Models.AdjacencyRule> adjacencyRules = 
+        List<Domain.Models.AdjacencyRule> adjacencyRules =
             tilemapAnalyzer.GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList();
-        
+
         KeyCeilings keyCeilings = new KeyCeilings(
             flowerPercentageCeiling: 0.2f,
-            doorPercentageCeiling: 0.05f,
             variationPercentageCeiling: 1.0f);
 
         int numberOfBuckets = 5;
         float standardDeviation = 1f;
-        
+
         IndividualHandlerArgs individualHandlerArgs =
             IndividualHandlerArgs.Create(mapDimensions, tileTypeCount, tileTypes, adjacencyRules, _evaluationIterations,
                 keyCeilings, numberOfBuckets, standardDeviation, VariationBehavior.UniqueCount);
@@ -71,7 +70,8 @@ public class ArchiveExplorer : MonoBehaviour
         IndividualHandler individualHandler = new(individualHandlerArgs);
 
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log,
-            $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>());
+            $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>(),
+            500);
 
         _archive = MapElites.MapElites.Run(individualHandler, args);
 
@@ -80,7 +80,7 @@ public class ArchiveExplorer : MonoBehaviour
         // SaveToJson(_archive);
         int maxFlowerBucket = _archive.GetKeys().Max(k => k.FlowerBucket);
         int maxTileTypesUsedKey = _archive.GetKeys().Max(k => k.VariationBucket);
-        
+
         _flowerKey = maxFlowerBucket;
         _tileTypesUsedKey = maxTileTypesUsedKey;
     }
