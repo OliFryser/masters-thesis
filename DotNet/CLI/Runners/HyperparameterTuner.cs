@@ -57,13 +57,11 @@ public static class HyperParameterTuner
         ConstrainedIndividualHandler individualHandler =
             new ConstrainedIndividualHandler(individualHandlerArgs);
 
-        return Enumerable
-            .Range(0, 3)
-            .AsParallel()
-            .Select(_ => MapElites.MapElites
-                .RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(individualHandler,
-                    mapElitesArgs))
-            .Average(a => a.GetReliability());
+        return MapElites.MapElites
+            .RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
+                individualHandler, 
+                mapElitesArgs)
+            .GetReliability();
     }
 
     private static ConstrainedIndividualHandlerArgs GetNewArgsWithSigma(
@@ -80,7 +78,8 @@ public static class HyperParameterTuner
             oldIndividualHandlerArgs.KeyCeilings,
             oldIndividualHandlerArgs.NumberOfBucketsPerAxis,
             sigma,
-            oldIndividualHandlerArgs.VariationBehavior);
+            oldIndividualHandlerArgs.VariationBehavior,
+            oldIndividualHandlerArgs.ProblemDomain);
         return new ConstrainedIndividualHandlerArgs(individualHandlerArgs, oldArgs.FeasibilityThreshold,
             oldArgs.SmoothingFactor);
     }

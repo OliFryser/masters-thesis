@@ -18,13 +18,14 @@ namespace Pokémon
         protected List<TileType> TileTypes { get; }
         protected List<AdjacencyRule> AdjacencyRules { get; }
         protected List<Vector> Coordinates { get; }
-        private HashSet<TileType> FlowerTiles { get; }
+        private TileType SpecialTile { get; }
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
         private KeyCeilings KeyCeilings { get; }
         public int NumberOfBucketsPerAxis { get; }
         public double StandardDeviation { get; }
         public VariationBehavior VariationBehavior { get; }
+        public ProblemDomain ProblemDomain { get; }
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -37,16 +38,29 @@ namespace Pokémon
             NumberOfBucketsPerAxis = individualHandlerArgs.NumberOfBucketsPerAxis;
             StandardDeviation = individualHandlerArgs.StandardDeviation;
             VariationBehavior = individualHandlerArgs.VariationBehavior;
-            
-            FlowerTiles = new HashSet<TileType>()
+            ProblemDomain = individualHandlerArgs.ProblemDomain;
+
+            switch (ProblemDomain)
             {
-                // new TileType("99907823a2961b44c2245d44f84bed3452b86f02"), // flower
-                // new TileType("8b3b310ba314c94bb2e371d05b7c3f0df8bd53d1") // the letter A
-                new TileType("4e2313df0660b9d874c387e8450498e015529e0f") // [x]
-            };
+                case ProblemDomain.Letters:
+                    Behavior.BehaviorXName = "Letter A %";
+                    SpecialTile = new TileType("8b3b310ba314c94bb2e371d05b7c3f0df8bd53d1"); // the letter A
+                    break;
+                case ProblemDomain.Arrows:
+                    Behavior.BehaviorXName = "Box X %";
+                    SpecialTile = new TileType("4e2313df0660b9d874c387e8450498e015529e0f"); // [x]
+                    break;
+                case ProblemDomain.Pokemon:
+                    Behavior.BehaviorXName = "Flower %";
+                    SpecialTile = new TileType("99907823a2961b44c2245d44f84bed3452b86f02"); // flower
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             BucketCapacity = NumberOfBucketsPerAxis.IntPow(Behavior.BehaviorCount);
         }
+
 
         public Individual CreateRandom()
         {
@@ -101,7 +115,7 @@ namespace Pokémon
 
         public Key GetKey(Behavior behavior)
         {
-            int flowerBucket = GetBucket(behavior.FlowerPercentage, KeyCeilings.FlowerPercentageCeiling);
+            int flowerBucket = GetBucket(behavior.SpecialTilePercentage, KeyCeilings.SpecialTileCeiling);
 
             int tileTypesUsedBucket =
                 GetBucket(behavior.Variation, KeyCeilings.VariationPercentageCeiling);
@@ -118,19 +132,19 @@ namespace Pokémon
         protected Behavior GetBehavior(State state)
         {
             List<Tile> tiles = state.GetMap().Tiles;
-            var numberOfFlowers = tiles.Count(t => FlowerTiles.Contains(t.Type));
+            var numberOfSpecialTiles = tiles.Count(t => SpecialTile.Equals(t.Type));
 
             float variation =
                 VariationBehavior == VariationBehavior.Entropy
                     ? Calculate.Entropy(tiles, TileTypeCount)
                     : Calculate.UniquePercentage(tiles, TileTypeCount);
 
-            return new Behavior(numberOfFlowers / (float)Coordinates.Count, variation);
+            return new Behavior(numberOfSpecialTiles / (float)Coordinates.Count, variation);
         }
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
-            float averageFlowerPercentage = behaviors.Select(b => b.FlowerPercentage).Average();
+            float averageFlowerPercentage = behaviors.Select(b => b.SpecialTilePercentage).Average();
             float averageVariation = behaviors.Select(b => b.Variation).Average();
 
             return new Behavior(averageFlowerPercentage, averageVariation);

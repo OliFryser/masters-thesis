@@ -40,8 +40,8 @@ namespace Pokémon.Statistics
             streamWriter.WriteLine("Number of Buckets Per Axis");
             streamWriter.WriteLine(numberOfBucketsPerAxis);
             streamWriter.WriteLine("Behavior Names");
-            streamWriter.WriteLine("Flower %");
-            streamWriter.WriteLine("Variation %");
+            streamWriter.WriteLine(Behavior.BehaviorXName);
+            streamWriter.WriteLine(Behavior.BehaviorYName);
             streamWriter.WriteLine("Feasibility Threshold");
             streamWriter.WriteLine(feasibilityThreshold.ToString(CultureInfo.InvariantCulture));
             streamWriter.WriteLine("Entries");

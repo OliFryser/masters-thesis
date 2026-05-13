@@ -21,6 +21,7 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
+ProblemDomain problemDomain = ProblemDomain.Pokemon;
 
 if (args.Length >= 1)
 {
@@ -49,10 +50,10 @@ if (args.Length >= 1)
     }
 
     string? tilemapArg = args.FirstOrDefault(s => s.StartsWith("-p") || s.StartsWith("--path"));
-    if (args.FirstOrDefault(s => s.StartsWith("-p") || s.StartsWith("--path")) != null)
+    if (args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain")) != null)
     {
-        string tilemapName = tilemapArg!.Split("=")[1];
-        FilePaths.TilemapName = tilemapName;
+        int domainNumber = int.Parse(tilemapArg!.Split("=")[1]);
+        problemDomain = (ProblemDomain)domainNumber;
     }
     
     // Parse behavior flags
@@ -76,14 +77,24 @@ else
     statisticsTrackers = [];
 }
 
-KeyCeilings keyCeilings = new(
-    flowerPercentageCeiling: 0.2f,
-    variationPercentageCeiling: 1.0f);
+KeyCeilings keyCeilings = problemDomain switch
+{
+    ProblemDomain.Letters => new(
+        specialTileCeiling: 1.0f,
+        variationPercentageCeiling: 1.0f),
+    ProblemDomain.Arrows => new(
+        specialTileCeiling: 1.0f,
+        variationPercentageCeiling: 1.0f),
+    ProblemDomain.Pokemon => new(
+        specialTileCeiling: 0.2f,
+        variationPercentageCeiling: 1.0f),
+    _ => throw new ArgumentOutOfRangeException()
+};
 
-int mapDimensions = 20;
+int mapDimensions = 10;
 int evaluationIterations = 50;
-int initializationIterations = 500;
-int mutationIterations = 10000;
+int initializationIterations = 250;
+int mutationIterations = 5000;
 int convergeThreshold = 500;
 int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
@@ -105,12 +116,29 @@ MapElitesArgs mapElitesArgs = new(
     statisticsTrackers,
     convergeThreshold);
 
+FilePaths.TilemapName = problemDomain switch
+{
+    ProblemDomain.Letters => "ToyDomain.png",
+    ProblemDomain.Arrows => "Letters.png",
+    ProblemDomain.Pokemon => "PalletTown.png",
+    _ => FilePaths.TilemapName
+};
+
 using TilemapAnalyzer tilemapAnalyzer = new(FilePaths.TilemapPath);
 List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
 int tileTypeCount = tilemapAnalyzer.TileTypeCount;
-List<AdjacencyRule> adjacencyRules = tilemapAnalyzer
-    .GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList();
+List<AdjacencyRule> adjacencyRules = new List<AdjacencyRule>();
 
+adjacencyRules.AddRange(
+    problemDomain switch
+    {
+        ProblemDomain.Letters or ProblemDomain.Arrows => tilemapAnalyzer.GetSymmetryRules(),
+        ProblemDomain.Pokemon =>
+            tilemapAnalyzer.GetAdjacencyRules().Concat(tilemapAnalyzer.GetSymmetryRules()).ToHashSet().ToList(),
+        _ => throw new ArgumentOutOfRangeException()
+    }
+);
+   
 IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     mapDimensions,
     tileTypeCount,
@@ -120,7 +148,8 @@ IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     keyCeilings,
     numberOfBucketsPerAxis,
     standardDeviation, 
-    variationBehavior);
+    variationBehavior,
+    problemDomain);
 
 ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
     new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);

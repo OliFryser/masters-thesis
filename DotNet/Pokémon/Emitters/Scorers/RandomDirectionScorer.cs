@@ -34,7 +34,7 @@ namespace Pokémon.Emitters.Scorers
         {
             return Vector<double>.Build.Dense(new double[]
             {
-                behavior.FlowerPercentage, 
+                behavior.SpecialTilePercentage, 
                 behavior.Variation
             });
         }

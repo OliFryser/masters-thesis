@@ -4,22 +4,25 @@ namespace Pokémon
 {
     public class Behavior
     {
-        public Behavior(float flowerPercentage, float variation)
+        public Behavior(float specialTilePercentage, float variation)
         {
-            FlowerPercentage = flowerPercentage;
+            SpecialTilePercentage = specialTilePercentage;
             Variation = variation;
         }
 
+        public static string BehaviorXName = "Flowers %";
+        public static readonly string BehaviorYName = "Variation %";
+        
         public static uint BehaviorCount => 2;
-        public float FlowerPercentage { get; }
+        public float SpecialTilePercentage { get; }
         public float Variation { get; }
 
         public float GetDeviation(Behavior averageBehavior)
         {
-            float flowerDeviation = MathF.Pow(MathF.Abs(FlowerPercentage - averageBehavior.FlowerPercentage), 2);
+            float specialTileDeviation = MathF.Pow(MathF.Abs(SpecialTilePercentage - averageBehavior.SpecialTilePercentage), 2);
             float variationDeviation = MathF.Pow(MathF.Abs(Variation - averageBehavior.Variation), 2);
             
-            float averageDeviation = MathF.Sqrt(flowerDeviation + variationDeviation);
+            float averageDeviation = MathF.Sqrt(specialTileDeviation + variationDeviation);
 
             return averageDeviation;
         }

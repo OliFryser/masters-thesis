@@ -4,18 +4,18 @@ namespace Pokémon.Args
 {
     public readonly struct KeyCeilings
     {
-        public readonly float FlowerPercentageCeiling;
+        public readonly float SpecialTileCeiling;
         public readonly float VariationPercentageCeiling;
 
-        public KeyCeilings(float flowerPercentageCeiling, float variationPercentageCeiling)
+        public KeyCeilings(float specialTileCeiling, float variationPercentageCeiling)
         {
-            FlowerPercentageCeiling = flowerPercentageCeiling;
+            SpecialTileCeiling = specialTileCeiling;
             VariationPercentageCeiling = variationPercentageCeiling;
         }
 
         public override string ToString()
         {
-            return $"Flower Percentage Ceiling: {FlowerPercentageCeiling}{Environment.NewLine}" +
+            return $"Special Tile Percentage Ceiling: {SpecialTileCeiling}{Environment.NewLine}" +
                    $"Variation Percentage Ceiling: {VariationPercentageCeiling}";
         }
     }
