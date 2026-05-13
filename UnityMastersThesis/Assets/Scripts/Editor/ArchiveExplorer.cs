@@ -1,6 +1,6 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Domain.Models;
 using MapElites.Args;
@@ -136,3 +136,4 @@ public class ArchiveExplorer : MonoBehaviour
         return _hasArchive;
     }
 }
+#endif

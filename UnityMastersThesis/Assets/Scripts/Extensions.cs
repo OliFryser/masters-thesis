@@ -3,12 +3,15 @@ using System.Linq;
 using Domain.Models;
 using Pokémon;
 using TilemapAnalysis;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using WFC.Args;
 
 public static class Extensions
 {
+    #if UNITY_EDITOR
     public static WfcArgs GetWfcArgs(this Individual individual, Texture2D inputTilemap)
     {
         const int mapDimensions = 20;
@@ -24,4 +27,5 @@ public static class Extensions
 
         return args;
     }
+    #endif
 }

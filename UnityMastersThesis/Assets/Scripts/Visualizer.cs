@@ -5,15 +5,12 @@ using Domain.Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Newtonsoft.Json;
 using WFC;
-using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
 using Tile = Domain.Models.Tile;
 
 #if UNITY_EDITOR
-using Pokémon;
 using UnityEditor;
 #endif
 
@@ -21,7 +18,7 @@ public class Visualizer : MonoBehaviour
 {
     [SerializeField] private Tilemap _tilemap;
 
-    [SerializeField] private WfcConfig _wfcConfig;
+    public WfcConfig _wfcConfig;
 
     [SerializeField, Range(0f, 1f)] private float _animationSpeed = .5f;
     [SerializeField] private TileBase _emptyTile;
@@ -69,15 +66,6 @@ public class Visualizer : MonoBehaviour
         }
     }
 
-    [Button("Step")]
-    public void Step()
-    {
-        InitializeState();
-
-        _state = WaveFunctionCollapse.Step(_state);
-        DisplayTiles(_state);
-    }
-
     private void InitializeState()
     {
         if (_state == null)
@@ -86,7 +74,25 @@ public class Visualizer : MonoBehaviour
             Debug.Log("Creating initial state.");
         }
     }
+    
+    public void Display(State state)
+    {
+        _state = state;
+        DisplayTiles(state);
+    }
 
+#if UNITY_EDITOR
+    private float _lastStepTime;
+    
+    [Button("Step")]
+    public void Step()
+    {
+        InitializeState();
+
+        _state = WaveFunctionCollapse.Step(_state);
+        DisplayTiles(_state);
+    }
+    
     [Button("Complete")]
     public void Complete()
     {
@@ -111,8 +117,6 @@ public class Visualizer : MonoBehaviour
         Complete();
     }
 
-#if UNITY_EDITOR
-    private float _lastStepTime;
 
     [Button("Start Animation")]
     public void PlayInEditor()
@@ -151,12 +155,6 @@ public class Visualizer : MonoBehaviour
             // This ensures the Scene View repaints so you see the tiles change
             EditorUtility.SetDirty(_tilemap);
         }
-    }
-
-    public void Display(State state)
-    {
-        _state = state;
-        DisplayTiles(state);
     }
     
     private void OnDrawGizmos()
