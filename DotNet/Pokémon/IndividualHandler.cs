@@ -44,11 +44,11 @@ namespace Pokémon
             {
                 case ProblemDomain.Letters:
                     Behavior.BehaviorXName = "Letter A %";
-                    SpecialTile = new TileType("8b3b310ba314c94bb2e371d05b7c3f0df8bd53d1"); // the letter A
+                    SpecialTile = new TileType("eb740f4bb13db9e8161c3f1d441eb7ab6cc9d97d"); // the letter A
                     break;
                 case ProblemDomain.Arrows:
                     Behavior.BehaviorXName = "Box X %";
-                    SpecialTile = new TileType("4e2313df0660b9d874c387e8450498e015529e0f"); // [x]
+                    SpecialTile = new TileType("2585de7ef2061b082f2462f93ddf0f15270dfc8c"); // [x]
                     break;
                 case ProblemDomain.Pokemon:
                     Behavior.BehaviorXName = "Flower %";
