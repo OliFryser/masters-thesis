@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Models;
 using WFC.Models;
 using WFC.Output;
