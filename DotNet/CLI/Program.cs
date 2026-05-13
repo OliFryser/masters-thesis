@@ -97,7 +97,7 @@ int initializationIterations = 250;
 int mutationIterations = 5000;
 int convergeThreshold = 500;
 int numberOfBucketsPerAxis = 5;
-double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
+double standardDeviation = 0.2; // Best result from Pokémon tuning
 
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 5f;

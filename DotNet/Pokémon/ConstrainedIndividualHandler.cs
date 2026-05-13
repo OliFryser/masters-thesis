@@ -25,7 +25,7 @@ namespace Pokémon
         {
             State[] results = SampleStates(individual);
 
-            Behavior[] behaviors = results.Select(GetBehavior).ToArray();
+            Behavior[] behaviors = results.Where(s => s.IsCollapsed).Select(GetBehavior).ToArray();
 
             Behavior averageBehavior = GetAverageBehavior(behaviors);
 
