@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Domain.Models;
 using MapElites;
@@ -15,17 +14,17 @@ namespace Pokémon
     public class IndividualHandler : IIndividualHandler<Key, Entry, Individual, Behavior>
     {
         private int TileTypeCount { get; }
-        protected List<TileType> TileTypes { get; }
-        protected List<AdjacencyRule> AdjacencyRules { get; }
-        protected List<Vector> Coordinates { get; }
+        private List<TileType> TileTypes { get; }
+        private List<AdjacencyRule> AdjacencyRules { get; }
+        private List<Vector> Coordinates { get; }
         private TileType SpecialTile { get; }
         public int BucketCapacity { get; }
         protected int EvaluationIterations { get; }
         private KeyCeilings KeyCeilings { get; }
         public int NumberOfBucketsPerAxis { get; }
-        public double StandardDeviation { get; }
-        public VariationBehavior VariationBehavior { get; }
-        public ProblemDomain ProblemDomain { get; }
+        private double StandardDeviation { get; }
+        private VariationBehavior VariationBehavior { get; }
+        private ProblemDomain ProblemDomain { get; }
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -58,6 +57,10 @@ namespace Pokémon
                     throw new ArgumentOutOfRangeException();
             }
 
+            Behavior.BehaviorYName = VariationBehavior == VariationBehavior.UniqueCount
+                ? "Variation Count %"
+                : "Variation Entropy";
+            
             BucketCapacity = NumberOfBucketsPerAxis.IntPow(Behavior.BehaviorCount);
         }
 

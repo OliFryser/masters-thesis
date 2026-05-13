@@ -11,7 +11,7 @@ namespace Pokémon
         }
 
         public static string BehaviorXName = "Flowers %";
-        public static readonly string BehaviorYName = "Variation %";
+        public static string BehaviorYName = "Variation %";
         
         public static uint BehaviorCount => 2;
         public float SpecialTilePercentage { get; }

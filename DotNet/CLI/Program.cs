@@ -93,13 +93,13 @@ KeyCeilings keyCeilings = problemDomain switch
 
 int mapDimensions = 10;
 int evaluationIterations = 50;
-int initializationIterations = 10;
-int mutationIterations = 10;
+int initializationIterations = 250;
+int mutationIterations = 5000;
 int convergeThreshold = 500;
-int numberOfBucketsPerAxis = 10;
+int numberOfBucketsPerAxis = 5;
 double standardDeviation = 0.1411; // From hyper parameter tuning: 30 generations, minPop 10, maxPop 20
 
-float feasibilityThreshold = 0.60f;
+float feasibilityThreshold = 0.70f;
 float smoothingFactor = 5f;
 
 int optimizationEmitters = 2;

@@ -30,7 +30,6 @@ public static class HyperParameterTuner
             .Select(RunExperimentWithSigma)
             .MaxBy(t => t.fitness).sigma;
         
-        
         using StreamWriter streamWriter = new StreamWriter(Path.Combine(FilePaths.OutputPath, "HyperParam.Log"));
         
         loggerEntries.Sort((a, b) => a.Item2.CompareTo(b.Item2));
@@ -41,7 +40,8 @@ public static class HyperParameterTuner
         {
             Console.WriteLine($"Running iteration {iteration} out of {steps} ({iteration / (double)steps * 100:F0} %) with sigma: {sigma.ToString("F2", CultureInfo.InvariantCulture)}");
             ConstrainedIndividualHandlerArgs newArgs = GetNewArgsWithSigma(constrainedIndividualHandlerArgs, sigma);
-            double fitness = RunMapElitesTrial(mapElitesArgs, newArgs);
+            MapElitesArgs newMapElitesArgs = GetNewMapElitesArgs(mapElitesArgs, iteration);
+            double fitness = RunMapElitesTrial(newMapElitesArgs, newArgs);
             lock (loggerEntries)
             {
                 loggerEntries.Add((sigma, fitness));
@@ -50,12 +50,23 @@ public static class HyperParameterTuner
         }
     }
 
+    private static MapElitesArgs GetNewMapElitesArgs(MapElitesArgs mapElitesArgs, int iteration)
+        => new MapElitesArgs(
+            mapElitesArgs.InitializationIterations,
+            mapElitesArgs.MutationIterations,
+            message => Console.WriteLine($"Iteration {iteration}: {message}"),
+            mapElitesArgs.StatisticsOutputPath,
+            mapElitesArgs.StatisticsTrackers,
+            mapElitesArgs.ConvergeThreshold);
+
     private static double RunMapElitesTrial(
         MapElitesArgs mapElitesArgs, 
         ConstrainedIndividualHandlerArgs individualHandlerArgs)
     {
         ConstrainedIndividualHandler individualHandler =
             new ConstrainedIndividualHandler(individualHandlerArgs);
+        
+        
 
         return MapElites.MapElites
             .RunConstrained<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(

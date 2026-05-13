@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MapElites.Models;
+using Pokémon.Args;
 
 namespace Pokémon.Statistics
 {
@@ -11,6 +12,7 @@ namespace Pokémon.Statistics
             IArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive,
             int numberOfBucketsPerAxis,
             float feasibilityThreshold,
+            KeyCeilings keyCeilings,
             string statisticsOutputPath)
         {
             IEnumerable<Key> keys = archive.GetKeys();
@@ -42,6 +44,9 @@ namespace Pokémon.Statistics
             streamWriter.WriteLine("Behavior Names");
             streamWriter.WriteLine(Behavior.BehaviorXName);
             streamWriter.WriteLine(Behavior.BehaviorYName);
+            streamWriter.WriteLine("Behavior ceilings");
+            streamWriter.WriteLine(keyCeilings.SpecialTileCeiling.ToString(CultureInfo.InvariantCulture));
+            streamWriter.WriteLine(keyCeilings.VariationPercentageCeiling.ToString(CultureInfo.InvariantCulture));
             streamWriter.WriteLine("Feasibility Threshold");
             streamWriter.WriteLine(feasibilityThreshold.ToString(CultureInfo.InvariantCulture));
             streamWriter.WriteLine("Entries");

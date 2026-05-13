@@ -62,8 +62,10 @@ namespace MapElites
                 if (iterationsSinceLastSave >= args.ConvergeThreshold)
                 {
                     logger($"MAP-Elites converged at iteration {i}. " +
-                           $"Archive Size: {{archive.Count}}. "+
-                           $"Max fitness {{archive.GetMaxFitness()}}");
+                           $"Archive Size: {archive.Count}. "+
+                           $"Max fitness {archive.GetMaxFitness()}");
+                    args.StatisticsTrackers.ForEach(s => s.SaveToFile(args.StatisticsOutputPath));
+                    return archive;
                 }
                 
                 TIndividual individual = archive.Sample();

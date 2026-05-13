@@ -38,6 +38,9 @@ class BehaviorSpacePlotter:
                 self.behavior_x_label = f.readline().strip()
                 self.behavior_y_label = f.readline().strip()
                 f.readline() # skip header
+                self.behavior_x_max = float(f.readline().strip())
+                self.behavior_y_max = float(f.readline().strip())
+                f.readline() # skip header
                 self.feasibility_threshold = float(f.readline().strip())
                 f.readline() # skip header
                 
@@ -52,7 +55,7 @@ class BehaviorSpacePlotter:
                     
 
         except Exception as e:
-                eprint(f"An error occured: {e}")
+                eprint(f"An error occured: {e}. Entries length: {len(self.entries)}")
 
 
     def plot_archive_coverage(self):
@@ -72,8 +75,8 @@ class BehaviorSpacePlotter:
         plt.figure(figsize=(12, 8))
         ax = plt.gca()
         
-        x_max = 0.2
-        y_max = 1.0
+        x_max = self.behavior_x_max
+        y_max = self.behavior_y_max
         
         extent = [0, x_max, 0, y_max]
 

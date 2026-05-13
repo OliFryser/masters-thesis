@@ -30,6 +30,7 @@ public static class ConstrainedMapElitesRunner
             archive, 
             constrainedIndividualHandler.NumberOfBucketsPerAxis, 
             constrainedIndividualHandlerArgs.FeasibilityThreshold,
+            constrainedIndividualHandlerArgs.IndividualHandlerArgs.KeyCeilings,
             FilePaths.DataPath);
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
