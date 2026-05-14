@@ -19,9 +19,9 @@
                 <ui:RadioButtonGroup label="Archive&#10;" choices="Letters,Arrows,Pokémon,Custom" name="TilemapButtonGroup" class="text" style="flex-direction: column; font-size: 42px;"/>
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Label text="Custom Archive" class="text" style="font-size: 42px;"/>
+            <ui:Label text="Custom Archive" class="text" style="font-size: 42px; white-space: nowrap; width: 203px;"/>
             <ui:Button text="UPLOAD" name="PickArchiveButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; background-color: rgb(188, 188, 188);"/>
-            <ui:Label text="" name="CustomArchive" class="text" style="font-size: 42px;"/>
+            <ui:Label text="" name="CustomArchive" class="text" style="font-size: 42px; white-space: normal;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;"/>
     </ui:VisualElement>

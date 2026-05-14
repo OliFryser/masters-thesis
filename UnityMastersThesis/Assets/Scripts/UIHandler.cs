@@ -23,7 +23,7 @@ public class UIHandler : MonoBehaviour
     private Button _pickArchiveButton;
     private RadioButtonGroup _tilemapRadioButtonGroup;
     private Label _customArchive;
-    private bool _archiveLoaded;
+    private string _customArchiveFilePath;
 
     public void OnEnable()
     {
@@ -83,9 +83,7 @@ public class UIHandler : MonoBehaviour
                 {
                     if (paths.Length != 1)
                         return;
-                    _archivePlaymodeExplorer.LoadArchive(paths.Single());
-                    _archiveLoaded = true;
-                    _customArchive.text = "Archive Loaded.";
+                    _customArchiveFilePath = paths.Single();
                     UpdateLoadStatus();
                 });
         }
@@ -97,40 +95,42 @@ public class UIHandler : MonoBehaviour
 
     private void UpdateLoadStatus()
     {
-        if (_tilemapRadioButtonGroup.value == 3) PickArchive();
-
-        int index = _tilemapRadioButtonGroup.value;
-        if (index == 3)
+        if (_tilemapRadioButtonGroup.value == 3)
         {
-            PickArchive();
+            if (string.IsNullOrEmpty(_customArchiveFilePath))
+            {
+                _customArchive.text = "No custom archive file loaded.";
+                return;
+            }
+            _archivePlaymodeExplorer.LoadArchive(_customArchiveFilePath);
+            _customArchive.text = "Archive Loaded.";
+            return;
         }
-        else
+        
+        string folderName = _tilemapRadioButtonGroup.value switch
         {
-            string folderName = index switch
-            {
-                0 => "Letters",
-                1 => "Arrows",
-                2 => "Pokemon",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            
-            string folderPath = Path.Combine(Application.streamingAssetsPath, folderName);
-            if (!Directory.Exists(folderPath))
-            {
-                throw new ArgumentException($"Folder {folderPath} does not exist.");
-            }
-
-            string[] files =  Directory.GetFiles(folderPath);
-            
-            if (files.Length == 0)
-            {
-                throw new ArgumentException($"Folder {folderPath} does not contain any files.");
-            }
-
-            string archiveFile = Directory.GetFiles(folderPath).FirstOrDefault();
-            
-            _archivePlaymodeExplorer.LoadArchive(archiveFile);
+            0 => "Letters",
+            1 => "Arrows",
+            2 => "Pokemon",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        
+        string folderPath = Path.Combine(Application.streamingAssetsPath, folderName);
+        if (!Directory.Exists(folderPath))
+        {
+            throw new ArgumentException($"Folder {folderPath} does not exist.");
         }
+
+        string[] files =  Directory.GetFiles(folderPath);
+        
+        if (files.Length == 0)
+        {
+            throw new ArgumentException($"Folder {folderPath} does not contain any files.");
+        }
+
+        string archiveFile = Directory.GetFiles(folderPath).FirstOrDefault();
+        
+        _archivePlaymodeExplorer.LoadArchive(archiveFile);
     }
 
     private void Run()
