@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MapElites.Extensions;
+using MapElites.Models;
 using Pokémon;
 using SFB;
 using UnityEngine;
@@ -24,6 +25,10 @@ public class UIHandler : MonoBehaviour
     private RadioButtonGroup _tilemapRadioButtonGroup;
     private Label _customArchive;
     private string _customArchiveFilePath;
+    private Label _value1;
+    private Label _value2;
+    private Label _value3;
+    private Label _value4;
 
     public void OnEnable()
     {
@@ -31,6 +36,10 @@ public class UIHandler : MonoBehaviour
         _pickArchiveButton = _uiDocument.rootVisualElement.Q<Button>("PickArchiveButton");
         _tilemapRadioButtonGroup = _uiDocument.rootVisualElement.Q<RadioButtonGroup>("TilemapButtonGroup");
         _customArchive = _uiDocument.rootVisualElement.Q<Label>("CustomArchive");
+        _value1 = _uiDocument.rootVisualElement.Q<Label>("v1");
+        _value2 = _uiDocument.rootVisualElement.Q<Label>("v2");
+        _value3 = _uiDocument.rootVisualElement.Q<Label>("v3");
+        _value4 = _uiDocument.rootVisualElement.Q<Label>("v4");
         
         _tilemapRadioButtonGroup.RegisterValueChangedCallback(_ => UpdateLoadStatus());
         _tilemapRadioButtonGroup.value = 2;
@@ -63,6 +72,21 @@ public class UIHandler : MonoBehaviour
         
        SetSlider(_flowerSlider, minFlowers, maxFlowers);
        SetSlider(_tileTypesSlider, minTileTypes, maxTileTypes);
+       
+       _flowerSlider.RegisterValueChangedCallback(_ => UpdateValueLabels());
+    }
+
+    private void UpdateValueLabels()
+    {
+        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = _archivePlaymodeExplorer.ConstrainedArchive;
+        Key key = GetKey();
+        if (archive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
+        {
+            _value1.text = $"{Mathf.Round(entry.Behavior.SpecialTilePercentage * 100)}%";
+            _value2.text = $"{Mathf.Round(entry.Behavior.Variation * 100)}%";
+            _value3.text = $"{Mathf.Round(entry.Feasibility * 100)}%";
+            _value4.text = $"{entry.Fitness:F2}";
+        }
     }
 
     private void PickArchive()

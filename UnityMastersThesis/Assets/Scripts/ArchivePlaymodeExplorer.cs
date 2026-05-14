@@ -23,7 +23,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     
     
     private IArchive<Key, Entry, Individual, Behavior> _archive;
-    private ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> _constrainedArchive;
+    public ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> ConstrainedArchive { get; private set; }
     
     private IReadOnlyCollection<TileType> _tileTypes;
     private IReadOnlyCollection<Domain.Models.AdjacencyRule> _adjacencyRules;
@@ -40,9 +40,9 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     public void LoadArchive(string filename)
     {
         ConstrainedSaveData saveData = ReadConstrainedArchiveFile(filename);
-        _constrainedArchive = saveData.Archive;
+        ConstrainedArchive = saveData.Archive;
         _coordinates = GetRectangleCoordinates(saveData.MapDimensions, saveData.MapDimensions).ToList();
-        _uiHandler.Initialize(_constrainedArchive.GetKeys());
+        _uiHandler.Initialize(ConstrainedArchive.GetKeys());
     }
     
     private ConstrainedSaveData ReadConstrainedArchiveFile(string filename)
@@ -53,7 +53,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
 
     public void BrowseConstrainedArchive(Key key, TilemapDomain tilemapDomain)
     {
-        if (!_constrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
+        if (!ConstrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
         {
             Debug.LogError($"Failed to retrieve key {key}");
             return;
@@ -64,7 +64,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
             TilemapDomain.Letters => _lettersConfig,
             TilemapDomain.Arrows => _arrowsConfig,
             TilemapDomain.Pokemon => _pokemonConfig,
-            TilemapDomain.ReadFromArchive => _constrainedArchive.MapId switch
+            TilemapDomain.ReadFromArchive => ConstrainedArchive.MapId switch
             {
                 0 => _lettersConfig,
                 1 => _arrowsConfig,
