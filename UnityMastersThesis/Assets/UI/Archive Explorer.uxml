@@ -1,26 +1,28 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styling.uss?fileID=7433441132597879392&amp;guid=bd0b4bdc84cb74c3bb10a7d33157e981&amp;type=3#Styling"/>
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 33%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap;">
-            <ui:Label text="Behaviors" name="Label" class="text" style="-unity-text-align: middle-center; font-size: 105px;"/>
+        <ui:VisualElement style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 23%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap;">
+            <ui:Label text="Behaviors" name="Label" class="text" style="-unity-text-align: middle-left; font-size: 65px;"/>
             <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Label text="Special Tile" class="text" style="font-size: 53px;"/>
+            <ui:Label text="Special Tile" class="text" style="font-size: 42px;"/>
             <ui:SliderInt label="" value="42" high-value="100" name="FlowersSlider" class="unity-slider"/>
             <ui:VisualElement name="VisualElement" style="flex-grow: 0.1; display: none;"/>
             <ui:Label text="Doors" class="text" style="font-size: 53px; display: none;"/>
             <ui:SliderInt label="" value="42" high-value="100" name="DoorsSlider" class="unity-slider" style="display: none;"/>
             <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Label text="Variation" name="Variation" class="text" style="font-size: 53px;"/>
+            <ui:Label text="Variation" name="Variation" class="text" style="font-size: 42px;"/>
             <ui:SliderInt label="" value="42" high-value="100" name="TileTypesSlider" class="unity-slider"/>
             <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Button text="RUN" name="RunButton" class="text" style="font-size: 53px; border-top-left-radius: 24px; border-bottom-right-radius: 24px;"/>
+            <ui:Button text="SAMPLE" name="RunButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px;"/>
             <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Button text="PICK ARCHIVE" name="PickArchiveButton" class="text" style="font-size: 53px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; background-color: rgb(255, 209, 119);"/>
-            <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:VisualElement style="flex-grow: initial; flex-direction: row; justify-content: space-around;">
-                <ui:RadioButtonGroup label="Tilemap" choices="Letters,Arrows,Pokémon" name="TilemapButtonGroup" class="text"/>
+            <ui:VisualElement style="flex-grow: initial; flex-direction: row; justify-content: flex-start;">
+                <ui:RadioButtonGroup label="Archive&#10;" choices="Letters,Arrows,Pokémon,Custom" name="TilemapButtonGroup" class="text" style="flex-direction: column; font-size: 42px;"/>
             </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 0.1;"/>
+            <ui:Label text="Custom Archive" class="text" style="font-size: 42px;"/>
+            <ui:Button text="UPLOAD" name="PickArchiveButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; background-color: rgb(188, 188, 188);"/>
+            <ui:Label text="" name="CustomArchive" class="text" style="font-size: 42px;"/>
         </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 2;"/>
+        <ui:VisualElement style="flex-grow: 1;"/>
     </ui:VisualElement>
 </ui:UXML>

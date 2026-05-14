@@ -71,7 +71,7 @@ public class ArchiveExplorer : MonoBehaviour
 
         MapElitesArgs args = new MapElitesArgs(_initialIterations, _mutationIterations, Debug.Log,
             $"Assets/Output/{DateTime.Now:yyyyMMdd_HHmmss}", new List<IStatisticsTracker>(),
-            500);
+            500, 2);
 
         _archive = MapElites.MapElites.Run(individualHandler, args);
 

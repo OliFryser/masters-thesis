@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Domain.Models;
 using MapElites;
@@ -147,6 +148,11 @@ namespace Pokémon
 
         protected Behavior GetAverageBehavior(Behavior[] behaviors)
         {
+            if (behaviors.Length == 0)
+            {
+                return new Behavior(0, 0);
+            }
+            
             float averageFlowerPercentage = behaviors.Select(b => b.SpecialTilePercentage).Average();
             float averageVariation = behaviors.Select(b => b.Variation).Average();
 

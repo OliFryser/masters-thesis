@@ -5,7 +5,6 @@ using Domain.Models;
 using MapElites.Models;
 using Pokémon;
 using Pokémon.Json;
-using TilemapAnalysis;
 using UnityEngine;
 using WFC;
 using WFC.Args;
@@ -17,7 +16,11 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     [SerializeField] private Visualizer[] _visualizers;
     [SerializeField] private Texture2D _tilemap;
     [SerializeField] private UIHandler _uiHandler;
-    [SerializeField] private WfcConfig[] _wfcConfigs; 
+
+    [SerializeField] private WfcConfig _lettersConfig;
+    [SerializeField] private WfcConfig _arrowsConfig;
+    [SerializeField] private WfcConfig _pokemonConfig;
+    
     
     private IArchive<Key, Entry, Individual, Behavior> _archive;
     private ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> _constrainedArchive;
@@ -48,7 +51,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         return saveData;
     }
 
-    public void BrowseConstrainedArchive(Key key, int wfcConfigIndex)
+    public void BrowseConstrainedArchive(Key key, TilemapDomain tilemapDomain)
     {
         if (!_constrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
         {
@@ -56,17 +59,26 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
             return;
         }
 
-        if (wfcConfigIndex >= _wfcConfigs.Length)
+        WfcConfig wfcConfig = tilemapDomain switch
         {
-            throw new ArgumentOutOfRangeException(nameof(wfcConfigIndex), "WFC Config Index is out of range. Make sure 3 wfc configs are added");
-        }
-        
-        var currentWfcConfig = _wfcConfigs[wfcConfigIndex];
-        LoadTilemap(currentWfcConfig);
+            TilemapDomain.Letters => _lettersConfig,
+            TilemapDomain.Arrows => _arrowsConfig,
+            TilemapDomain.Pokemon => _pokemonConfig,
+            TilemapDomain.ReadFromArchive => _constrainedArchive.MapId switch
+            {
+                0 => _lettersConfig,
+                1 => _arrowsConfig,
+                2 => _pokemonConfig,
+                _ => throw new ArgumentOutOfRangeException()
+            },
+            _ => throw new ArgumentOutOfRangeException(nameof(tilemapDomain), tilemapDomain, null)
+        };
+            
+        LoadTilemap(wfcConfig);
         
         foreach (Visualizer visualizer in _visualizers)
         {
-            visualizer._wfcConfig = _wfcConfigs[wfcConfigIndex];
+            visualizer._wfcConfig = wfcConfig;
             
             WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
 
@@ -85,5 +97,13 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
 
             visualizer.Display(state);
         }
+    }
+
+    public enum TilemapDomain
+    {
+        Letters,
+        Arrows,
+        Pokemon,
+        ReadFromArchive
     }
 }

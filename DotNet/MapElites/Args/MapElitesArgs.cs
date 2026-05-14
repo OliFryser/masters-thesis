@@ -12,7 +12,8 @@ namespace MapElites.Args
             Action<string> logger, 
             string statisticsOutputPath,
             List<IStatisticsTracker> statisticsTrackers, 
-            int convergeThreshold)
+            int convergeThreshold,
+            int mapId)
         {
             InitializationIterations = initializationIterations;
             MutationIterations = mutationIterations;
@@ -20,11 +21,13 @@ namespace MapElites.Args
             StatisticsOutputPath = statisticsOutputPath;
             StatisticsTrackers = statisticsTrackers;
             ConvergeThreshold = convergeThreshold;
+            MapId = mapId;
         }
 
         public int InitializationIterations { get; }
         public int MutationIterations { get; }
         public int ConvergeThreshold { get; }
+        public int MapId { get; }
         public Action<string> Logger { get; }
         public string StatisticsOutputPath { get; }
         public List<IStatisticsTracker> StatisticsTrackers { get; }

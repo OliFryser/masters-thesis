@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using MapElites.Extensions;
 using Pokémon;
@@ -20,6 +22,7 @@ public class UIHandler : MonoBehaviour
     private Button _runButton;
     private Button _pickArchiveButton;
     private RadioButtonGroup _tilemapRadioButtonGroup;
+    private Label _customArchive;
     private bool _archiveLoaded;
 
     public void OnEnable()
@@ -27,9 +30,10 @@ public class UIHandler : MonoBehaviour
         _runButton = _uiDocument.rootVisualElement.Q<Button>("RunButton");
         _pickArchiveButton = _uiDocument.rootVisualElement.Q<Button>("PickArchiveButton");
         _tilemapRadioButtonGroup = _uiDocument.rootVisualElement.Q<RadioButtonGroup>("TilemapButtonGroup");
-        _runButton.SetEnabled(false);
+        _customArchive = _uiDocument.rootVisualElement.Q<Label>("CustomArchive");
         
         _tilemapRadioButtonGroup.RegisterValueChangedCallback(_ => UpdateLoadStatus());
+        _tilemapRadioButtonGroup.value = 2;
         
         _runButton.clicked += Run;
         _pickArchiveButton.clicked += PickArchive;
@@ -67,31 +71,82 @@ public class UIHandler : MonoBehaviour
             new ExtensionFilter("JSON Files", "json"),
             new ExtensionFilter("All Files", "*" ),
         };
-        StandaloneFileBrowser.OpenFilePanelAsync(
-            "Open Archive File", 
-            "", 
-            extensions, 
-            false, 
-            paths =>
-            {
-                if (paths.Length != 1)
-                    return;
-                _archivePlaymodeExplorer.LoadArchive(paths.Single());
-                _archiveLoaded = true;
-                _pickArchiveButton.style.backgroundColor = new Color(.5f, 1f, 0.45f);
-                UpdateLoadStatus();
-            });
+
+        try
+        {
+            StandaloneFileBrowser.OpenFilePanelAsync(
+                "Open Archive File", 
+                "", 
+                extensions, 
+                false, 
+                paths =>
+                {
+                    if (paths.Length != 1)
+                        return;
+                    _archivePlaymodeExplorer.LoadArchive(paths.Single());
+                    _archiveLoaded = true;
+                    _customArchive.text = "Archive Loaded.";
+                    UpdateLoadStatus();
+                });
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     private void UpdateLoadStatus()
     {
-        _runButton.SetEnabled(_archiveLoaded && _tilemapRadioButtonGroup.value != -1);
+        if (_tilemapRadioButtonGroup.value == 3) PickArchive();
+
+        int index = _tilemapRadioButtonGroup.value;
+        if (index == 3)
+        {
+            PickArchive();
+        }
+        else
+        {
+            string folderName = index switch
+            {
+                0 => "Letters",
+                1 => "Arrows",
+                2 => "Pokemon",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            
+            string folderPath = Path.Combine(Application.streamingAssetsPath, folderName);
+            if (!Directory.Exists(folderPath))
+            {
+                throw new ArgumentException($"Folder {folderPath} does not exist.");
+            }
+
+            string[] files =  Directory.GetFiles(folderPath);
+            
+            if (files.Length == 0)
+            {
+                throw new ArgumentException($"Folder {folderPath} does not contain any files.");
+            }
+
+            string archiveFile = Directory.GetFiles(folderPath).FirstOrDefault();
+            
+            _archivePlaymodeExplorer.LoadArchive(archiveFile);
+        }
     }
 
     private void Run()
     {
         Key key = GetKey();
-        _archivePlaymodeExplorer.BrowseConstrainedArchive(key, _tilemapRadioButtonGroup.value);
+        
+        ArchivePlaymodeExplorer.TilemapDomain tilemapDomain = _tilemapRadioButtonGroup.value switch
+        {
+            0 => ArchivePlaymodeExplorer.TilemapDomain.Letters,
+            1 => ArchivePlaymodeExplorer.TilemapDomain.Arrows,
+            2 => ArchivePlaymodeExplorer.TilemapDomain.Pokemon,
+            3 => ArchivePlaymodeExplorer.TilemapDomain.ReadFromArchive,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        
+        _archivePlaymodeExplorer.BrowseConstrainedArchive(key, tilemapDomain);
     }
 
     private Key GetKey()

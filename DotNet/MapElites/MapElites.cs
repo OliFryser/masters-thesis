@@ -26,7 +26,7 @@ namespace MapElites
             where TEntry : ConstrainedEntry<TIndividual, TBehavior>
         {
             ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior> archive =
-                new ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity);
+                new ConstrainedArchive<TKey, TEntry, TIndividual, TBehavior>(individualHandler.BucketCapacity, args.MapId);
             
             return RunMapElites(archive, args, individualHandler);
         }

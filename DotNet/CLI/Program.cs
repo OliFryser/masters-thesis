@@ -21,7 +21,7 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
-ProblemDomain problemDomain = ProblemDomain.Pokemon;
+ProblemDomain problemDomain = ProblemDomain.Arrows;
 
 if (args.Length >= 1)
 {
@@ -91,7 +91,7 @@ KeyCeilings keyCeilings = problemDomain switch
     _ => throw new ArgumentOutOfRangeException()
 };
 
-int mapDimensions = 10;
+int mapDimensions = 20;
 int evaluationIterations = 50;
 int initializationIterations = 250;
 int mutationIterations = 5000;
@@ -108,13 +108,22 @@ int randomDirectionEmitters = 3;
 double startingStepSize = 0.1411;
 int stagnationThreshold = 30;
 
+int mapId = problemDomain switch
+{
+    ProblemDomain.Letters => 0,
+    ProblemDomain.Arrows => 1,
+    ProblemDomain.Pokemon => 2,
+    _ => throw new ArgumentOutOfRangeException()
+};
+
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
     mutationIterations,
     Console.WriteLine,
     FilePaths.DataPath,
     statisticsTrackers,
-    convergeThreshold);
+    convergeThreshold,
+    mapId);
 
 FilePaths.TilemapName = problemDomain switch
 {
@@ -177,7 +186,8 @@ switch (runMode)
             _ => {},
             mapElitesArgs.StatisticsOutputPath,
             [],
-            mapElitesArgs.ConvergeThreshold);
+            mapElitesArgs.ConvergeThreshold,
+            mapElitesArgs.MapId);
         RunHyperParameterTuning();
         return;
     default:

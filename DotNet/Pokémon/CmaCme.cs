@@ -25,7 +25,7 @@ namespace Pokémon
 
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
                 new ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior>(
-                    individualHandler.BucketCapacity);
+                    individualHandler.BucketCapacity, mapElitesArgs.MapId);
 
             for (int i = 0; i < mapElitesArgs.InitializationIterations; i++)
             {
