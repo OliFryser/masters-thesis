@@ -102,14 +102,13 @@ namespace MapElites.Models
         [JsonProperty]
         private readonly Dictionary<TKey, Entries> _archive = new Dictionary<TKey, Entries>();
 
-        public ConstrainedArchive(int bucketCapacity, int mapId)
+        public ConstrainedArchive(int bucketCapacity)
         {
             BucketCapacity = bucketCapacity;
-            MapId = mapId;
         }
         
         [JsonConstructor]
-        public ConstrainedArchive(int bucketCapacity, Dictionary<TKey, Entries> archive, int mapId) : this(bucketCapacity, mapId)
+        public ConstrainedArchive(int bucketCapacity, Dictionary<TKey, Entries> archive, int mapId) : this(bucketCapacity)
         {
             _archive = archive;
         }

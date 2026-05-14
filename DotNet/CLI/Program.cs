@@ -122,8 +122,7 @@ MapElitesArgs mapElitesArgs = new(
     Console.WriteLine,
     FilePaths.DataPath,
     statisticsTrackers,
-    convergeThreshold,
-    mapId);
+    convergeThreshold);
 
 FilePaths.TilemapName = problemDomain switch
 {
@@ -169,12 +168,12 @@ switch (runMode)
         MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
         break;
     case RunMode.ConstrainedMapElites:
-        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
+        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, mapId);
         break;
     case RunMode.CmaCme:
         var emitterConfiguration =
             new EmitterConfiguration(optimizationEmitters, feasibilityEmitters, randomDirectionEmitters);
-        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold);
+        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold, mapId);
         break;
     case RunMode.TileMapAnalysis:
         RunTilemapAnalysis();
@@ -186,8 +185,7 @@ switch (runMode)
             _ => {},
             mapElitesArgs.StatisticsOutputPath,
             [],
-            mapElitesArgs.ConvergeThreshold,
-            mapElitesArgs.MapId);
+            mapElitesArgs.ConvergeThreshold);
         RunHyperParameterTuning();
         return;
     default:

@@ -13,7 +13,7 @@ namespace CLI.Runners;
 public static class ConstrainedMapElitesRunner
 {
     public static void Run(MapElitesArgs mapElitesArgs,
-        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs)
+        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs, int mapId)
     {
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
@@ -45,7 +45,7 @@ public static class ConstrainedMapElitesRunner
         }
 
         JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
-            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions);
+            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions, mapId);
 
         ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
         Console.WriteLine($"Read archive from JSON, key count: {saveData.Archive.GetKeys().Count()}");

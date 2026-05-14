@@ -57,8 +57,7 @@ public static class HyperParameterTuner
             message => Console.WriteLine($"Iteration {iteration}: {message}"),
             mapElitesArgs.StatisticsOutputPath,
             mapElitesArgs.StatisticsTrackers,
-            mapElitesArgs.ConvergeThreshold,
-            mapElitesArgs.MapId);
+            mapElitesArgs.ConvergeThreshold);
 
     private static double RunMapElitesTrial(
         MapElitesArgs mapElitesArgs, 
