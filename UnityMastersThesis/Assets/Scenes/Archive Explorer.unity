@@ -30348,6 +30348,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHandler
   _uiDocument: {fileID: 1701317237}
   _archivePlaymodeExplorer: {fileID: 1958649284}
+  _minFitnessColor: {r: 0.8584906, g: 0.13894062, b: 0, a: 1}
+  _maxFitnessColor: {r: 1, g: 0.82852113, b: 0.08962262, a: 1}
+  _minFeasibleColor: {r: 0, g: 0, b: 0, a: 1}
+  _maxFeasibleColor: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
 --- !u!114 &1701317237
 MonoBehaviour:
   m_ObjectHideFlags: 0
