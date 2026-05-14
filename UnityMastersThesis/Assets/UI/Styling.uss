@@ -27,3 +27,9 @@
 .text {
     -unity-font-definition: url("project://database/Assets/UI/Fonts/VCR_OSD_MONO_1.001.ttf?fileID=12800000&guid=989625b88030c40a08717b16c155d909&type=3#VCR_OSD_MONO_1.001");
 }
+
+.unity-radio-button-group {
+    flex-direction: column;
+    margin-top: 0;
+    font-size: 39px;
+}

@@ -1,138 +1,85 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Models;
 using MapElites.Models;
-using NaughtyAttributes;
 using Pokémon;
 using Pokémon.Json;
-using TilemapAnalysis;
-using UnityEditor;
 using UnityEngine;
 using WFC;
 using WFC.Args;
-using WFC.Extensions;
 using WFC.Models;
 using static Pokémon.LevelGeneration;
 
 public class ArchivePlaymodeExplorer : MonoBehaviour
 {
     [SerializeField] private Visualizer[] _visualizers;
-    [SerializeField] private TextAsset _archiveFile;
-    [SerializeField] private TextAsset _constrainedArchiveFile;
     [SerializeField] private Texture2D _tilemap;
     [SerializeField] private UIHandler _uiHandler;
+
+    [SerializeField] private WfcConfig _lettersConfig;
+    [SerializeField] private WfcConfig _arrowsConfig;
+    [SerializeField] private WfcConfig _pokemonConfig;
+    
     
     private IArchive<Key, Entry, Individual, Behavior> _archive;
     private ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> _constrainedArchive;
     
-    private List<TileType> _tileTypes;
-    private List<Domain.Models.AdjacencyRule> _adjacencyRules;
+    private IReadOnlyCollection<TileType> _tileTypes;
+    private IReadOnlyCollection<Domain.Models.AdjacencyRule> _adjacencyRules;
     private List<Vector> _coordinates;
 
-    private void Start()
+    public void LoadTilemap(WfcConfig wfcConfig)
     {
-        (List<TileType> tileTypes, List<Domain.Models.AdjacencyRule> adjacencyRules) = AnalyzeTilemap();
-
-        _tileTypes = tileTypes;
+        var args = wfcConfig.ToArgs();
         
-        _adjacencyRules = adjacencyRules;
-
-        (IArchive<Key, Entry, Individual, Behavior> archive, int _) = ReadArchiveFile(_archiveFile);
-
-        _archive = archive;
-        
-        (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> constrainedArchive, int mapDimension) = ReadConstrainedArchiveFile(_constrainedArchiveFile);
-
-        mapDimension = 20;
-        
-        _constrainedArchive = constrainedArchive;
-
-        Debug.Log($"Key count: {_constrainedArchive.GetKeys().Count()}");
-
-        foreach (Key key in _constrainedArchive.GetKeys())
-        {
-            if (_constrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
-            {
-                // print($"Key {key} with variation {entry.Behavior.Variation}");
-            }
-        }
-        
-        _coordinates = GetRectangleCoordinates(mapDimension, mapDimension).ToList();
-
+        _tileTypes = args.TileTypes;
+        _adjacencyRules = args.AdjacencyRules;
+    }
+    
+    public void LoadArchive(string filename)
+    {
+        ConstrainedSaveData saveData = ReadConstrainedArchiveFile(filename);
+        _constrainedArchive = saveData.Archive;
+        _coordinates = GetRectangleCoordinates(saveData.MapDimensions, saveData.MapDimensions).ToList();
         _uiHandler.Initialize(_constrainedArchive.GetKeys());
     }
-
-    private (List<TileType> tileTypes, List<Domain.Models.AdjacencyRule> adjacencyRules) AnalyzeTilemap()
-    {
-        string tilemapPath = AssetDatabase.GetAssetPath(_tilemap);
-        
-        using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
-        
-        List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-        
-        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules()
-            .Concat(tilemapAnalyzer.GetSymmetryRules()).ToList();
-
-        return (tileTypes, adjacencyRules);
-    }
     
-    private (IArchive<Key, Entry, Individual, Behavior>, int MapDimension) ReadArchiveFile(TextAsset archiveFile)
+    private ConstrainedSaveData ReadConstrainedArchiveFile(string filename)
     {
-        string path = AssetDatabase.GetAssetPath(archiveFile);
-        
-        SaveData saveData = JsonSerializer.ReadFromFile(path);
-
-        return (saveData.Archive, saveData.MapDimension);
-    }
-    
-    private (ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> Archive, int MapDimensions) ReadConstrainedArchiveFile(TextAsset archiveFile)
-    {
-        string path = AssetDatabase.GetAssetPath(archiveFile);
-        
-        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile(path);
-
-        return (saveData.Archive, saveData.MapDimensions);
+        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile(filename);
+        return saveData;
     }
 
-    public void BrowseArchive(Key key)
-    {
-        if (!_archive.TryGet(key, out Entry entry))
-        {
-            Debug.LogError($"Failed to retrieve key {key}");
-            return;
-        }
-        
-        foreach (Visualizer visualizer in _visualizers)
-        {
-            WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
-
-            State state = WaveFunctionCollapse.Run(args);
-
-            const int limit = 100;
-            int c = 0;
-            while (!state.IsCollapsed)
-            {
-                state = WaveFunctionCollapse.Run(args);
-                if (c++ >= limit)
-                {
-                    break;
-                }
-            }
-
-            visualizer.Display(state);
-        }
-    }
-
-    public void BrowseConstrainedArchive(Key key)
+    public void BrowseConstrainedArchive(Key key, TilemapDomain tilemapDomain)
     {
         if (!_constrainedArchive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
         {
             Debug.LogError($"Failed to retrieve key {key}");
             return;
         }
+
+        WfcConfig wfcConfig = tilemapDomain switch
+        {
+            TilemapDomain.Letters => _lettersConfig,
+            TilemapDomain.Arrows => _arrowsConfig,
+            TilemapDomain.Pokemon => _pokemonConfig,
+            TilemapDomain.ReadFromArchive => _constrainedArchive.MapId switch
+            {
+                0 => _lettersConfig,
+                1 => _arrowsConfig,
+                2 => _pokemonConfig,
+                _ => throw new ArgumentOutOfRangeException()
+            },
+            _ => throw new ArgumentOutOfRangeException(nameof(tilemapDomain), tilemapDomain, null)
+        };
+            
+        LoadTilemap(wfcConfig);
         
         foreach (Visualizer visualizer in _visualizers)
         {
+            visualizer._wfcConfig = wfcConfig;
+            
             WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
 
             State state = WaveFunctionCollapse.Run(args);
@@ -150,5 +97,13 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
 
             visualizer.Display(state);
         }
+    }
+
+    public enum TilemapDomain
+    {
+        Letters,
+        Arrows,
+        Pokemon,
+        ReadFromArchive
     }
 }

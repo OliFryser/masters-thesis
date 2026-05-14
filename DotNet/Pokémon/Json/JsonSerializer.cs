@@ -18,9 +18,10 @@ namespace Pokémon.Json
         public static void SaveToFile(
             string filePath,
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive, 
-            int mapDimension)
+            int mapDimension,
+            int mapId)
         {
-            string json = ConvertToJson(mapDimension, archive);
+            string json = ConvertToJson(mapDimension, mapId, archive);
             WriteToFile(filePath, json);
         }
         
@@ -50,11 +51,13 @@ namespace Pokémon.Json
         
         private static string ConvertToJson(
             int mapDimension,
+            int mapId,
             ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
         {
             ConstrainedSaveData saveData = new ConstrainedSaveData
             {
                 MapDimensions = mapDimension,
+                MapId = mapId,
                 Archive = archive,
             };
             return JsonConvert.SerializeObject(saveData);

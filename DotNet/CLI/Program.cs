@@ -21,7 +21,7 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
-ProblemDomain problemDomain = ProblemDomain.Pokemon;
+ProblemDomain problemDomain = ProblemDomain.Arrows;
 
 if (args.Length >= 1)
 {
@@ -91,7 +91,7 @@ KeyCeilings keyCeilings = problemDomain switch
     _ => throw new ArgumentOutOfRangeException()
 };
 
-int mapDimensions = 10;
+int mapDimensions = 20;
 int evaluationIterations = 50;
 int initializationIterations = 250;
 int mutationIterations = 5000;
@@ -107,6 +107,14 @@ int feasibilityEmitters = 5;
 int randomDirectionEmitters = 3;
 double startingStepSize = 0.1411;
 int stagnationThreshold = 30;
+
+int mapId = problemDomain switch
+{
+    ProblemDomain.Letters => 0,
+    ProblemDomain.Arrows => 1,
+    ProblemDomain.Pokemon => 2,
+    _ => throw new ArgumentOutOfRangeException()
+};
 
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
@@ -160,12 +168,12 @@ switch (runMode)
         MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
         break;
     case RunMode.ConstrainedMapElites:
-        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
+        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, mapId);
         break;
     case RunMode.CmaCme:
         var emitterConfiguration =
             new EmitterConfiguration(optimizationEmitters, feasibilityEmitters, randomDirectionEmitters);
-        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold);
+        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold, mapId);
         break;
     case RunMode.TileMapAnalysis:
         RunTilemapAnalysis();
