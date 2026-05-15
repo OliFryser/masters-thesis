@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MapElites.Extensions;
 using MapElites.Models;
 using Pokémon;
 using SFB;
@@ -15,70 +14,115 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private ArchivePlaymodeExplorer _archivePlaymodeExplorer;
 
-    private List<Key> _keys;
+    [SerializeField] private Color _minFitnessColor;
+    [SerializeField] private Color _maxFitnessColor;
+    [SerializeField] private Color _minFeasibleColor;
+    [SerializeField] private Color _maxFeasibleColor;
     
-    private SliderInt _flowerSlider;
-    private SliderInt _doorsSlider;
-    private SliderInt _tileTypesSlider;
+    private List<Key> _keys;
+    private int _bucketsPerAxis;
+
+    private RadioButtonGroup _behaviorButtonsGroup;
     private Button _runButton;
-    private Button _pickArchiveButton;
-    private RadioButtonGroup _tilemapRadioButtonGroup;
-    private Label _customArchive;
-    private string _customArchiveFilePath;
     private Label _value1;
     private Label _value2;
     private Label _value3;
     private Label _value4;
 
+    private EnumField _archiveType;
+    
     public void OnEnable()
     {
         _runButton = _uiDocument.rootVisualElement.Q<Button>("RunButton");
-        _pickArchiveButton = _uiDocument.rootVisualElement.Q<Button>("PickArchiveButton");
-        _tilemapRadioButtonGroup = _uiDocument.rootVisualElement.Q<RadioButtonGroup>("TilemapButtonGroup");
-        _customArchive = _uiDocument.rootVisualElement.Q<Label>("CustomArchive");
+        _archiveType = _uiDocument.rootVisualElement.Q<EnumField>("ArchiveType");
         _value1 = _uiDocument.rootVisualElement.Q<Label>("v1");
         _value2 = _uiDocument.rootVisualElement.Q<Label>("v2");
         _value3 = _uiDocument.rootVisualElement.Q<Label>("v3");
         _value4 = _uiDocument.rootVisualElement.Q<Label>("v4");
+        _behaviorButtonsGroup = _uiDocument.rootVisualElement.Q<RadioButtonGroup>("BehaviorButtons");
+
+        _behaviorButtonsGroup.RegisterValueChangedCallback(_ => UpdateValueLabels());
         
-        _tilemapRadioButtonGroup.RegisterValueChangedCallback(_ => UpdateLoadStatus());
-        _tilemapRadioButtonGroup.value = 2;
+        _archiveType.RegisterValueChangedCallback(_ => UpdateLoadStatus());
         
         _runButton.clicked += Run;
-        _pickArchiveButton.clicked += PickArchive;
         
         UpdateLoadStatus();
     }
 
     public void OnDisable()
     {
-        _tilemapRadioButtonGroup.UnregisterValueChangedCallback(_ => UpdateLoadStatus());
+        _behaviorButtonsGroup.UnregisterValueChangedCallback(_ => UpdateValueLabels());
         _runButton.clicked -= Run;
-        _pickArchiveButton.clicked -= PickArchive;
     }
     
-    public void Initialize(IEnumerable<Key> keys)
+    public void Initialize(ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
     {
-        _flowerSlider = _uiDocument.rootVisualElement.Q<SliderInt>("FlowersSlider");
-        _tileTypesSlider = _uiDocument.rootVisualElement.Q<SliderInt>("TileTypesSlider");
+        VisualElement buttonContainer = _behaviorButtonsGroup.Q<VisualElement>("choicesContentContainer");
+        buttonContainer.style.flexDirection = FlexDirection.Row;
+        buttonContainer.style.flexWrap = Wrap.Wrap;
+        buttonContainer.Clear();
         
-        _keys = keys.ToList();
+        _keys = archive.GetKeys().ToList();
+        _bucketsPerAxis = (int)Mathf.Sqrt(archive.BucketCapacity);
 
-        int minFlowers = _keys.Select(k => k.FlowerBucket).Min();
-        int maxFlowers = _keys.Select(k => k.FlowerBucket).Max();
+        float percentage = 100f / _bucketsPerAxis - 0.01f;
 
-        int minTileTypes = _keys.Select(k => k.VariationBucket).Min();
-        int maxTileTypes = _keys.Select(k => k.VariationBucket).Max();
+        for (int i = 0; i < _bucketsPerAxis * _bucketsPerAxis; i++)
+        {
+            RadioButton radioButton = new RadioButton
+            {
+                name = $"Bucket{i}",
+            };
+            radioButton.AddToClassList("archive-buttons");
+            
+            // Apply the layout to the RadioButton wrapper
+            radioButton.style.width = Length.Percent(percentage);
+            radioButton.style.aspectRatio = 1;
         
-       SetSlider(_flowerSlider, minFlowers, maxFlowers);
-       SetSlider(_tileTypesSlider, minTileTypes, maxTileTypes);
-       
-       _flowerSlider.RegisterValueChangedCallback(_ => UpdateValueLabels());
+            radioButton.style.marginLeft = 0;
+            radioButton.style.marginRight = 0;
+            radioButton.style.marginTop = 0;
+            radioButton.style.marginBottom = 0;
+            
+            Key key = GetKeyFromIndex(i);
+            if (archive.TryGet(key, out var entry))
+            {
+                VisualElement inputBox = radioButton.Q(className: "unity-radio-button__input");
+                if (inputBox != null)
+                {
+                    if (entry.IsFeasible)
+                    {
+                        Color color = Color.Lerp(_minFitnessColor, _maxFitnessColor, entry.Fitness);
+                        inputBox.style.backgroundColor = color;
+                    }
+                    else
+                    {
+                        Color color = Color.Lerp(_minFeasibleColor, _maxFeasibleColor, entry.Fitness);
+                        inputBox.style.backgroundColor = color;
+                    }
+                }
+                
+            }
+            radioButton.SetEnabled(_keys.Contains(key));
+            
+            buttonContainer.Add(radioButton);
+        }
+    }
+
+    private Key GetKeyFromIndex(int index)
+    {
+        int xBehavior = index % _bucketsPerAxis;
+        // Flip the y-axis since 0,0 is bottom-left
+        int yBehavior = (_bucketsPerAxis - 1) - (index / _bucketsPerAxis);
+        
+        return new Key(xBehavior, yBehavior);
     }
 
     private void UpdateValueLabels()
     {
-        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = _archivePlaymodeExplorer.ConstrainedArchive;
+        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = 
+            _archivePlaymodeExplorer.ConstrainedArchive;
         Key key = GetKey();
         if (archive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
         {
@@ -107,8 +151,14 @@ public class UIHandler : MonoBehaviour
                 {
                     if (paths.Length != 1)
                         return;
-                    _customArchiveFilePath = paths.Single();
-                    UpdateLoadStatus();
+                    
+                    var archivePath = paths.Single();
+                    
+                    if (string.IsNullOrEmpty(archivePath))
+                    {
+                        return;
+                    }
+                    _archivePlaymodeExplorer.LoadArchive(archivePath);
                 });
         }
         catch (Exception e)
@@ -119,23 +169,17 @@ public class UIHandler : MonoBehaviour
 
     private void UpdateLoadStatus()
     {
-        if (_tilemapRadioButtonGroup.value == 3)
+        if ((ArchiveType)_archiveType.value == ArchiveType.Custom)
         {
-            if (string.IsNullOrEmpty(_customArchiveFilePath))
-            {
-                _customArchive.text = "No custom archive file loaded.";
-                return;
-            }
-            _archivePlaymodeExplorer.LoadArchive(_customArchiveFilePath);
-            _customArchive.text = "Archive Loaded.";
+            PickArchive();
             return;
         }
         
-        string folderName = _tilemapRadioButtonGroup.value switch
+        string folderName = (ArchiveType)_archiveType.value switch
         {
-            0 => "Letters",
-            1 => "Arrows",
-            2 => "Pokemon",
+            ArchiveType.Letters => "Letters",
+            ArchiveType.Arrows => "Arrows",
+            ArchiveType.Pokémon => "Pokemon",
             _ => throw new ArgumentOutOfRangeException()
         };
         
@@ -161,29 +205,17 @@ public class UIHandler : MonoBehaviour
     {
         Key key = GetKey();
         
-        ArchivePlaymodeExplorer.TilemapDomain tilemapDomain = _tilemapRadioButtonGroup.value switch
+        ArchivePlaymodeExplorer.TilemapDomain tilemapDomain = _archiveType.value switch
         {
-            0 => ArchivePlaymodeExplorer.TilemapDomain.Letters,
-            1 => ArchivePlaymodeExplorer.TilemapDomain.Arrows,
-            2 => ArchivePlaymodeExplorer.TilemapDomain.Pokemon,
-            3 => ArchivePlaymodeExplorer.TilemapDomain.ReadFromArchive,
+            ArchiveType.Letters => ArchivePlaymodeExplorer.TilemapDomain.Letters,
+            ArchiveType.Arrows => ArchivePlaymodeExplorer.TilemapDomain.Arrows,
+            ArchiveType.Pokémon => ArchivePlaymodeExplorer.TilemapDomain.Pokemon,
+            ArchiveType.Custom => ArchivePlaymodeExplorer.TilemapDomain.ReadFromArchive,
             _ => throw new ArgumentOutOfRangeException()
         };
         
         _archivePlaymodeExplorer.BrowseConstrainedArchive(key, tilemapDomain);
     }
 
-    private Key GetKey()
-    {
-        return _keys.MinBy(k =>
-            Mathf.Abs(k.FlowerBucket - _flowerSlider.value) + 
-            Mathf.Abs(k.VariationBucket - _tileTypesSlider.value));
-    }
-
-    private static void SetSlider(SliderInt slider, int min, int max)
-    {
-        slider.lowValue = min;
-        slider.highValue = max;
-        slider.value = (min + max) / 2;
-    }
+    private Key GetKey() => GetKeyFromIndex(_behaviorButtonsGroup.value);
 }

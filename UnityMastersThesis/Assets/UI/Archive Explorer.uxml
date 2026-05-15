@@ -1,44 +1,33 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styling.uss?fileID=7433441132597879392&amp;guid=bd0b4bdc84cb74c3bb10a7d33157e981&amp;type=3#Styling"/>
-    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 23%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap;">
-            <ui:Label text="Behaviors" name="Label" class="text" style="-unity-text-align: middle-left; font-size: 65px;"/>
-            <ui:VisualElement style="flex-grow: 0.1; min-height: 3px;"/>
-            <ui:Label text="Special Tile" class="text" style="font-size: 42px;"/>
-            <ui:SliderInt label="" value="42" high-value="100" name="FlowersSlider" class="unity-slider"/>
-            <ui:VisualElement name="VisualElement" style="flex-grow: 0.1; display: none;"/>
-            <ui:Label text="Doors" class="text" style="font-size: 53px; display: none;"/>
-            <ui:SliderInt label="" value="42" high-value="100" name="DoorsSlider" class="unity-slider" style="display: none;"/>
-            <ui:Label text="Variation" name="Variation" class="text" style="font-size: 42px;"/>
-            <ui:SliderInt label="" value="42" high-value="100" name="TileTypesSlider" class="unity-slider"/>
-            <ui:VisualElement style="flex-grow: 0.1; min-height: 16px;"/>
-            <ui:Label text="Entry Values" class="text" style="font-size: 42px;"/>
-            <ui:VisualElement name="" style="flex-grow: 0; flex-direction: row;">
-                <ui:Label text="Special tile:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
-                <ui:Label text="0%" name="v1" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+    <Style src="project://database/Assets/UI/ArchiveEntries.uss?fileID=7433441132597879392&amp;guid=f605ef664ac7711488229552a6be95e8&amp;type=3#ArchiveEntries"/>
+    <ui:VisualElement name="" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="Sidebar" style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 23%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap; justify-content: space-around;">
+            <ui:VisualElement name="BehaviorsContainer">
+                <ui:Label text="Behaviors" name="BehaviorsLabel" class="text" style="-unity-text-align: middle-left; font-size: 65px;"/>
+                <ui:RadioButtonGroup label="" name="BehaviorButtons"/>
             </ui:VisualElement>
-            <ui:VisualElement name="" style="flex-grow: 0; flex-direction: row;">
-                <ui:Label text="Variation:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
-                <ui:Label text="0%" name="v2" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+            <ui:VisualElement name="EntryValuesContainer" style="margin-bottom: 12px;">
+                <ui:Label text="Entry Values" name="EntryValuesLabel" class="text" style="font-size: 42px;"/>
+                <ui:VisualElement name="SpecialTileDisplay" style="flex-grow: 0; flex-direction: row;">
+                    <ui:Label text="Special tile:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
+                    <ui:Label text="0%" name="v1" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="VariationDisplay" style="flex-grow: 0; flex-direction: row;">
+                    <ui:Label text="Variation:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
+                    <ui:Label text="0%" name="v2" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="FitnessDisplay" style="flex-grow: 0; flex-direction: row;">
+                    <ui:Label text="Feasibility:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
+                    <ui:Label text="0%" name="v3" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="FeasibilityDisplay" style="flex-grow: 0; flex-direction: row;">
+                    <ui:Label text="Fitness:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
+                    <ui:Label text="0%" name="v4" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="" style="flex-grow: 0; flex-direction: row;">
-                <ui:Label text="Fitness:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
-                <ui:Label text="0%" name="v3" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="" style="flex-grow: 0; flex-direction: row;">
-                <ui:Label text="Feasibility:" class="text" style="font-size: 36px; -unity-text-align: upper-left;"/>
-                <ui:Label text="0%" name="v4" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
-            </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 0.1; min-height: 22px;"/>
-            <ui:Button text="SAMPLE" name="RunButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px;"/>
-            <ui:VisualElement style="flex-grow: 0.1; min-height: 16px;"/>
-            <ui:VisualElement style="flex-grow: initial; flex-direction: row; justify-content: flex-start;">
-                <ui:RadioButtonGroup label="Archive&#10;" choices="Letters,Arrows,Pokémon,Custom" name="TilemapButtonGroup" class="text" style="flex-direction: column; font-size: 42px;"/>
-            </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 0.1;"/>
-            <ui:Label text="Custom Archive" class="text" style="font-size: 42px; white-space: nowrap; width: 203px;"/>
-            <ui:Button text="UPLOAD" name="PickArchiveButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; background-color: rgb(188, 188, 188);"/>
-            <ui:Label text="" name="CustomArchive" class="text" style="font-size: 42px; white-space: normal;"/>
+            <ui:EnumField label="Archive" value="Pokémon" type="ArchiveType, Assembly-CSharp" name="ArchiveType" class="text enum-field" style="flex-direction: column; font-size: 42px; margin-bottom: 12px;"/>
+            <ui:Button text="SAMPLE" name="RunButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; margin-bottom: 0;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;"/>
     </ui:VisualElement>

@@ -1,0 +1,39 @@
+.archive-buttons
+{
+    overflow: visible;
+}
+
+.archive-buttons .unity-radio-button__input {
+    background-color: #333;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: #222;
+
+    flex-grow: 1;
+    margin: 2px;
+}
+
+.archive-buttons:checked .unity-radio-button__input {
+    border-color: white;
+    background-color: #555; /* Slightly lighter when selected */
+}
+
+.archive-buttons .unity-radio-button__checkmark-background,
+.archive-buttons .unity-radio-button__text {
+    display: none;
+}
+
+#behaviorButtonsGroup {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#choicesContentContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 1
+}

@@ -33,3 +33,28 @@
     margin-top: 0;
     font-size: 39px;
 }
+
+.enum-field .unity-base-field__input {
+    border-bottom-right-radius: 24px;
+    border-top-left-radius: 24px;
+    margin-top: 10px;
+}
+
+.unity-base-field__input > .unity-text-element {
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
+
+.unity-base-field__input > .unity-enum-field__arrow {
+    width: 24px;
+    height: 24px;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 4px;
+}
+
+.unity-base-dropdown > .unity-base-dropdown__checkmark {
+    width: 24px;
+    height: 24px;
+
+    -unity-background-scale-mode: scale-to-fit;
+}

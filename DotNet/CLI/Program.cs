@@ -96,7 +96,7 @@ int evaluationIterations = 50;
 int initializationIterations = 250;
 int mutationIterations = 5000;
 int convergeThreshold = 500;
-int numberOfBucketsPerAxis = 5;
+int numberOfBucketsPerAxis = 10;
 double standardDeviation = 0.2; // Best result from Pokémon tuning
 
 float feasibilityThreshold = 0.75f;

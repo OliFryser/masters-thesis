@@ -21,7 +21,6 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     [SerializeField] private WfcConfig _arrowsConfig;
     [SerializeField] private WfcConfig _pokemonConfig;
     
-    
     private IArchive<Key, Entry, Individual, Behavior> _archive;
     public ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> ConstrainedArchive { get; private set; }
     
@@ -42,7 +41,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         ConstrainedSaveData saveData = ReadConstrainedArchiveFile(filename);
         ConstrainedArchive = saveData.Archive;
         _coordinates = GetRectangleCoordinates(saveData.MapDimensions, saveData.MapDimensions).ToList();
-        _uiHandler.Initialize(ConstrainedArchive.GetKeys());
+        _uiHandler.Initialize(ConstrainedArchive);
     }
     
     private ConstrainedSaveData ReadConstrainedArchiveFile(string filename)
