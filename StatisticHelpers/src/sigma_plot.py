@@ -64,7 +64,7 @@ plt.grid(True, linestyle="--", alpha=0.6)
 plt.xlim(0, 1)
 plt.ylim(0, 1)
 
-plt.savefig(savepathPrefix + "_fitness_plot.png")
+plt.savefig(savepathPrefix + "_fitness_plot.png", bbox_inches="tight")
 
 plt.figure(figsize=(8, 5))
 
@@ -83,4 +83,4 @@ plt.grid(True, linestyle="--", alpha=0.6)
 plt.xlim(0, 1)
 plt.ylim(0, 5250)
 
-plt.savefig(savepathPrefix + "_convergence_plot.png")
+plt.savefig(savepathPrefix + "_convergence_plot.png", bbox_inches="tight")
