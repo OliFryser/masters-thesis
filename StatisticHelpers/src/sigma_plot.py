@@ -1,4 +1,5 @@
 import sys
+import os
 import re
 
 import matplotlib.pyplot as plt
@@ -12,6 +13,13 @@ class Entry:
 
 
 entries: list[Entry] = []
+
+domain_name = re.search(r"(\w+)_.+", sys.argv[1])
+
+if not domain_name:
+    raise ValueError("Invalid path for argument 1")
+
+savepathPrefix = os.path.join("plots", domain_name.group(1))
 
 with open(sys.argv[1], "r") as file:
     for line in file:
@@ -47,19 +55,16 @@ plt.plot(
     marker="o",
     linestyle="-",
     color="b",
-    label="Fitness Curve",
 )
 
-plt.title("Impact of $\sigma$ on Fitness", fontsize=14)
 plt.xlabel("Sigma ($\sigma$)", fontsize=12)
-plt.ylabel("Fitness Value", fontsize=12)
+plt.ylabel("Global Reliability", fontsize=12)
 
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.xlim(0, 1)
 plt.ylim(0, 1)
-plt.legend()
 
-plt.savefig(sys.argv[1] + "_fitness_plot.png")
+plt.savefig(savepathPrefix + "_fitness_plot.png")
 
 plt.figure(figsize=(8, 5))
 
@@ -69,16 +74,13 @@ plt.plot(
     marker="o",
     linestyle="-",
     color="b",
-    label="Fitness Curve",
 )
 
-plt.title("Impact of $\sigma$ on Convergence Rate", fontsize=14)
 plt.xlabel("Sigma ($\sigma$)", fontsize=12)
 plt.ylabel("Converged at iteration", fontsize=12)
 
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.xlim(0, 1)
 plt.ylim(0, 5250)
-plt.legend()
 
-plt.savefig(sys.argv[1] + "_convergence_plot.png")
+plt.savefig(savepathPrefix + "_convergence_plot.png")
