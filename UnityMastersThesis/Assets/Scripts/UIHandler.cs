@@ -35,6 +35,7 @@ public class UIHandler : MonoBehaviour
     {
         _runButton = _uiDocument.rootVisualElement.Q<Button>("RunButton");
         _archiveType = _uiDocument.rootVisualElement.Q<EnumField>("ArchiveType");
+        _archiveType.value = ArchiveType.Pokémon;
         _value1 = _uiDocument.rootVisualElement.Q<Label>("v1");
         _value2 = _uiDocument.rootVisualElement.Q<Label>("v2");
         _value3 = _uiDocument.rootVisualElement.Q<Label>("v3");
