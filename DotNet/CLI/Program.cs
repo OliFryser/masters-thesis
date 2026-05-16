@@ -21,7 +21,8 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
-ProblemDomain problemDomain = ProblemDomain.Arrows;
+ProblemDomain problemDomain = ProblemDomain.Pokemon;
+MutationStrategy mutationStrategy = MutationStrategy.AllTiles;
 
 if (args.Length >= 1)
 {
@@ -49,11 +50,22 @@ if (args.Length >= 1)
         runMode = RunMode.TileMapAnalysis;
     }
 
-    string? tilemapArg = args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain"));
-    if (tilemapArg != null)
+    string? domainFlag = args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain"));
+    if (domainFlag != null)
     {
-        int domainNumber = int.Parse(tilemapArg.Split("=")[1]);
+        int domainNumber = int.Parse(domainFlag.Split("=")[1]);
         problemDomain = (ProblemDomain)domainNumber;
+    }
+    
+    string? mutationFlag = args.FirstOrDefault(s => s.StartsWith("-m") || s.StartsWith("--mutation"));
+    if (mutationFlag != null)
+    {
+        int mutationNumber = int.Parse(mutationFlag.Split("=")[1]);
+        mutationStrategy = (MutationStrategy)mutationNumber;
+        if (mutationStrategy == MutationStrategy.CmaCme)
+        {
+            runMode = RunMode.CmaCme;
+        }
     }
     
     // Parse behavior flags
@@ -61,6 +73,7 @@ if (args.Length >= 1)
     {
         variationBehavior = VariationBehavior.Entropy;
     }
+    
 }
 
 List<IStatisticsTracker> statisticsTrackers;
@@ -91,7 +104,7 @@ KeyCeilings keyCeilings = problemDomain switch
     _ => throw new ArgumentOutOfRangeException()
 };
 
-int mapDimensions = 20;
+int mapDimensions = 10;
 int evaluationIterations = 50;
 int initializationIterations = 250;
 int mutationIterations = 5000;
@@ -157,7 +170,8 @@ IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
     numberOfBucketsPerAxis,
     standardDeviation, 
     variationBehavior,
-    problemDomain);
+    problemDomain,
+    mutationStrategy);
 
 ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
     new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);

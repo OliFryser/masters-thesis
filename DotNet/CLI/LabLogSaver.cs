@@ -84,6 +84,7 @@ namespace CLI
             stringBuilder.AppendLine($"NumberOfBucketsPerAxis: {individualHandlerArgs.NumberOfBucketsPerAxis}");
             stringBuilder.AppendLine($"StandardDeviation: {individualHandlerArgs.StandardDeviation}");
             stringBuilder.AppendLine($"VariationBehavior: {individualHandlerArgs.VariationBehavior}");
+            stringBuilder.AppendLine($"MutationStrategy: {individualHandlerArgs.MutationStrategy}");
             
             return stringBuilder.ToString();
         }

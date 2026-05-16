@@ -35,21 +35,9 @@ public static class ConstrainedMapElitesRunner
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
         
-        foreach (Key key in archive.GetKeys())
-        {
-            if (archive.TryGet(key, out ConstrainedEntry<Individual, Behavior>? entry))
-            {
-                float variation = entry.Behavior.Variation;
-                Console.WriteLine($"{key}: {variation}");
-            }
-        }
-
         JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
             constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions, mapId);
-
-        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
-        Console.WriteLine($"Read archive from JSON, key count: {saveData.Archive.GetKeys().Count()}");
-
+        
         Console.WriteLine("Saved archive to JSON");
 
         LabLogSaver.SaveLog(
@@ -57,10 +45,5 @@ public static class ConstrainedMapElitesRunner
             mapElitesArgs,
             constrainedIndividualHandlerArgs,
             FilePaths.TilemapName);
-
-
-        // Get the archive like this:
-        // var saveData = JsonSerializer.ReadConstrainedSaveDataFromFile($"{FilePaths.OutputPath}/Archive.json");
-        // saveData.Archive;
     }
 }

@@ -16,14 +16,15 @@ namespace Pokémon.Args
             int numberOfBucketsPerAxis,
             double standardDeviation,
             VariationBehavior variationBehavior,
-            ProblemDomain problemDomain)
+            ProblemDomain problemDomain,
+            MutationStrategy mutationStrategy)
         {
             List<Vector> coordinates =
                 LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
 
             return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates,
                 mapDimensions, evaluationIterations, keyCeilings, numberOfBucketsPerAxis, standardDeviation,
-                variationBehavior, problemDomain);
+                variationBehavior, problemDomain, mutationStrategy);
         }
 
         private IndividualHandlerArgs(
@@ -33,11 +34,12 @@ namespace Pokémon.Args
             List<Vector> coordinates,
             int mapDimensions,
             int evaluationIterations,
-            KeyCeilings keyCeilings, 
-            int numberOfBucketsPerAxis, 
+            KeyCeilings keyCeilings,
+            int numberOfBucketsPerAxis,
             double standardDeviation,
             VariationBehavior variationBehavior,
-            ProblemDomain problemDomain)
+            ProblemDomain problemDomain, 
+            MutationStrategy mutationStrategy)
         {
             TileTypeCount = tileTypeCount;
             TileTypes = tileTypes;
@@ -50,6 +52,7 @@ namespace Pokémon.Args
             StandardDeviation = standardDeviation;
             VariationBehavior = variationBehavior;
             ProblemDomain = problemDomain;
+            MutationStrategy = mutationStrategy;
         }
         
         public int TileTypeCount { get; }
@@ -63,5 +66,6 @@ namespace Pokémon.Args
         public double StandardDeviation { get; }
         public VariationBehavior VariationBehavior { get; }
         public ProblemDomain ProblemDomain { get; }
+        public MutationStrategy MutationStrategy { get; }
     }
 }

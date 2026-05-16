@@ -26,6 +26,7 @@ namespace Pokémon
         private double StandardDeviation { get; }
         private VariationBehavior VariationBehavior { get; }
         private ProblemDomain ProblemDomain { get; }
+        private MutationStrategy _mutationStrategy;
 
         public IndividualHandler(IndividualHandlerArgs individualHandlerArgs)
         {
@@ -39,6 +40,7 @@ namespace Pokémon
             StandardDeviation = individualHandlerArgs.StandardDeviation;
             VariationBehavior = individualHandlerArgs.VariationBehavior;
             ProblemDomain = individualHandlerArgs.ProblemDomain;
+            _mutationStrategy = individualHandlerArgs.MutationStrategy;
 
             switch (ProblemDomain)
             {
@@ -81,14 +83,51 @@ namespace Pokémon
             List<TileWeight> newWeights = new List<TileWeight>();
             Random random = new Random();
             NormalSampler normalSampler = new NormalSampler();
-            foreach (TileWeight tileWeight in individual.Weights)
-            {
-                double sampledWeight = normalSampler.Sample(tileWeight.Weight, StandardDeviation, random);
-                double clampedWeight = Math.Clamp(sampledWeight, 0.0, 1.0);
-                newWeights.Add(new TileWeight(tileWeight.TileType, clampedWeight));
-            }
 
+            switch (_mutationStrategy)
+            {
+                case MutationStrategy.AllTiles:
+                    foreach (TileWeight tileWeight in individual.Weights)
+                    {
+                        double sampledWeight = SampleNewWeight(normalSampler, tileWeight, random);
+                        newWeights.Add(new TileWeight(tileWeight.TileType, sampledWeight));
+                    }
+                    break;
+                case MutationStrategy.ThirdTiles:
+                    // Selection sampling: https://stackoverflow.com/questions/35065764/select-n-records-at-random-from-a-set-of-n
+                    int amountNeeded = TileTypeCount / 3;
+                    int amountLeft = TileTypeCount;
+                    foreach (TileWeight tileWeight in individual.Weights)
+                    {
+                        bool shouldMutate = random.NextDouble() < amountNeeded / (double)amountLeft;
+                        double sampledWeight = shouldMutate ? SampleNewWeight(normalSampler, tileWeight, random) : tileWeight.Weight;
+                        newWeights.Add(new TileWeight(tileWeight.TileType, sampledWeight));
+                        amountLeft--;
+                        amountNeeded -= shouldMutate ? 1 : 0;
+                    }
+                    break;
+                case MutationStrategy.SpecialTileOnly:
+                    foreach (TileWeight tileWeight in individual.Weights)
+                    {
+                        bool shouldMutate = tileWeight.TileType.Equals(SpecialTile);
+                        double sampledWeight = shouldMutate ? SampleNewWeight(normalSampler, tileWeight, random) : tileWeight.Weight;
+                        newWeights.Add(new TileWeight(tileWeight.TileType, sampledWeight));
+                    }
+                    break;
+                case MutationStrategy.CmaCme:
+                    throw new ArgumentException("Should be using CMA-CME, not CME");
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
             return new Individual(newWeights);
+        }
+
+        private double SampleNewWeight(NormalSampler normalSampler, TileWeight mean, Random random)
+        {
+            double sampledWeight = normalSampler.Sample(mean.Weight, StandardDeviation, random);
+            double clampedWeight = Math.Clamp(sampledWeight, 0.0, 1.0);
+            return clampedWeight;
         }
 
         public virtual Entry Evaluate(Individual individual)

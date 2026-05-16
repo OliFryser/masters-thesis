@@ -90,7 +90,8 @@ public static class HyperParameterTuner
             oldIndividualHandlerArgs.NumberOfBucketsPerAxis,
             sigma,
             oldIndividualHandlerArgs.VariationBehavior,
-            oldIndividualHandlerArgs.ProblemDomain);
+            oldIndividualHandlerArgs.ProblemDomain,
+            oldIndividualHandlerArgs.MutationStrategy);
         return new ConstrainedIndividualHandlerArgs(individualHandlerArgs, oldArgs.FeasibilityThreshold,
             oldArgs.SmoothingFactor);
     }
