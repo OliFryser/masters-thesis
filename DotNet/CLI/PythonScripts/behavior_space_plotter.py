@@ -117,13 +117,19 @@ class BehaviorSpacePlotter:
         ax.set_xticks(np.linspace(0, x_max, 5), minor=False)
         ax.set_yticks(np.linspace(0, y_max, 6), minor=False)
 
+        ax.tick_params(axis='both', labelsize=12)
+
         # Colorbars
-        plt.colorbar(img_fitness, label='Fitness')
-        plt.colorbar(img_feasibility, label='Feasibility')
+        colorbar_fitness = plt.colorbar(img_fitness)
+        colorbar_fitness.set_label('Fitness', fontsize=14)
+        colorbar_fitness.ax.tick_params(labelsize=12)
+        colorbar_feasibility = plt.colorbar(img_feasibility)
+        colorbar_feasibility.set_label('Feasibility', fontsize=14)
+        colorbar_feasibility.ax.tick_params(labelsize=12)
         
-        plt.xlabel(self.behavior_x_label)
-        plt.ylabel(self.behavior_y_label)
-        plt.title('Behavior Space')
+        plt.xlabel(self.behavior_x_label, fontsize=14)
+        plt.ylabel(self.behavior_y_label, fontsize=14)
+        plt.title('Behavior Space', fontsize=20)
 
         plt.savefig(output_file_path, dpi=300, bbox_inches='tight')
         plt.close()

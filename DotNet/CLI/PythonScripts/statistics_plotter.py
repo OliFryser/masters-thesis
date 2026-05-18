@@ -10,21 +10,23 @@ def create_plot_from_text_file(text_file_path: str, output_folder_path):
         os.path.join(data_folder_path, text_file_path)
     )
 
-    # plt.figure(figsize=(10, 6))
-
     for header, values in header_to_data.items():
         if values:
             plt.plot([i for i in range(len(values))], values, label=header)
 
     plt.ylim((0, 1))
 
-    plt.title(figname)
-    plt.xlabel("Iteration")
-    plt.ylabel(figname)
-    plt.grid(True, linestyle=':', alpha=0.6)
-    plt.legend()
+    plt.title(figname, fontsize=20)
+    
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
 
-    plt.savefig(output_file_path)
+    plt.xlabel("Iteration", fontsize=14)
+    plt.ylabel(figname, fontsize=14)
+    plt.grid(True, linestyle=':', alpha=0.6)
+    plt.legend(fontsize=14)
+
+    plt.savefig(output_file_path, bbox_inches='tight')
     plt.close()
 
     print(f"Successfully saved plot to: {output_file_path}")
@@ -47,12 +49,14 @@ def create_feasibility_plot(text_file_name: str, output_folder_path: str) -> Non
     plt.plot(iterations, feasible_pop_points, label=feasible_pop_header, color='blue')
     plt.fill_between(iterations, feasible_pop_points, color='blue', alpha=0.3)
 
-    plt.xlabel('Generations')
-    plt.ylabel('Population Size')
-    plt.title('Population vs. Feasibility')
-    plt.legend()
+    plt.xlabel('Generations', fontsize=14)
+    plt.ylabel('Population Size', fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.title('Population vs. Feasibility', fontsize=20)
+    plt.legend(fontsize=14)
     plt.grid(True, linestyle=':', alpha=0.6)
-    plt.savefig(output_file_path)
+    plt.savefig(output_file_path, bbox_inches='tight')
     plt.close()
     
     print(f"Successfully saved plot to: {output_file_path}")
