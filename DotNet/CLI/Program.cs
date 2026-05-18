@@ -110,7 +110,14 @@ int initializationIterations = 250;
 int mutationIterations = 5000;
 int convergeThreshold = 500;
 int numberOfBucketsPerAxis = 10;
-double standardDeviation = 0.2; // Best result from Pokémon tuning
+
+double standardDeviation = problemDomain switch
+{
+    ProblemDomain.Letters => 0.25,
+    ProblemDomain.Arrows => 0.3,
+    ProblemDomain.Pokemon => 0.2,
+    _ => throw new ArgumentOutOfRangeException()
+};
 
 float feasibilityThreshold = 0.75f;
 float smoothingFactor = 5f;
