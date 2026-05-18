@@ -82,7 +82,10 @@ namespace Pokémon
                 }
 
                 Individual individual = currentEmitter.Ask();
-                ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
+                if (!individualHandler.TryEvaluate(individual, out var entry))
+                {
+                    continue;
+                }
                 Key key = individualHandler.GetKey(entry.Behavior);
                 bool wasSaved = archive.TryAdd(key, entry);
                 statisticsTrackers.ForEach(s => s.AddPoint(archive));
@@ -95,7 +98,10 @@ namespace Pokémon
 
             void EvaluateAndSave(Individual individual)
             {
-                ConstrainedEntry<Individual, Behavior> entry = individualHandler.Evaluate(individual);
+                if (!individualHandler.TryEvaluate(individual, out var entry))
+                {
+                    return;
+                }
                 Key key = individualHandler.GetKey(entry.Behavior);
                 archive.TryAdd(key, entry);
                 statisticsTrackers.ForEach(s => s.AddPoint(archive));

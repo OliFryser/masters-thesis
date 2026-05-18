@@ -99,17 +99,17 @@ KeyCeilings keyCeilings = problemDomain switch
         specialTileCeiling: 1.0f,
         variationPercentageCeiling: 1.0f),
     ProblemDomain.Pokemon => new(
-        specialTileCeiling: 0.2f,
+        specialTileCeiling: 0.25f,
         variationPercentageCeiling: 1.0f),
     _ => throw new ArgumentOutOfRangeException()
 };
 
-int mapDimensions = 10;
-int evaluationIterations = 50;
+int mapDimensions = 20;
+int evaluationIterations = 10;
 int initializationIterations = 250;
 int mutationIterations = 5000;
 int convergeThreshold = 500;
-int numberOfBucketsPerAxis = 10;
+int numberOfBucketsPerAxis = 5;
 
 double standardDeviation = problemDomain switch
 {

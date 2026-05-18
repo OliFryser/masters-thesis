@@ -79,7 +79,7 @@ namespace CLI
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("-- Individual Handler config --");
             stringBuilder.AppendLine($"EvaluationIterations: {individualHandlerArgs.EvaluationIterations}");
-            stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.EvaluationIterations}");
+            stringBuilder.AppendLine($"MapDimensions: {individualHandlerArgs.MapDimensions}");
             stringBuilder.AppendLine($"KeyCeilings: {individualHandlerArgs.KeyCeilings.ToString()}");
             stringBuilder.AppendLine($"NumberOfBucketsPerAxis: {individualHandlerArgs.NumberOfBucketsPerAxis}");
             stringBuilder.AppendLine($"StandardDeviation: {individualHandlerArgs.StandardDeviation}");

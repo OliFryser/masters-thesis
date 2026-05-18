@@ -13,19 +13,19 @@ namespace MapElites
         TIndividual Mutate(TIndividual individual);
     }
 
-    public interface IIndividualHandler<out TKey, out TEntry, TIndividual, in TBehavior>
+    public interface IIndividualHandler<out TKey, TEntry, TIndividual, in TBehavior>
         : IIndividualFactory<TIndividual>, IIndividualVariator<TIndividual>
         where TKey : IEquatable<TKey>
         where TEntry : Entry<TIndividual, TBehavior>
     {
         int BucketCapacity { get; }
         
-        TEntry Evaluate(TIndividual individual);
+        bool TryEvaluate(TIndividual individual, out TEntry entry);
 
         TKey GetKey(TBehavior behavior);
     }
     
-    public interface IConstrainedIndividualHandler<out TKey, out TEntry, TIndividual, in TBehavior>
+    public interface IConstrainedIndividualHandler<out TKey, TEntry, TIndividual, in TBehavior>
         :  IIndividualHandler<TKey, TEntry, TIndividual, TBehavior>
         where TKey : IEquatable<TKey>
         where TEntry : ConstrainedEntry<TIndividual, TBehavior>

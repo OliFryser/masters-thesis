@@ -20,13 +20,26 @@ namespace Pokémon
             SmoothingFactor = args.SmoothingFactor;
         }
 
+        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor)
+        {
+            float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
+            float meanDeviation = deviationSum / behaviors.Length;
 
-        public new ConstrainedEntry<Individual, Behavior> Evaluate(Individual individual)
+            return MathF.Exp(-smoothingFactor * meanDeviation);
+        }
+
+        public bool TryEvaluate(Individual individual, out ConstrainedEntry<Individual, Behavior> entry)
         {
             State[] results = SampleStates(individual);
 
             Behavior[] behaviors = results.Where(s => s.IsCollapsed).Select(GetBehavior).ToArray();
 
+            if (behaviors.Length == 0)
+            {
+                entry = null!;
+                return false;
+            }
+            
             Behavior averageBehavior = GetAverageBehavior(behaviors);
 
             float fitness = GetFitness(behaviors, averageBehavior, SmoothingFactor);
@@ -35,22 +48,14 @@ namespace Pokémon
 
             float feasibility = amountComplete / (float)EvaluationIterations;
 
-            ConstrainedEntry<Individual, Behavior> entry = new ConstrainedEntry<Individual, Behavior>(
+            entry = new ConstrainedEntry<Individual, Behavior>(
                 individual,
                 averageBehavior,
                 fitness,
                 feasibility,
                 FeasibilityThreshold);
 
-            return entry;
-        }
-
-        private static float GetFitness(Behavior[] behaviors, Behavior averageBehavior, float smoothingFactor)
-        {
-            float deviationSum = behaviors.Sum(behavior => behavior.GetDeviation(averageBehavior));
-            float meanDeviation = deviationSum / behaviors.Length;
-
-            return MathF.Exp(-smoothingFactor * meanDeviation);
+            return true;
         }
     }
 }

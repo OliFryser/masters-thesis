@@ -130,19 +130,6 @@ namespace Pokémon
             return clampedWeight;
         }
 
-        public virtual Entry Evaluate(Individual individual)
-        {
-            State[] results = SampleStates(individual);
-
-            float fitness = results.Count(state => state.IsCollapsed);
-
-            Behavior[] behaviors = results.Select(GetBehavior).ToArray();
-
-            Behavior averageBehavior = GetAverageBehavior(behaviors);
-
-            return new Entry(individual, averageBehavior, fitness);
-        }
-
         protected State[] SampleStates(Individual individual)
         {
             return Enumerable.Range(0, EvaluationIterations)
@@ -155,6 +142,20 @@ namespace Pokémon
                 .ToArray();
         }
 
+
+        public bool TryEvaluate(Individual individual, out Entry entry)
+        {
+            State[] results = SampleStates(individual);
+
+            float fitness = results.Count(state => state.IsCollapsed);
+            
+            Behavior[] behaviors = results.Select(GetBehavior).ToArray();
+
+            Behavior averageBehavior = GetAverageBehavior(behaviors);
+
+            entry = new Entry(individual, averageBehavior, fitness);
+            return true;
+        }
 
         public Key GetKey(Behavior behavior)
         {

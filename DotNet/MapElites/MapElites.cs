@@ -98,8 +98,11 @@ namespace MapElites
 
             bool EvaluateAndSave(TIndividual individual)
             {
-                TEntry entry = individualHandler.Evaluate(individual);
-
+                if (!individualHandler.TryEvaluate(individual, out TEntry entry))
+                {
+                    return false;
+                }
+                
                 TKey key = individualHandler.GetKey(entry.Behavior);
 
                 bool didSave = archive.TryAdd(key, entry);
