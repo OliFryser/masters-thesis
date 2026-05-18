@@ -38,7 +38,7 @@ namespace WFC.Extensions
                 int tileTypeIndex = tileTypeToIndex[tileWeight.TileType];
                 weights[tileTypeIndex] = tileWeight.Weight;
             }
-            
+
             BitArray[] options = new BitArray[numberOfCells];
             for (int i = 0; i < numberOfCells; i++)
             {
@@ -72,6 +72,11 @@ namespace WFC.Extensions
                 sumOfWeightsArray,
                 sumOfWeightsLogWeightsArray
             );
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                level.PruneInconsistentOptions(i);
+            }
 
             level.RemoveBorderTilesFromCenterOptions();
 
