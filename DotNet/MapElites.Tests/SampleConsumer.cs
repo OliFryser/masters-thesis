@@ -52,8 +52,7 @@ namespace MapElites.Tests
             throw new NotImplementedException();
         }
 
-
-        public SampleEntry Evaluate(SampleIndividual individual)
+        public bool TryEvaluate(SampleIndividual individual, out SampleEntry entry)
         {
             throw new NotImplementedException();
         }
