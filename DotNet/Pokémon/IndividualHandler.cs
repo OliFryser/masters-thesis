@@ -130,9 +130,8 @@ namespace Pokémon
             return clampedWeight;
         }
 
-        protected State[] SampleStates(Individual individual)
-        {
-            return Enumerable.Range(0, EvaluationIterations)
+        protected State[] SampleStates(Individual individual) =>
+            Enumerable.Range(0, EvaluationIterations)
                 .AsParallel()
                 .Select(i =>
                 {
@@ -140,7 +139,6 @@ namespace Pokémon
                     return WaveFunctionCollapse.Run(args);
                 })
                 .ToArray();
-        }
 
 
         public bool TryEvaluate(Individual individual, out Entry entry)

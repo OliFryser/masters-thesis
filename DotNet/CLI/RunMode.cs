@@ -6,5 +6,6 @@ public enum RunMode
     ConstrainedMapElites,
     CmaCme,
     TileMapAnalysis,
-    HyperParameterTuning
+    HyperParameterTuning,
+    EvaluationIterationsComparison
 }

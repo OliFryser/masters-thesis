@@ -20,11 +20,21 @@ namespace Pokémon.Args
             MutationStrategy mutationStrategy)
         {
             List<Vector> coordinates =
-                LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
+                LevelGeneration.GetRectangleCoordinates(width: mapDimensions, height: mapDimensions).ToList();
 
-            return new IndividualHandlerArgs(tileTypeCount, tileTypes, adjacencyRules, coordinates,
-                mapDimensions, evaluationIterations, keyCeilings, numberOfBucketsPerAxis, standardDeviation,
-                variationBehavior, problemDomain, mutationStrategy);
+            return new IndividualHandlerArgs(
+                tileTypeCount: tileTypeCount, 
+                tileTypes: tileTypes, 
+                adjacencyRules: adjacencyRules, 
+                coordinates: coordinates,
+                mapDimensions: mapDimensions, 
+                evaluationIterations: evaluationIterations, 
+                keyCeilings: keyCeilings, 
+                numberOfBucketsPerAxis: numberOfBucketsPerAxis, 
+                standardDeviation: standardDeviation,
+                variationBehavior: variationBehavior, 
+                problemDomain: problemDomain, 
+                mutationStrategy: mutationStrategy);
         }
 
         private IndividualHandlerArgs(

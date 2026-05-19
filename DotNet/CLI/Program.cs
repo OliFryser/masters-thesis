@@ -21,7 +21,7 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
-ProblemDomain problemDomain = ProblemDomain.Arrows;
+ProblemDomain problemDomain = ProblemDomain.Pokemon;
 MutationStrategy mutationStrategy = MutationStrategy.AllTiles;
 
 if (args.Length >= 1)
@@ -48,6 +48,10 @@ if (args.Length >= 1)
     else if (args.Contains("--tilemap") || args.Contains("-t"))
     {
         runMode = RunMode.TileMapAnalysis;
+    }
+    else if (args.Contains("-i") || args.Contains("--iterations"))
+    {
+        runMode = RunMode.EvaluationIterationsComparison;
     }
 
     string? domainFlag = args.FirstOrDefault(s => s.StartsWith("-d") || s.StartsWith("--domain"));
@@ -128,13 +132,15 @@ int randomDirectionEmitters = 3;
 double startingStepSize = 0.1411;
 int stagnationThreshold = 30;
 
+int[] evaluationIterationsToCompare = [5, 10, 20, 30, 40];
+
 MapElitesArgs mapElitesArgs = new(
-    initializationIterations,
-    mutationIterations,
-    Console.WriteLine,
-    FilePaths.DataPath,
-    statisticsTrackers,
-    convergeThreshold);
+    initializationIterations: initializationIterations,
+    mutationIterations: mutationIterations,
+    logger: Console.WriteLine,
+    statisticsOutputPath: FilePaths.DataPath,
+    statisticsTrackers: statisticsTrackers,
+    convergeThreshold: convergeThreshold);
 
 FilePaths.TilemapName = problemDomain switch
 {
@@ -160,17 +166,17 @@ adjacencyRules.AddRange(
 );
    
 IndividualHandlerArgs individualHandlerArgs = IndividualHandlerArgs.Create(
-    mapDimensions,
-    tileTypeCount,
-    tileTypes,
-    adjacencyRules,
-    evaluationIterations,
-    keyCeilings,
-    numberOfBucketsPerAxis,
-    standardDeviation, 
-    variationBehavior,
-    problemDomain,
-    mutationStrategy);
+    mapDimensions: mapDimensions,
+    tileTypeCount: tileTypeCount,
+    tileTypes: tileTypes,
+    adjacencyRules: adjacencyRules,
+    evaluationIterations: evaluationIterations,
+    keyCeilings: keyCeilings,
+    numberOfBucketsPerAxis: numberOfBucketsPerAxis,
+    standardDeviation: standardDeviation, 
+    variationBehavior: variationBehavior,
+    problemDomain: problemDomain,
+    mutationStrategy: mutationStrategy);
 
 ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs = 
     new(individualHandlerArgs, feasibilityThreshold, smoothingFactor);
@@ -201,6 +207,14 @@ switch (runMode)
             mapElitesArgs.ConvergeThreshold);
         RunHyperParameterTuning();
         return;
+    case RunMode.EvaluationIterationsComparison:
+        Console.WriteLine("Running Evaluation Iterations Comparison");
+        EvaluationIterationsComparer.Run(
+            constrainedIndividualHandlerArgs, 
+            mapElitesArgs, 
+            evaluationIterationsToCompare,
+            FilePaths.OutputPath);
+        break;
     default:
         throw new ArgumentOutOfRangeException();
 }
