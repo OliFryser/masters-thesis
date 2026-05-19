@@ -80,8 +80,6 @@ namespace WFC.Extensions
                 level.ReduceEntropy(i);
             }
 
-            level.RemoveBorderTilesFromCenterOptions();
-
             return level;
         }
 
