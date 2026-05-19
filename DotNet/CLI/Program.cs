@@ -109,7 +109,7 @@ KeyCeilings keyCeilings = problemDomain switch
 };
 
 int mapDimensions = 20;
-int evaluationIterations = 10;
+int evaluationIterations = 20;
 int initializationIterations = 250;
 int mutationIterations = 5000;
 int convergeThreshold = 500;

@@ -51,7 +51,7 @@ namespace MapElites
                     logger($"Completed {i} initialization iterations out of {args.InitializationIterations} " +
                            $"({(i / (float)args.InitializationIterations) * 100:F0} %). " +
                            $"Archive Size: {archive.Count}. " +
-                           $"Max fitness {archive.GetMaxFitness()}");
+                           $"Reliability: {archive.GetReliability()}");
                 }
             }
 
@@ -63,7 +63,7 @@ namespace MapElites
                 {
                     logger($"MAP-Elites converged at iteration {i}. " +
                            $"Archive Size: {archive.Count}. "+
-                           $"Max fitness {archive.GetMaxFitness()}");
+                           $"Reliability: {archive.GetReliability()}");
                     args.StatisticsTrackers.ForEach(s => s.SaveToFile(args.StatisticsOutputPath));
                     return archive;
                 }
@@ -86,11 +86,11 @@ namespace MapElites
                     logger($"Completed {i} mutation iterations out of {args.MutationIterations} " +
                            $"({(i / (float)args.MutationIterations) * 100:F0} %). " +
                            $"Archive Size: {archive.Count}. " +
-                           $"Max fitness {archive.GetMaxFitness()}");
+                           $"Reliability: {archive.GetReliability()}");
                 }
             }
             
-            logger($"Map-Elites completed (100%). Archive Size: {archive.Count}. Max fitness {archive.GetMaxFitness()}\n");
+            logger($"Map-Elites completed (100%). Archive Size: {archive.Count}. Reliability: {archive.GetReliability()}\n");
 
             args.StatisticsTrackers.ForEach(s => s.SaveToFile(args.StatisticsOutputPath));
 
