@@ -75,7 +75,9 @@ namespace WFC.Extensions
 
             for (int i = 0; i < positions.Length; i++)
             {
-                level.PruneInconsistentOptions(i);
+                var excludedOptions = level.PruneInconsistentOptions(i);
+                level.UpdateSumOfWeights(i, excludedOptions);
+                level.ReduceEntropy(i);
             }
 
             level.RemoveBorderTilesFromCenterOptions();

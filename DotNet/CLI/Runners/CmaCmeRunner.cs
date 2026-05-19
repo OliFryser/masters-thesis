@@ -16,8 +16,7 @@ public static class CmaCmeRunner
         ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs,
         EmitterConfiguration emitterConfiguration,
         double startingStepSize,
-        int stagnationThreshold,
-        int mapId)
+        int stagnationThreshold)
     {
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
@@ -40,8 +39,11 @@ public static class CmaCmeRunner
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
 
-        JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
-            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions, mapId);
+        JsonSerializer.SaveToFile(
+            $"{FilePaths.OutputPath}/Archive.json", 
+            archive,
+            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions,
+            (int)constrainedIndividualHandlerArgs.IndividualHandlerArgs.ProblemDomain);
 
         Console.WriteLine("Saved archive to JSON");
 
