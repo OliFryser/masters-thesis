@@ -13,7 +13,7 @@ namespace CLI.Runners;
 public static class ConstrainedMapElitesRunner
 {
     public static void Run(MapElitesArgs mapElitesArgs,
-        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs, int mapId)
+        ConstrainedIndividualHandlerArgs constrainedIndividualHandlerArgs)
     {
         ConstrainedIndividualHandler constrainedIndividualHandler = new(constrainedIndividualHandlerArgs);
 
@@ -35,8 +35,11 @@ public static class ConstrainedMapElitesRunner
 
         Console.WriteLine($"Finished MAP-Elites in:  {stopwatch.Elapsed.TotalSeconds} ms");
         
-        JsonSerializer.SaveToFile($"{FilePaths.OutputPath}/Archive.json", archive,
-            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions, mapId);
+        JsonSerializer.SaveToFile(
+            $"{FilePaths.OutputPath}/Archive.json", 
+            archive,
+            constrainedIndividualHandlerArgs.IndividualHandlerArgs.MapDimensions, 
+            (int)constrainedIndividualHandlerArgs.IndividualHandlerArgs.ProblemDomain);
         
         Console.WriteLine("Saved archive to JSON");
 

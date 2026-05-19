@@ -21,7 +21,7 @@ bool shouldCreateStatistics = true;
 
 RunMode runMode = RunMode.ConstrainedMapElites;
 VariationBehavior variationBehavior = VariationBehavior.UniqueCount;
-ProblemDomain problemDomain = ProblemDomain.Pokemon;
+ProblemDomain problemDomain = ProblemDomain.Arrows;
 MutationStrategy mutationStrategy = MutationStrategy.AllTiles;
 
 if (args.Length >= 1)
@@ -128,14 +128,6 @@ int randomDirectionEmitters = 3;
 double startingStepSize = 0.1411;
 int stagnationThreshold = 30;
 
-int mapId = problemDomain switch
-{
-    ProblemDomain.Letters => 0,
-    ProblemDomain.Arrows => 1,
-    ProblemDomain.Pokemon => 2,
-    _ => throw new ArgumentOutOfRangeException()
-};
-
 MapElitesArgs mapElitesArgs = new(
     initializationIterations,
     mutationIterations,
@@ -189,12 +181,12 @@ switch (runMode)
         MapElitesRunner.Run(mapElitesArgs, individualHandlerArgs);
         break;
     case RunMode.ConstrainedMapElites:
-        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, mapId);
+        ConstrainedMapElitesRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs);
         break;
     case RunMode.CmaCme:
         var emitterConfiguration =
             new EmitterConfiguration(optimizationEmitters, feasibilityEmitters, randomDirectionEmitters);
-        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold, mapId);
+        CmaCmeRunner.Run(mapElitesArgs, constrainedIndividualHandlerArgs, emitterConfiguration, startingStepSize, stagnationThreshold);
         break;
     case RunMode.TileMapAnalysis:
         RunTilemapAnalysis();
