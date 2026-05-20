@@ -16,7 +16,7 @@ The pipeline we offer is the following:
 
 We believe this pipeline can be of help to game developers in *mixed-initiative PCG*, where the designers works and the algorithm works in collaboration to create content.
 
-For a more detailed explanation of this project, read [our thesis report]().
+For a more detailed explanation of this project, read [our thesis report](TODO).
 
 ### The InfinimonCLI tool
 
@@ -38,17 +38,30 @@ The CLI supports a number of command line switches. The deafult Run Mode is Cons
 
 ### The Archive Explorer
 
-The Archive Explorer can be launched from the Unity build or from the Unity project itself. It allows 
+The Archive Explorer can be launched from the Unity build or from the Unity project itself. From here, 3 pre-packaged archives can be browsed, one for each domain. It is also possible to browse a custom archive by picking the 'Custom' option from the domain dropdown. Note: Currently only supported on Windows.
+
+The top-left buttons pick which cell in the archive is sampled from.
 
 ### Unity Project
 
+The Unity project can be found in the folder ``UnityMastersThesis``. It contains a few scenes that we have used for debugging and visualization.
+
+* Archive Explorer: This scene contains the archive explorer 
+
 ## Prerequisites
 
-TODO
+InfinimonCLI requires:
 
-## Getting Started
+* [.Net 10 runtime (and .Net 10 SDK for builds)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0).
+* Optional (only required for statistics): [Python 3](https://www.python.org/downloads/) (we used 3.13), with the packages [matplotlib](https://pypi.org/project/matplotlib/) and [numpy](https://pypi.org/project/numpy/).
 
-TODO
+Archive Explorer:
+
+* Requires system compatible with [Unity 6.3 player requirements](https://docs.unity3d.com/6000.3/Documentation/Manual/system-requirements.html).
+
+Unity Project:
+
+* Requires Unity version 6.3.9f1 or compatible version.
 
 ## Why and when?
 
