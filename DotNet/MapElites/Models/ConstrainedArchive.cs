@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Domain.Extensions;
+using Core.Extensions;
 using Newtonsoft.Json;
 
 namespace MapElites.Models

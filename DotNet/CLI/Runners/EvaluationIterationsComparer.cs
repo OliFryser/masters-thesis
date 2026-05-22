@@ -4,8 +4,8 @@ using System.Linq;
 using MapElites.Args;
 using MapElites.Models;
 using Newtonsoft.Json;
-using Pokémon;
-using Pokémon.Args;
+using Domain;
+using Domain.Args;
 
 namespace CLI.Runners;
 

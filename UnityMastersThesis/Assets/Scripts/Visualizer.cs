@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
+using Core.Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WFC;
 using WFC.Extensions;
 using WFC.Models;
-using Tile = Domain.Models.Tile;
+using Tile = Core.Models.Tile;
 
 #if UNITY_EDITOR
 using UnityEditor;

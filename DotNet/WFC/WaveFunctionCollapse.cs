@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Domain.Extensions;
-using Domain.Models;
+using Core.Extensions;
+using Core.Models;
 using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;

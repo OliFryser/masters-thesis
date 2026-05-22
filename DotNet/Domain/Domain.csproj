@@ -3,10 +3,30 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <Nullable>enable</Nullable>
+        <UnityPluginsDir>../../UnityMastersThesis/Assets/Plugins</UnityPluginsDir>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MapElites\MapElites.csproj" />
+      <ProjectReference Include="..\WFC\WFC.csproj" />
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
 
+    <Target Name="CopyToUnityPlugins" AfterTargets="AfterBuild" Condition="'$(TargetFramework)' == 'netstandard2.1'">
+        <ItemGroup>
+            <BuiltAssemblies Include="$(OutputPath)*.dll" />
+        </ItemGroup>
+
+        <Message Text=">>> Copying all DLLs to Unity Plugins..." Importance="high"/>
+        <Message Text="UnityPluginsDir=$(UnityPluginsDir)" Importance="high"/>
+        <Message Text="OutputPath=$(OutputPath)" Importance="high"/>
+        <Copy
+                SourceFiles="@(BuiltAssemblies)"
+                DestinationFolder="$(UnityPluginsDir)"
+                SkipUnchangedFiles="false"
+        />
+    </Target>
 </Project>

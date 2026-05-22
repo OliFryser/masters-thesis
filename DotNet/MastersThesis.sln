@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{5C0F3CE8-FB53-4B66-BA3D-47EEB638505E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{5C0F3CE8-FB53-4B66-BA3D-47EEB638505E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFC", "WFC\WFC.csproj", "{F156F51A-7134-462C-A7C1-5DD2E537BB78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapElites", "MapElites\MapElites.csproj", "{1FF66D9E-3D2F-4D52-A3AB-6BD46F5DD7E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokémon", "Pokémon\Pokémon.csproj", "{8577CE14-C193-4C60-98EE-43291021CC3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{8577CE14-C193-4C60-98EE-43291021CC3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{99505EE9-7CAF-4F1A-98FA-134378FC0ECB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFC.Tests", "WFC.Tests\WFC.Tests.csproj", "{C282ACD2-7D41-4032-AE8C-C0BE02413361}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{E5A04D39-D56D-425C-B7DC-87BE2AE010C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TilemapAnalysis", "TilemapAnalysis\TilemapAnalysis.csproj", "{06BF7689-36D1-4061-B220-73AF308FBFF7}"
 EndProject
@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapElites.Tests", "MapElites.Tests\MapElites.Tests.csproj", "{4581BBEB-840A-4627-BC5F-892E6718B825}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokémon.Tests", "Pokémon.Tests\Pokémon.Tests.csproj", "{9806C2BE-FF78-49BE-A42D-F694E9FE1810}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{9806C2BE-FF78-49BE-A42D-F694E9FE1810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

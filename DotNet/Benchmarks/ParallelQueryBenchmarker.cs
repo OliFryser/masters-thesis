@@ -1,6 +1,6 @@
 using BenchmarkDotNet.Attributes;
-using Domain.Models;
-using Pokémon;
+using Core.Models;
+using Domain;
 using TilemapAnalysis;
 using WFC;
 using WFC.Args;
@@ -13,7 +13,7 @@ public class ParallelQueryBenchmarker
 {
     [Params(1, 10, 50, 1000)] public int EvaluationIterations;
 
-    public List<Vector> Coordinates { get; set; }
+    public List<Core.Models.Vector> Coordinates { get; set; }
     public IReadOnlyCollection<TileType> TileTypes { get; set; }
     public IReadOnlyCollection<AdjacencyRule> AdjacencyRules { get; set; }
     public List<TileWeight> Weights { get; set; }

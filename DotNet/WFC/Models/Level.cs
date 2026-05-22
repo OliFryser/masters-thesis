@@ -1,5 +1,5 @@
 using System.Collections;
-using Domain.Models;
+using Core.Models;
 
 namespace WFC.Models
 {

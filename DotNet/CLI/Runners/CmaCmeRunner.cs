@@ -2,10 +2,10 @@ using System;
 using System.Diagnostics;
 using MapElites.Args;
 using MapElites.Models;
-using Pokémon;
-using Pokémon.Args;
-using Pokémon.Json;
-using Pokémon.Statistics;
+using Domain;
+using Domain.Args;
+using Domain.Json;
+using Domain.Statistics;
 
 namespace CLI.Runners;
 

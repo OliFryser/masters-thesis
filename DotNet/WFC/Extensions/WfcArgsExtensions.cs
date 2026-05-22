@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
+using Core.Models;
 using WFC.Args;
 using WFC.Models;
 

@@ -1,4 +1,4 @@
-using Domain.Models;
+using Core.Models;
 using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;

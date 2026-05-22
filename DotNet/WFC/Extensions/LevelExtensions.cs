@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
+using Core.Models;
 using WFC.Models;
 using WFC.Output;
 using static WFC.EntropyCalculation;

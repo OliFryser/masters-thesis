@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using MapElites.Args;
 using MapElites.Models;
-using Pokémon;
-using Pokémon.Args;
+using Domain;
+using Domain.Args;
 
 namespace CLI.Runners;
 

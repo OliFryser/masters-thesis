@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
-using Pokémon;
+using Core.Models;
+using Domain;
 using TilemapAnalysis;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,12 +15,12 @@ public static class Extensions
     public static WfcArgs GetWfcArgs(this Individual individual, Texture2D inputTilemap)
     {
         const int mapDimensions = 20;
-        List<Vector> coordinates = Pokémon.LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
+        List<Vector> coordinates = LevelGeneration.GetRectangleCoordinates(mapDimensions, mapDimensions).ToList();
         
         string tilemapPath = AssetDatabase.GetAssetPath(inputTilemap);
         using TilemapAnalyzer tilemapAnalyzer = new TilemapAnalyzer(tilemapPath);
         List<TileType> tileTypes = tilemapAnalyzer.Tiles.Select(t => t.Type).ToHashSet().ToList();
-        List<Domain.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules()
+        List<Core.Models.AdjacencyRule> adjacencyRules = tilemapAnalyzer.GetAdjacencyRules()
             .Concat(tilemapAnalyzer.GetSymmetryRules()).ToList();
         
         WfcArgs args = new WfcArgs(coordinates, tileTypes, adjacencyRules, individual.Weights);

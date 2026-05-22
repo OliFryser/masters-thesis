@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Core.Models;
 using WFC.Extensions;
 using WFC.Tests.Helpers;
 

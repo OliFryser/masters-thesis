@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain.Models;
+using Core.Models;
 using WFC.Extensions;
 using WFC.Output;
 

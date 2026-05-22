@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
+using Core.Models;
 using MapElites.Models;
-using Pokémon;
-using Pokémon.Json;
+using Domain;
+using Domain.Json;
 using UnityEngine;
 using WFC;
 using WFC.Args;
 using WFC.Models;
-using static Pokémon.LevelGeneration;
+using static Domain.LevelGeneration;
 
 public class ArchivePlaymodeExplorer : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     public ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> ConstrainedArchive { get; private set; }
     
     private IReadOnlyCollection<TileType> _tileTypes;
-    private IReadOnlyCollection<Domain.Models.AdjacencyRule> _adjacencyRules;
+    private IReadOnlyCollection<Core.Models.AdjacencyRule> _adjacencyRules;
     private List<Vector> _coordinates;
 
     public void LoadTilemap(WfcConfig wfcConfig)

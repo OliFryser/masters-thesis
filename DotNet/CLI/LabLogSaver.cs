@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using MapElites.Args;
-using Pokémon.Args;
+using Domain.Args;
 
 namespace CLI
 {

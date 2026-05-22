@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Models;
+using Core.Models;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WFC.Args;
-using WFC.Extensions;
 
 [CreateAssetMenu(fileName = "WfcArgs", menuName = "Scriptable Objects/Wave Function Collapse Args")]
 public class WfcConfig : ScriptableObject
@@ -27,14 +26,14 @@ public class WfcConfig : ScriptableObject
             }
         }
 
-        List<Domain.Models.AdjacencyRule> rules = new();
+        List<Core.Models.AdjacencyRule> rules = new();
 
         foreach (var rule in Rules)
         {
             TileType fromTile = new TileType(rule.From.name);
             TileType toTile = new TileType(rule.To.name);
 
-            rules.Add(new Domain.Models.AdjacencyRule(fromTile, toTile, rule.Direction));
+            rules.Add(new Core.Models.AdjacencyRule(fromTile, toTile, rule.Direction));
         }
 
         List<TileWeight> tileWeights = Weights.Select(w => w.ToTileWeight()).ToList();

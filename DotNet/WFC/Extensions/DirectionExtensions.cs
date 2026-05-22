@@ -1,5 +1,5 @@
 using System;
-using Domain.Models;
+using Core.Models;
 
 namespace WFC.Extensions
 {

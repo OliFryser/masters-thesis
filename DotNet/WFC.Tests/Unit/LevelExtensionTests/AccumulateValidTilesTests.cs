@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Domain.Models;
+using Core.Models;
 using WFC.Extensions;
 using WFC.Models;
 using WFC.Tests.Helpers;
