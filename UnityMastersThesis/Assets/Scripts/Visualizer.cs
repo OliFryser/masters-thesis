@@ -4,7 +4,6 @@ using System.Linq;
 using Core.Models;
 using System.Threading;
 using DefaultNamespace;
-using Domain.Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;

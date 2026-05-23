@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Domain.Extensions;
+using Core.Extensions;
 using MapElites.Models;
 using Domain;
 using SFB;
