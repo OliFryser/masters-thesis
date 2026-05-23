@@ -50,15 +50,15 @@ public class Visualizer : MonoBehaviour
             
             float wait = Mathf.Lerp(_maxWaitTime, 0.0001f, _animationSpeed.Value);
 
-            if (wait > 0.1f)
+            if (wait > 0.3f)
             {
                 state = WaveFunctionCollapse.Step(state);
                 DisplayTiles(state);
                 await Awaitable.WaitForSecondsAsync(wait, token);
             }
-            else
+            else if (wait > 0.01f)
             {
-                int steps = 10 - (int)(wait * 100f);
+                int steps = 10 - (int)((wait / 3f) * 100f);
                 for (int i = 0; i < steps; i++)
                 { 
                     state = WaveFunctionCollapse.Step(state);
@@ -66,6 +66,25 @@ public class Visualizer : MonoBehaviour
                 
                 DisplayTiles(state);
                 await Awaitable.NextFrameAsync(token);
+            }
+            else
+            {
+                state = WaveFunctionCollapse.Complete(state);
+                
+                const int limit = 100;
+                int c = 0;
+                while (!state.IsCollapsed)
+                {
+                    state = WaveFunctionCollapse.Run(wfcArgs);
+                    DisplayTiles(state);
+                    if (c++ >= limit)
+                    {
+                        break;
+                    }
+                    await Awaitable.WaitForSecondsAsync(1f, token);
+                }
+                
+                DisplayTiles(state);
             }
         }
     }

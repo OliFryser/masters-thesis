@@ -96,21 +96,6 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
             State state = args.ToState();
 
             _ = visualizer.Animate(args);
-
-            // State state = WaveFunctionCollapse.Run(args);
-            //
-            // const int limit = 100;
-            // int c = 0;
-            // while (!state.IsCollapsed)
-            // {
-            //     state = WaveFunctionCollapse.Run(args);
-            //     if (c++ >= limit)
-            //     {
-            //         break;
-            //     }
-            // }
-            //
-            // visualizer.Display(state);
         }
     }
 
