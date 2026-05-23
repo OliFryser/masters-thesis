@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Models;
+using System.Threading;
+using DefaultNamespace;
+using Domain.Models;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WFC;
+using WFC.Args;
 using WFC.Extensions;
 using WFC.Models;
 using Tile = Core.Models.Tile;
@@ -18,14 +22,55 @@ public class Visualizer : MonoBehaviour
 {
     [SerializeField] private Tilemap _tilemap;
 
-    public WfcConfig _wfcConfig;
+    public WfcConfig WfcConfig;
 
-    [SerializeField, Range(0f, 1f)] private float _animationSpeed = .5f;
+    [SerializeField] private FloatScriptableObject _animationSpeed;
     [SerializeField] private TileBase _emptyTile;
 
     private State _state;
     private List<EmptyTile> _emptyTiles;
+    private CancellationTokenSource _cancellationTokenSource;
+    [SerializeField] private float _maxWaitTime = 1f;
     
+    public async Awaitable Animate(WfcArgs wfcArgs)
+    {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationToken token = _cancellationTokenSource.Token;
+
+        State state = wfcArgs.ToState();
+        
+        while (!token.IsCancellationRequested && !state.IsCollapsed)
+        {
+            if (state.HasReachedContradiction)
+            {
+                await Awaitable.WaitForSecondsAsync(1f, token);
+                state = wfcArgs.ToState();
+            }
+            
+            float wait = Mathf.Lerp(_maxWaitTime, 0.0001f, _animationSpeed.Value);
+
+            if (wait > 0.1f)
+            {
+                state = WaveFunctionCollapse.Step(state);
+                DisplayTiles(state);
+                await Awaitable.WaitForSecondsAsync(wait, token);
+            }
+            else
+            {
+                int steps = 10 - (int)(wait * 100f);
+                for (int i = 0; i < steps; i++)
+                { 
+                    state = WaveFunctionCollapse.Step(state);
+                }
+                
+                DisplayTiles(state);
+                await Awaitable.NextFrameAsync(token);
+            }
+        }
+    }
+
     private void DisplayTiles(State state)
     {
         _tilemap.ClearAllTiles();
@@ -36,7 +81,7 @@ public class Visualizer : MonoBehaviour
         {
             try
             {
-                TileBase tileBase = _wfcConfig.Tiles.First(tileBase => tileBase.name == tile.Type.Id);
+                TileBase tileBase = WfcConfig.Tiles.First(tileBase => tileBase.name == tile.Type.Id);
                 _tilemap.SetTile(new Vector3Int(tile.Position.X, -tile.Position.Y, 0), tileBase);
             }
             catch (Exception e)
@@ -70,7 +115,7 @@ public class Visualizer : MonoBehaviour
     {
         if (_state == null)
         {
-            _state = _wfcConfig.ToArgs().ToState();
+            _state = WfcConfig.ToArgs().ToState();
             Debug.Log("Creating initial state.");
         }
     }
@@ -143,7 +188,7 @@ public class Visualizer : MonoBehaviour
         }
 
         float currentTime = (float)EditorApplication.timeSinceStartup;
-        if (currentTime - _lastStepTime >= _animationSpeed)
+        if (currentTime - _lastStepTime >= _animationSpeed.Value)
         {
             for (int i = 0; i < 20; i++)
             {

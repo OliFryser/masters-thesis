@@ -123,7 +123,7 @@ double standardDeviation = problemDomain switch
     _ => throw new ArgumentOutOfRangeException()
 };
 
-float feasibilityThreshold = 0.75f;
+float feasibilityThreshold = 0.95f;
 float smoothingFactor = 5f;
 
 int optimizationEmitters = 2;

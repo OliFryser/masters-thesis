@@ -8,6 +8,7 @@ using Domain.Json;
 using UnityEngine;
 using WFC;
 using WFC.Args;
+using WFC.Extensions;
 using WFC.Models;
 using static Domain.LevelGeneration;
 
@@ -74,27 +75,42 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
         };
             
         LoadTilemap(wfcConfig);
+
+        Vector3 size = tilemapDomain switch
+        {
+            TilemapDomain.Letters => Vector3.one * 4,
+            TilemapDomain.Arrows => Vector3.one * 4,
+            TilemapDomain.Pokemon => Vector3.one,
+            TilemapDomain.ReadFromArchive => Vector3.one,
+            _ => throw new ArgumentOutOfRangeException(nameof(tilemapDomain), tilemapDomain, null)
+        };
         
         foreach (Visualizer visualizer in _visualizers)
         {
-            visualizer._wfcConfig = wfcConfig;
+            visualizer.transform.localScale = size;
+            
+            visualizer.WfcConfig = wfcConfig;
             
             WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
+            
+            State state = args.ToState();
 
-            State state = WaveFunctionCollapse.Run(args);
+            _ = visualizer.Animate(args);
 
-            const int limit = 100;
-            int c = 0;
-            while (!state.IsCollapsed)
-            {
-                state = WaveFunctionCollapse.Run(args);
-                if (c++ >= limit)
-                {
-                    break;
-                }
-            }
-
-            visualizer.Display(state);
+            // State state = WaveFunctionCollapse.Run(args);
+            //
+            // const int limit = 100;
+            // int c = 0;
+            // while (!state.IsCollapsed)
+            // {
+            //     state = WaveFunctionCollapse.Run(args);
+            //     if (c++ >= limit)
+            //     {
+            //         break;
+            //     }
+            // }
+            //
+            // visualizer.Display(state);
         }
     }
 

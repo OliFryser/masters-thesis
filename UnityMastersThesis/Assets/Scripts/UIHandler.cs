@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Domain.Extensions;
 using MapElites.Models;
 using Domain;
 using SFB;
@@ -109,6 +110,24 @@ public class UIHandler : MonoBehaviour
             
             buttonContainer.Add(radioButton);
         }
+
+        SelectValidKey();
+    }
+
+    private void SelectValidKey()
+    {
+        List<int> options = new();
+        for (int i = 0; i < _bucketsPerAxis * _bucketsPerAxis; i++)
+        {
+            Key key = GetKeyFromIndex(i);
+            
+            if (_keys.Contains(key))
+            {
+                options.Add(i);
+            }
+        }
+        
+        _behaviorButtonsGroup.value = options.GetRandomElement();
     }
 
     private Key GetKeyFromIndex(int index)
@@ -160,6 +179,8 @@ public class UIHandler : MonoBehaviour
                         return;
                     }
                     _archivePlaymodeExplorer.LoadArchive(archivePath);
+                    
+                    SelectValidKey();
                 });
         }
         catch (Exception e)
@@ -200,6 +221,8 @@ public class UIHandler : MonoBehaviour
         string archiveFile = Directory.GetFiles(folderPath).FirstOrDefault();
         
         _archivePlaymodeExplorer.LoadArchive(archiveFile);
+        
+        SelectValidKey();
     }
 
     private void Run()

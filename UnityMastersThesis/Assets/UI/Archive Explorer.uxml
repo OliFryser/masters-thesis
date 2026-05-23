@@ -2,11 +2,12 @@
     <Style src="project://database/Assets/UI/Styling.uss?fileID=7433441132597879392&amp;guid=bd0b4bdc84cb74c3bb10a7d33157e981&amp;type=3#Styling"/>
     <Style src="project://database/Assets/UI/ArchiveEntries.uss?fileID=7433441132597879392&amp;guid=f605ef664ac7711488229552a6be95e8&amp;type=3#ArchiveEntries"/>
     <ui:VisualElement name="" style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="Sidebar" style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 23%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap; justify-content: space-around;">
+        <ui:VisualElement name="Sidebar" style="flex-grow: 1; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 5px; max-width: 24%; padding-right: 40px; padding-left: 40px; padding-top: 40px; padding-bottom: 40px; flex-wrap: nowrap; justify-content: space-around;">
             <ui:VisualElement name="BehaviorsContainer">
-                <ui:Label text="Behaviors" name="BehaviorsLabel" class="text" style="-unity-text-align: middle-left; font-size: 65px;"/>
-                <ui:RadioButtonGroup label="" name="BehaviorButtons"/>
+                <ui:Label text="Behaviors" name="BehaviorsLabel" class="text" style="-unity-text-align: middle-left; font-size: 65px; padding-bottom: 41px;"/>
             </ui:VisualElement>
+            <ui:EnumField label="Archive" value="Pokémon" type="ArchiveType, Assembly-CSharp" name="ArchiveType" class="text enum-field" style="flex-direction: column; font-size: 42px; margin-bottom: 12px;"/>
+            <ui:RadioButtonGroup label="" name="BehaviorButtons" style="aspect-ratio: 1;"/>
             <ui:VisualElement name="EntryValuesContainer" style="margin-bottom: 12px;">
                 <ui:Label text="Entry Values" name="EntryValuesLabel" class="text" style="font-size: 42px;"/>
                 <ui:VisualElement name="SpecialTileDisplay" style="flex-grow: 0; flex-direction: row;">
@@ -26,7 +27,11 @@
                     <ui:Label text="0%" name="v4" class="text" style="font-size: 36px; -unity-text-align: upper-right; flex-grow: 1;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:EnumField label="Archive" value="Pokémon" type="ArchiveType, Assembly-CSharp" name="ArchiveType" class="text enum-field" style="flex-direction: column; font-size: 42px; margin-bottom: 12px;"/>
+            <ui:Slider label="Speed" value="1" high-value="1" data-source-type="DefaultNamespace.FloatScriptableObject, Assembly-CSharp" data-source-path="Value" data-source="project://database/Assets/Scriptable%20Objects/Animation%20Speed.asset?fileID=11400000&amp;guid=07d29cacd33ed4b308be4fdb8cda7dad&amp;type=2#Animation Speed" low-value="0.6" style="font-size: 49px; -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/VCR_OSD_MONO_1.001.ttf?fileID=12800000&amp;guid=989625b88030c40a08717b16c155d909&amp;type=3#VCR_OSD_MONO_1.001&quot;); -unity-text-align: middle-left; min-height: 68px;">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="Value" data-source="project://database/Assets/Scriptable%20Objects/Animation%20Speed.asset?fileID=11400000&amp;guid=07d29cacd33ed4b308be4fdb8cda7dad&amp;type=2#Animation Speed" binding-mode="TwoWay"/>
+                </Bindings>
+            </ui:Slider>
             <ui:Button text="SAMPLE" name="RunButton" class="text" style="font-size: 42px; border-top-left-radius: 24px; border-bottom-right-radius: 24px; margin-bottom: 0;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;"/>

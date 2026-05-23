@@ -151,9 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 74257014}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1839735485 &74257014
 Tilemap:
   m_ObjectHideFlags: 0
@@ -4399,7 +4400,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -4.130001, y: -56.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4433,7 +4434,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -48.13, y: -56.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8760,9 +8761,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 126608297}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &202832895
 GameObject:
   m_ObjectHideFlags: 0
@@ -8794,14 +8796,14 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1722123295}
-  - {fileID: 74257016}
+  - {fileID: 340099553}
+  - {fileID: 345327151}
   - {fileID: 648088681}
   - {fileID: 414948712}
-  - {fileID: 541671952}
   - {fileID: 2013726843}
-  - {fileID: 345327151}
-  - {fileID: 340099553}
   - {fileID: 126608295}
+  - {fileID: 541671952}
+  - {fileID: 74257016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &202832897
@@ -8846,7 +8848,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -26.130001, y: -12.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13065,9 +13067,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 340099555}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &345327150
 GameObject:
   m_ObjectHideFlags: 0
@@ -13098,7 +13101,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -4.130001, y: -12.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17365,9 +17368,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 345327153}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &414948711
 GameObject:
   m_ObjectHideFlags: 0
@@ -17398,7 +17402,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -26.130001, y: -34.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21705,9 +21709,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 414948714}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &541671951
 GameObject:
   m_ObjectHideFlags: 0
@@ -21738,7 +21743,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -26.130001, y: -56.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26025,9 +26030,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 541671954}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &648088680
 GameObject:
   m_ObjectHideFlags: 0
@@ -26058,7 +26064,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -48.13, y: -34.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30313,9 +30319,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 648088683}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &1701317235
 GameObject:
   m_ObjectHideFlags: 0
@@ -30420,7 +30427,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -48.13, y: -12.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -34703,9 +34710,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 1722123297}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &1958649283
 GameObject:
   m_ObjectHideFlags: 0
@@ -34795,7 +34803,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -4.130001, y: -34.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 202832896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -39034,9 +39042,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visualizer
   _tilemap: {fileID: 2013726845}
-  _wfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
-  _animationSpeed: 0
+  WfcConfig: {fileID: 11400000, guid: b9567dc947260884dad8acfbd8ef671b, type: 2}
+  _animationSpeed: {fileID: 11400000, guid: 07d29cacd33ed4b308be4fdb8cda7dad, type: 2}
   _emptyTile: {fileID: 11400000, guid: 294055b8de35a4251b858dbf637ca9a1, type: 2}
+  _maxWaitTime: 1
 --- !u!1 &2135227940
 GameObject:
   m_ObjectHideFlags: 0
