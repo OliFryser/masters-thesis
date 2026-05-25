@@ -1,0 +1,16 @@
+Number of Buckets Per Axis
+5
+Behavior Names
+Flower %
+Variation Count %
+Behavior ceilings
+0.25
+1
+Feasibility Threshold
+0.75
+Entries
+0 2 0.7755662 -1
+0 1 0.7332497 -1
+1 2 0.65178007 -1
+1 1 0.6126923 -1
+2 2 0.5576782 -1

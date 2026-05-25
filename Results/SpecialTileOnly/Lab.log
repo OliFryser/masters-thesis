@@ -1,0 +1,22 @@
+--- Log for Constrained MAP-Elites run ---
+TileMap: PalletTown.png
+
+-- Individual Handler config --
+EvaluationIterations: 20
+MapDimensions: 20
+KeyCeilings: Special Tile Percentage Ceiling: 0,25
+Variation Percentage Ceiling: 1
+NumberOfBucketsPerAxis: 5
+StandardDeviation: 0,2
+VariationBehavior: UniqueCount
+MutationStrategy: SpecialTileOnly
+
+Feasibility Threshold: 0,75
+Smoothing Factor: 5
+
+
+-- MAP-Elites config --
+InitializationIteration: 250
+MutationIterations: 5000
+ConvergeThreshold: 500
+

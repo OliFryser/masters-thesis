@@ -38,7 +38,9 @@ The CLI supports a number of command line switches. The deafult Run Mode is Cons
 
 ### The Archive Explorer
 
-The Archive Explorer can be launched from the Unity build or from the Unity project itself. From here, 3 pre-packaged archives can be browsed, one for each domain. It is also possible to browse a custom archive by picking the 'Custom' option from the domain dropdown. Note: Currently only supported on Windows.
+The Archive Explorer can be launched from the Unity build or from the Unity project itself. From here, 3 pre-packaged archives can be browsed, one for each domain, taken from the 'Domain Difficulty' experiments from our report.
+
+It is also possible to browse a custom archive by picking the 'Custom' option from the domain dropdown. The archives from the ``Results`` folder in the root directory are a good starting point. Note: Currently only supported on Windows.
 
 The top-left buttons pick which cell in the archive is sampled from.
 

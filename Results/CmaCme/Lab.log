@@ -1,0 +1,29 @@
+--- Log for CMA Constrained MAP-Elites run ---
+TileMap: PalletTown.png
+Starting Step Size: 0,1411
+Stagnation Threshold: 30
+Optimization emitters: 2
+Feasibility emitters: 5
+Random Direction emitters: 3
+
+
+
+-- Individual Handler config --
+EvaluationIterations: 20
+MapDimensions: 20
+KeyCeilings: Special Tile Percentage Ceiling: 0,25
+Variation Percentage Ceiling: 1
+NumberOfBucketsPerAxis: 5
+StandardDeviation: 0,2
+VariationBehavior: UniqueCount
+MutationStrategy: CmaCme
+
+Feasibility Threshold: 0,75
+Smoothing Factor: 5
+
+
+-- MAP-Elites config --
+InitializationIteration: 250
+MutationIterations: 5000
+ConvergeThreshold: 500
+

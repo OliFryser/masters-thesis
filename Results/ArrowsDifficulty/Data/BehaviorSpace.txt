@@ -1,0 +1,22 @@
+Number of Buckets Per Axis
+5
+Behavior Names
+Box X %
+Variation Count %
+Behavior ceilings
+1
+1
+Feasibility Threshold
+0.75
+Entries
+3 3 0.79453367 -1
+2 3 0.8187308 -1
+1 3 0.81058425 -1
+0 2 1 -1
+0 3 0.88692045 -1
+1 2 0.61934114 -1
+4 3 0.8311043 -1
+4 1 1 -1
+4 2 1 -1
+2 2 0.60185504 -1
+3 2 0.6825172 -1

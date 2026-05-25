@@ -1,0 +1,552 @@
+[
+  {
+    "EvaluationIterations": 5,
+    "Entries": [
+      {
+        "Key": "0,1",
+        "Fitness": 0.88371193,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.022348166,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "2,2",
+        "Fitness": 0.6778597,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0130422115,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "0,2",
+        "Fitness": 1.0,
+        "Feasibility": 0.6,
+        "DeltaFitness": 0.18631792,
+        "DeltaFeasibility": -0.19999999
+      },
+      {
+        "Key": "1,1",
+        "Fitness": 0.8393005,
+        "Feasibility": 1.0,
+        "DeltaFitness": 0.018650353,
+        "DeltaFeasibility": 0.100000024
+      },
+      {
+        "Key": "2,1",
+        "Fitness": 0.9376837,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.05871141,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "1,2",
+        "Fitness": 0.74296665,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.03493303,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "4,1",
+        "Fitness": 0.7618771,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.032628357,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,1",
+        "Fitness": 0.82951623,
+        "Feasibility": 0.6,
+        "DeltaFitness": 0.03160733,
+        "DeltaFeasibility": -0.19999999
+      },
+      {
+        "Key": "0,3",
+        "Fitness": 0.6968947,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.06510943,
+        "DeltaFeasibility": 0.100000024
+      },
+      {
+        "Key": "3,2",
+        "Fitness": 0.525733,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.019790232,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "4,0",
+        "Fitness": 0.9202816,
+        "Feasibility": 1.0,
+        "DeltaFitness": 0.06705129,
+        "DeltaFeasibility": 0.19999999
+      },
+      {
+        "Key": "1,0",
+        "Fitness": 0.84576213,
+        "Feasibility": 1.0,
+        "DeltaFitness": -0.022803962,
+        "DeltaFeasibility": 0.100000024
+      },
+      {
+        "Key": "0,0",
+        "Fitness": 0.962078,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.01537323,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,0",
+        "Fitness": 0.8529441,
+        "Feasibility": 1.0,
+        "DeltaFitness": -0.0064742565,
+        "DeltaFeasibility": 0.19999999
+      },
+      {
+        "Key": "2,0",
+        "Fitness": 0.82646215,
+        "Feasibility": 1.0,
+        "DeltaFitness": -0.019818366,
+        "DeltaFeasibility": 0.100000024
+      }
+    ]
+  },
+  {
+    "EvaluationIterations": 10,
+    "Entries": [
+      {
+        "Key": "0,1",
+        "Fitness": 0.9060601,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "2,2",
+        "Fitness": 0.6648175,
+        "Feasibility": 0.9,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "0,2",
+        "Fitness": 0.8136821,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "1,1",
+        "Fitness": 0.82065016,
+        "Feasibility": 0.9,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "2,1",
+        "Fitness": 0.8789723,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "1,2",
+        "Fitness": 0.7778997,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "4,1",
+        "Fitness": 0.7945055,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,1",
+        "Fitness": 0.7979089,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "0,3",
+        "Fitness": 0.76200414,
+        "Feasibility": 0.7,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,2",
+        "Fitness": 0.5455232,
+        "Feasibility": 0.9,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "4,0",
+        "Fitness": 0.8532303,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "1,0",
+        "Fitness": 0.8685661,
+        "Feasibility": 0.9,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "0,0",
+        "Fitness": 0.94670475,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,0",
+        "Fitness": 0.85941833,
+        "Feasibility": 0.8,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "2,0",
+        "Fitness": 0.8462805,
+        "Feasibility": 0.9,
+        "DeltaFitness": 0.0,
+        "DeltaFeasibility": 0.0
+      }
+    ]
+  },
+  {
+    "EvaluationIterations": 20,
+    "Entries": [
+      {
+        "Key": "0,1",
+        "Fitness": 0.8688663,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.037193775,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "2,2",
+        "Fitness": 0.6244854,
+        "Feasibility": 0.95,
+        "DeltaFitness": -0.04033214,
+        "DeltaFeasibility": 0.050000012
+      },
+      {
+        "Key": "0,2",
+        "Fitness": 0.82012725,
+        "Feasibility": 0.7,
+        "DeltaFitness": 0.0064451694,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,1",
+        "Fitness": 0.7446675,
+        "Feasibility": 0.9,
+        "DeltaFitness": -0.07598269,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "2,1",
+        "Fitness": 0.8019539,
+        "Feasibility": 0.75,
+        "DeltaFitness": -0.07701838,
+        "DeltaFeasibility": -0.050000012
+      },
+      {
+        "Key": "1,2",
+        "Fitness": 0.61847806,
+        "Feasibility": 0.85,
+        "DeltaFitness": -0.15942162,
+        "DeltaFeasibility": 0.050000012
+      },
+      {
+        "Key": "4,1",
+        "Fitness": 0.73736155,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.057143927,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,1",
+        "Fitness": 0.70573103,
+        "Feasibility": 0.75,
+        "DeltaFitness": -0.09217787,
+        "DeltaFeasibility": -0.050000012
+      },
+      {
+        "Key": "0,3",
+        "Fitness": 0.44769806,
+        "Feasibility": 0.75,
+        "DeltaFitness": -0.31430608,
+        "DeltaFeasibility": 0.050000012
+      },
+      {
+        "Key": "3,2",
+        "Fitness": 0.4908733,
+        "Feasibility": 0.9,
+        "DeltaFitness": -0.05464992,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "4,0",
+        "Fitness": 0.76838744,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.08484286,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,0",
+        "Fitness": 0.8300682,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.038497925,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "0,0",
+        "Fitness": 0.91957027,
+        "Feasibility": 0.75,
+        "DeltaFitness": -0.027134478,
+        "DeltaFeasibility": -0.050000012
+      },
+      {
+        "Key": "3,0",
+        "Fitness": 0.8236161,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.035802245,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "2,0",
+        "Fitness": 0.8464338,
+        "Feasibility": 0.85,
+        "DeltaFitness": 0.00015330315,
+        "DeltaFeasibility": -0.049999952
+      }
+    ]
+  },
+  {
+    "EvaluationIterations": 30,
+    "Entries": [
+      {
+        "Key": "0,1",
+        "Fitness": 0.854447,
+        "Feasibility": 0.6,
+        "DeltaFitness": -0.051613092,
+        "DeltaFeasibility": -0.19999999
+      },
+      {
+        "Key": "2,2",
+        "Fitness": 0.58132064,
+        "Feasibility": 0.93333334,
+        "DeltaFitness": -0.08349687,
+        "DeltaFeasibility": 0.03333336
+      },
+      {
+        "Key": "0,2",
+        "Fitness": 0.72901213,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.08466995,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,1",
+        "Fitness": 0.7285113,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.09213889,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "2,1",
+        "Fitness": 0.785586,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.09338629,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,2",
+        "Fitness": 0.6286248,
+        "Feasibility": 0.9,
+        "DeltaFitness": -0.14927489,
+        "DeltaFeasibility": 0.099999964
+      },
+      {
+        "Key": "4,1",
+        "Fitness": 0.7472879,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.047217548,
+        "DeltaFeasibility": 0.0
+      },
+      {
+        "Key": "3,1",
+        "Fitness": 0.62535185,
+        "Feasibility": 0.73333335,
+        "DeltaFitness": -0.17255706,
+        "DeltaFeasibility": -0.06666666
+      },
+      {
+        "Key": "0,3",
+        "Fitness": 0.45802048,
+        "Feasibility": 0.8333333,
+        "DeltaFitness": -0.30398366,
+        "DeltaFeasibility": 0.13333333
+      },
+      {
+        "Key": "3,2",
+        "Fitness": 0.49243662,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.05308661,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "4,0",
+        "Fitness": 0.76416147,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.08906883,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,0",
+        "Fitness": 0.8232781,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.045287967,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "0,0",
+        "Fitness": 0.8997406,
+        "Feasibility": 0.73333335,
+        "DeltaFitness": -0.04696417,
+        "DeltaFeasibility": -0.06666666
+      },
+      {
+        "Key": "3,0",
+        "Fitness": 0.8117063,
+        "Feasibility": 0.73333335,
+        "DeltaFitness": -0.047712028,
+        "DeltaFeasibility": -0.06666666
+      },
+      {
+        "Key": "2,0",
+        "Fitness": 0.84719104,
+        "Feasibility": 0.8666667,
+        "DeltaFitness": 0.00091052055,
+        "DeltaFeasibility": -0.0333333
+      }
+    ]
+  },
+  {
+    "EvaluationIterations": 40,
+    "Entries": [
+      {
+        "Key": "0,1",
+        "Fitness": 0.8205828,
+        "Feasibility": 0.65,
+        "DeltaFitness": -0.08547729,
+        "DeltaFeasibility": -0.15000004
+      },
+      {
+        "Key": "2,2",
+        "Fitness": 0.5927254,
+        "Feasibility": 0.925,
+        "DeltaFitness": -0.072092116,
+        "DeltaFeasibility": 0.025000036
+      },
+      {
+        "Key": "0,2",
+        "Fitness": 0.71461517,
+        "Feasibility": 0.675,
+        "DeltaFitness": -0.09906691,
+        "DeltaFeasibility": -0.125
+      },
+      {
+        "Key": "1,1",
+        "Fitness": 0.70882726,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.1118229,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "2,1",
+        "Fitness": 0.77043116,
+        "Feasibility": 0.675,
+        "DeltaFitness": -0.10854113,
+        "DeltaFeasibility": -0.125
+      },
+      {
+        "Key": "1,2",
+        "Fitness": 0.63701016,
+        "Feasibility": 0.9,
+        "DeltaFitness": -0.14088953,
+        "DeltaFeasibility": 0.099999964
+      },
+      {
+        "Key": "4,1",
+        "Fitness": 0.75406104,
+        "Feasibility": 0.775,
+        "DeltaFitness": -0.040444434,
+        "DeltaFeasibility": -0.025000036
+      },
+      {
+        "Key": "3,1",
+        "Fitness": 0.6053629,
+        "Feasibility": 0.725,
+        "DeltaFitness": -0.19254601,
+        "DeltaFeasibility": -0.07499999
+      },
+      {
+        "Key": "0,3",
+        "Fitness": 0.51511043,
+        "Feasibility": 0.875,
+        "DeltaFitness": -0.2468937,
+        "DeltaFeasibility": 0.17500001
+      },
+      {
+        "Key": "3,2",
+        "Fitness": 0.47456884,
+        "Feasibility": 0.825,
+        "DeltaFitness": -0.07095438,
+        "DeltaFeasibility": -0.07499999
+      },
+      {
+        "Key": "4,0",
+        "Fitness": 0.7662202,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.087010086,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "1,0",
+        "Fitness": 0.8007119,
+        "Feasibility": 0.8,
+        "DeltaFitness": -0.067854166,
+        "DeltaFeasibility": -0.099999964
+      },
+      {
+        "Key": "0,0",
+        "Fitness": 0.88850516,
+        "Feasibility": 0.7,
+        "DeltaFitness": -0.058199584,
+        "DeltaFeasibility": -0.100000024
+      },
+      {
+        "Key": "3,0",
+        "Fitness": 0.8060517,
+        "Feasibility": 0.725,
+        "DeltaFitness": -0.05336666,
+        "DeltaFeasibility": -0.07499999
+      },
+      {
+        "Key": "2,0",
+        "Fitness": 0.83845896,
+        "Feasibility": 0.875,
+        "DeltaFitness": -0.00782156,
+        "DeltaFeasibility": -0.024999976
+      }
+    ]
+  }
+]
