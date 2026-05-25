@@ -16,7 +16,7 @@ The pipeline we offer is the following:
 
 We believe this pipeline can be of help to game developers in *mixed-initiative PCG*, where the designers works and the algorithm works in collaboration to create content.
 
-For a more detailed explanation of this project, read [our thesis report](TODO).
+For a more detailed explanation of this project, read [our thesis report](Docs/oljh_wihe_MastersThesis.pdf).
 
 ### The InfinimonCLI tool
 
