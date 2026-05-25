@@ -38,17 +38,13 @@ The CLI supports a number of command line switches. The deafult Run Mode is Cons
 
 ### The Archive Explorer
 
-The Archive Explorer can be launched from the Unity build or from the Unity project itself. From here, 3 pre-packaged archives can be browsed, one for each domain, taken from the 'Domain Difficulty' experiments from our report.
+The Archive Explorer can be launched from the Unity build or from the Unity project itself. You can also explore it [from the browser](https://william227.itch.io/archive-explorer-masters-thesis). From here, 3 pre-packaged archives can be browsed, one for each domain, taken from the 'Domain Difficulty' experiments from our report.
 
-It is also possible to browse a custom archive by picking the 'Custom' option from the domain dropdown. The archives from the ``Results`` folder in the root directory are a good starting point. Note: Currently only supported on Windows.
+It is also possible to browse a custom archive by picking the 'Custom' option from the domain dropdown. The archives from the ``Results`` folder in the root directory are a good starting point.
 
 The top-left buttons pick which cell in the archive is sampled from.
 
-### Unity Project
-
-The Unity project can be found in the folder ``UnityMastersThesis``. It contains a few scenes that we have used for debugging and visualization.
-
-* Archive Explorer: This scene contains the archive explorer 
+The user can specify the speed of which the samples are generated. This visualizes the process of the Wave Function Collapse Algorithm.
 
 ## Prerequisites
 
