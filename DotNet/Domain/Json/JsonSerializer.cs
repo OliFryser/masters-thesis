@@ -72,8 +72,8 @@ namespace Domain.Json
 
         private static SaveData ReadFromJson(string json)
             => JsonConvert.DeserializeObject<SaveData>(json);
-        
-        private static ConstrainedSaveData ReadConstrainedSaveDataFromJson(string json)
+
+        public static ConstrainedSaveData ReadConstrainedSaveDataFromJson(string json)
             => JsonConvert.DeserializeObject<ConstrainedSaveData>(json);
     }
 }

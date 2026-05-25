@@ -19,7 +19,7 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private Color _maxFitnessColor;
     [SerializeField] private Color _minFeasibleColor;
     [SerializeField] private Color _maxFeasibleColor;
-    
+
     private List<Key> _keys;
     private int _bucketsPerAxis;
 
@@ -31,7 +31,7 @@ public class UIHandler : MonoBehaviour
     private Label _value4;
 
     private EnumField _archiveType;
-    
+
     public void OnEnable()
     {
         _runButton = _uiDocument.rootVisualElement.Q<Button>("RunButton");
@@ -44,11 +44,11 @@ public class UIHandler : MonoBehaviour
         _behaviorButtonsGroup = _uiDocument.rootVisualElement.Q<RadioButtonGroup>("BehaviorButtons");
 
         _behaviorButtonsGroup.RegisterValueChangedCallback(_ => UpdateValueLabels());
-        
+
         _archiveType.RegisterValueChangedCallback(_ => UpdateLoadStatus());
-        
+
         _runButton.clicked += Run;
-        
+
         UpdateLoadStatus();
     }
 
@@ -57,14 +57,15 @@ public class UIHandler : MonoBehaviour
         _behaviorButtonsGroup.UnregisterValueChangedCallback(_ => UpdateValueLabels());
         _runButton.clicked -= Run;
     }
-    
-    public void Initialize(ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
+
+    public void Initialize(
+        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive)
     {
         VisualElement buttonContainer = _behaviorButtonsGroup.Q<VisualElement>("choicesContentContainer");
         buttonContainer.style.flexDirection = FlexDirection.Row;
         buttonContainer.style.flexWrap = Wrap.Wrap;
         buttonContainer.Clear();
-        
+
         _keys = archive.GetKeys().ToList();
         _bucketsPerAxis = (int)Mathf.Sqrt(archive.BucketCapacity);
 
@@ -77,16 +78,16 @@ public class UIHandler : MonoBehaviour
                 name = $"Bucket{i}",
             };
             radioButton.AddToClassList("archive-buttons");
-            
+
             // Apply the layout to the RadioButton wrapper
             radioButton.style.width = Length.Percent(percentage);
             radioButton.style.aspectRatio = 1;
-        
+
             radioButton.style.marginLeft = 0;
             radioButton.style.marginRight = 0;
             radioButton.style.marginTop = 0;
             radioButton.style.marginBottom = 0;
-            
+
             Key key = GetKeyFromIndex(i);
             if (archive.TryGet(key, out var entry))
             {
@@ -105,10 +106,10 @@ public class UIHandler : MonoBehaviour
                         inputBox.style.backgroundColor = color;
                     }
                 }
-                
             }
+
             radioButton.SetEnabled(_keys.Contains(key));
-            
+
             buttonContainer.Add(radioButton);
         }
 
@@ -121,13 +122,13 @@ public class UIHandler : MonoBehaviour
         for (int i = 0; i < _bucketsPerAxis * _bucketsPerAxis; i++)
         {
             Key key = GetKeyFromIndex(i);
-            
+
             if (_keys.Contains(key))
             {
                 options.Add(i);
             }
         }
-        
+
         _behaviorButtonsGroup.value = options.GetRandomElement();
     }
 
@@ -136,13 +137,13 @@ public class UIHandler : MonoBehaviour
         int xBehavior = index % _bucketsPerAxis;
         // Flip the y-axis since 0,0 is bottom-left
         int yBehavior = (_bucketsPerAxis - 1) - (index / _bucketsPerAxis);
-        
+
         return new Key(xBehavior, yBehavior);
     }
 
     private void UpdateValueLabels()
     {
-        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive = 
+        ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> archive =
             _archivePlaymodeExplorer.ConstrainedArchive;
         Key key = GetKey();
         if (archive.TryGet(key, out ConstrainedEntry<Individual, Behavior> entry))
@@ -156,31 +157,33 @@ public class UIHandler : MonoBehaviour
 
     private void PickArchive()
     {
-        var extensions = new [] {
+        var extensions = new[]
+        {
             new ExtensionFilter("JSON Files", "json"),
-            new ExtensionFilter("All Files", "*" ),
+            new ExtensionFilter("All Files", "*"),
         };
 
         try
         {
             StandaloneFileBrowser.OpenFilePanelAsync(
-                "Open Archive File", 
-                "", 
-                extensions, 
-                false, 
+                "Open Archive File",
+                "",
+                extensions,
+                false,
                 paths =>
                 {
                     if (paths.Length != 1)
                         return;
-                    
+
                     var archivePath = paths.Single();
-                    
+
                     if (string.IsNullOrEmpty(archivePath))
                     {
                         return;
                     }
-                    _archivePlaymodeExplorer.LoadArchive(archivePath);
-                    
+
+                    _archivePlaymodeExplorer.LoadArchiveFile(archivePath);
+
                     SelectValidKey();
                 });
         }
@@ -197,7 +200,7 @@ public class UIHandler : MonoBehaviour
             PickArchive();
             return;
         }
-        
+
         string folderName = (ArchiveType)_archiveType.value switch
         {
             ArchiveType.Letters => "Letters",
@@ -205,31 +208,20 @@ public class UIHandler : MonoBehaviour
             ArchiveType.Pokémon => "Pokemon",
             _ => throw new ArgumentOutOfRangeException()
         };
-        
-        string folderPath = Path.Combine(Application.streamingAssetsPath, folderName);
-        if (!Directory.Exists(folderPath))
-        {
-            throw new ArgumentException($"Folder {folderPath} does not exist.");
-        }
 
-        string[] files =  Directory.GetFiles(folderPath);
-        
-        if (files.Length == 0)
-        {
-            throw new ArgumentException($"Folder {folderPath} does not contain any files.");
-        }
+        var textAssets = Resources.LoadAll<TextAsset>(folderName);
 
-        string archiveFile = Directory.GetFiles(folderPath).FirstOrDefault();
-        
-        _archivePlaymodeExplorer.LoadArchive(archiveFile);
-        
+        var archiveFile = textAssets.Single();
+
+        _archivePlaymodeExplorer.LoadArchive(archiveFile.text);
+
         SelectValidKey();
     }
 
     private void Run()
     {
         Key key = GetKey();
-        
+
         ArchivePlaymodeExplorer.TilemapDomain tilemapDomain = _archiveType.value switch
         {
             ArchiveType.Letters => ArchivePlaymodeExplorer.TilemapDomain.Letters,
@@ -238,7 +230,7 @@ public class UIHandler : MonoBehaviour
             ArchiveType.Custom => ArchivePlaymodeExplorer.TilemapDomain.ReadFromArchive,
             _ => throw new ArgumentOutOfRangeException()
         };
-        
+
         _archivePlaymodeExplorer.BrowseConstrainedArchive(key, tilemapDomain);
     }
 

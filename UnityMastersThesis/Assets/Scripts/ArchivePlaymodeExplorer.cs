@@ -6,10 +6,7 @@ using MapElites.Models;
 using Domain;
 using Domain.Json;
 using UnityEngine;
-using WFC;
 using WFC.Args;
-using WFC.Extensions;
-using WFC.Models;
 using static Domain.LevelGeneration;
 
 public class ArchivePlaymodeExplorer : MonoBehaviour
@@ -21,10 +18,15 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     [SerializeField] private WfcConfig _lettersConfig;
     [SerializeField] private WfcConfig _arrowsConfig;
     [SerializeField] private WfcConfig _pokemonConfig;
-    
+
     private IArchive<Key, Entry, Individual, Behavior> _archive;
-    public ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> ConstrainedArchive { get; private set; }
-    
+
+    public ConstrainedArchive<Key, ConstrainedEntry<Individual, Behavior>, Individual, Behavior> ConstrainedArchive
+    {
+        get;
+        private set;
+    }
+
     private IReadOnlyCollection<TileType> _tileTypes;
     private IReadOnlyCollection<Core.Models.AdjacencyRule> _adjacencyRules;
     private List<Vector> _coordinates;
@@ -32,23 +34,28 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
     public void LoadTilemap(WfcConfig wfcConfig)
     {
         var args = wfcConfig.ToArgs();
-        
+
         _tileTypes = args.TileTypes;
         _adjacencyRules = args.AdjacencyRules;
     }
-    
-    public void LoadArchive(string filename)
+
+    public void LoadArchiveFile(string filename)
     {
-        ConstrainedSaveData saveData = ReadConstrainedArchiveFile(filename);
+        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile(filename);
+        SetSaveData(saveData);
+    }
+
+    public void LoadArchive(string json)
+    {
+        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromJson(json);
+        SetSaveData(saveData);
+    }
+
+    private void SetSaveData(ConstrainedSaveData saveData)
+    {
         ConstrainedArchive = saveData.Archive;
         _coordinates = GetRectangleCoordinates(saveData.MapDimensions, saveData.MapDimensions).ToList();
         _uiHandler.Initialize(ConstrainedArchive);
-    }
-    
-    private ConstrainedSaveData ReadConstrainedArchiveFile(string filename)
-    {
-        ConstrainedSaveData saveData = JsonSerializer.ReadConstrainedSaveDataFromFile(filename);
-        return saveData;
     }
 
     public void BrowseConstrainedArchive(Key key, TilemapDomain tilemapDomain)
@@ -73,7 +80,7 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
             },
             _ => throw new ArgumentOutOfRangeException(nameof(tilemapDomain), tilemapDomain, null)
         };
-            
+
         LoadTilemap(wfcConfig);
 
         Vector3 size = tilemapDomain switch
@@ -84,16 +91,14 @@ public class ArchivePlaymodeExplorer : MonoBehaviour
             TilemapDomain.ReadFromArchive => Vector3.one,
             _ => throw new ArgumentOutOfRangeException(nameof(tilemapDomain), tilemapDomain, null)
         };
-        
+
         foreach (Visualizer visualizer in _visualizers)
         {
             visualizer.transform.localScale = size;
-            
+
             visualizer.WfcConfig = wfcConfig;
-            
+
             WfcArgs args = new WfcArgs(_coordinates, _tileTypes, _adjacencyRules, entry.Individual.Weights);
-            
-            State state = args.ToState();
 
             _ = visualizer.Animate(args);
         }
