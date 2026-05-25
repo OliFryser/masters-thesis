@@ -30,7 +30,12 @@ public class Visualizer : MonoBehaviour
     private List<EmptyTile> _emptyTiles;
     private CancellationTokenSource _cancellationTokenSource;
     [SerializeField] private float _maxWaitTime = 1f;
-    
+
+    private void Awake()
+    {
+        _animationSpeed.Value = .975f;
+    }
+
     public async Awaitable Animate(WfcArgs wfcArgs)
     {
         _cancellationTokenSource?.Cancel();
