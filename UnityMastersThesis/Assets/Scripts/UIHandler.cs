@@ -95,7 +95,8 @@ public class UIHandler : MonoBehaviour
                 {
                     if (entry.IsFeasible)
                     {
-                        Color color = Color.Lerp(_minFitnessColor, _maxFitnessColor, entry.Fitness);
+                        // Color color = Color.Lerp(_minFitnessColor, _maxFitnessColor, entry.Fitness);
+                        Color color = ViridisColor.GetColor(entry.Fitness);
                         inputBox.style.backgroundColor = color;
                     }
                     else

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e97a6126e0340a2bb6c484432f6ce71, type: 3}
   m_Name: Animation Speed
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.FloatScriptableObject
-  Value: 0.37
+  Value: 1
